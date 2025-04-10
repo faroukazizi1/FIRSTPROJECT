@@ -1,0 +1,63 @@
+<style>
+    .custom-form {
+      max-width: 400px; /* Adjust as needed */
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  
+    .custom-form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+  
+    .custom-form input[type="text"],
+    .custom-form input[type="email"],
+    .custom-form input[type="password"],
+    .custom-form textarea,
+    .custom-form select {
+      width: calc(100% - 12px); /* Account for padding */
+      padding: 6px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box; /* Include padding and border in element's total width and height */
+    }
+  
+    .custom-form input[type="checkbox"],
+    .custom-form input[type="radio"] {
+      margin-bottom: 15px;
+    }
+  
+    .custom-form .btn {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  
+    .custom-form .btn:hover {
+      background-color: #0056b3;
+    }
+  
+    .custom-form .error-message {
+      color: red;
+      font-size: 0.9em;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+  </style>
+  
+  <div class="custom-form">
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+  </div>

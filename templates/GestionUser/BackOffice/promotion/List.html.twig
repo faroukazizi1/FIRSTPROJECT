@@ -1,0 +1,74 @@
+{% extends 'BackOffice/Home.html.twig' %}
+
+{% block title %}
+    <title>Promotion List</title>
+{% endblock %}
+
+{% block body %}
+
+{{ parent() }}
+
+<div class="container">
+    <div class="page-inner">
+        <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+            <div>
+                <h3 class="fw-bold mb-3">Promotion List</h3>
+            </div>
+            <div class="ms-md-auto py-2 py-md-0">
+                <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
+                <a href="{{ path('app_back_promotion_new') }}" class="btn btn-primary btn-round">Add Promotion</a>
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            <!-- Displaying the promotion table -->
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Type</th>
+                            <th>Reason</th>
+                            <th>New Position</th>
+                            <th>Date</th>
+                            <th>New Salary</th>
+                            <th>Extra Benefits</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for promotion in promotions %}
+                            <tr>
+                                <td>{{ promotion.id }}</td>
+                                <td>{{ promotion.typePromo }}</td>
+                                <td>{{ promotion.raison }}</td>
+                                <td>{{ promotion.postePromo }}</td>
+                                <td>{{ promotion.datePromo ? promotion.datePromo|date('Y-m-d') : '' }}</td>
+                                <td>{{ promotion.nouvSal }}</td>
+                                <td>{{ promotion.avantageSupp }}</td>
+                                <td>
+                                    <form action="{{ path('app_back_promotion_delete', {'id': promotion.id}) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this promotion?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ promotion.id) }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+
+                                    <a href="{{ path('app_back_promotion_edit', {'id': promotion.id}) }}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="8" class="text-center">No records found</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

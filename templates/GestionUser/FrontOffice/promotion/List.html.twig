@@ -1,0 +1,45 @@
+{% extends 'FrontOffice/front_base.html.twig' %}
+
+{% block title %}
+    <title>Liste des Promotions</title>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="table-responsive">
+
+        <h1>
+            Promotions
+        </h1>
+        
+        <table class="table table-bordered table-hover align-middle shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Type</th>
+                    <th>Raison</th>
+                    <th>Nouveau Poste</th>
+                    <th>Date</th>
+                    <th>Nouveau Salaire</th>
+                    <th>Avantages Supplémentaires</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for promotion in promotions %}
+                    <tr>
+                        <td>{{ promotion.typePromo }}</td>
+                        <td>{{ promotion.raison }}</td>
+                        <td>{{ promotion.postePromo }}</td>
+                        <td>{{ promotion.datePromo ? promotion.datePromo|date('Y-m-d') : 'N/A' }}</td>
+                        <td>{{ promotion.nouvSal }} €</td>
+                        <td>{{ promotion.avantageSupp }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">Aucune promotion trouvée.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

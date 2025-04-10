@@ -1,0 +1,59 @@
+{{ form_start(form, { 'attr': {'class': 'user-form' } }) }}
+    <div class="form-container">
+        <h3 class="form-title">User Details</h3>
+        
+        <!-- First Name and Last Name -->
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.nom, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.prenom, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+        </div>
+
+        <!-- CIN and Email -->
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.cin, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.email, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+        </div>
+
+        <!-- Username and Password -->
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.username, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.password, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+        </div>
+
+        <!-- Role, Sexe, Adresse, and Numero -->
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.role, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.sexe, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.adresse, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.numero, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-footer">
+            <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        </div>
+    </div>
+{{ form_end(form) }}
