@@ -1,0 +1,80 @@
+<html lang="en">
+  <head>
+    {% block title %}<title>Login 07</title>{% endblock %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
+
+    {% block css %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Use asset() for local CSS files -->
+    <link rel="stylesheet" href="{{ asset('Login/css/style.css') }}">
+
+    {% endblock %}
+  </head>
+  <body>
+    {% block body %}
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6 text-center mb-5">
+            <h2 class="heading-section">Login #07</h2>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-12 col-lg-10">
+            <div class="wrap d-md-flex">
+              <div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
+                <div class="text w-100">
+                  <h2>Welcome to login</h2>
+                  <p>Don't have an account?</p>
+                  <a href="#" class="btn btn-white btn-outline-white">Sign Up</a>
+                </div>
+              </div>
+              <div class="login-wrap p-4 p-lg-5">
+                {% block login_form %}
+                <form method="post">
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                    {% endif %}
+                
+                    {% if app.user %}
+                        <div class="mb-3">
+                            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                        </div>
+                    {% endif %}
+                
+                    <h3 class="mb-4">Sign In</h3>
+                
+                    <label for="email">Email</label>
+                    <input type="email" value="{{ last_username }}" name="_email" id="email" class="form-control" autocomplete="email" required autofocus>
+                
+                    <label for="password">Password</label>
+                    <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+                
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                
+                    <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+                </form>
+                
+                {% endblock %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% block js %}
+    <!-- Use asset() for local JS files -->
+    <script src="{{ asset('Login/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('Login/js/popper.js') }}"></script>
+    <script src="{{ asset('Login/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('Login/js/main.js') }}"></script>
+    {% endblock %}
+  </body>
+  {% endblock %}
+</html>

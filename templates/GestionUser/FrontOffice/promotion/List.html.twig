@@ -6,40 +6,25 @@
 
 {% block body %}
 <div class="container mt-5">
-    <div class="table-responsive">
+    <h1 class="mb-4 text-grey">Promotions</h1>
 
-        <h1>
-            Promotions
-        </h1>
-        
-        <table class="table table-bordered table-hover align-middle shadow-sm">
-            <thead class="table-dark">
-                <tr>
-                    <th>Type</th>
-                    <th>Raison</th>
-                    <th>Nouveau Poste</th>
-                    <th>Date</th>
-                    <th>Nouveau Salaire</th>
-                    <th>Avantages Supplémentaires</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for promotion in promotions %}
-                    <tr>
-                        <td>{{ promotion.typePromo }}</td>
-                        <td>{{ promotion.raison }}</td>
-                        <td>{{ promotion.postePromo }}</td>
-                        <td>{{ promotion.datePromo ? promotion.datePromo|date('Y-m-d') : 'N/A' }}</td>
-                        <td>{{ promotion.nouvSal }} €</td>
-                        <td>{{ promotion.avantageSupp }}</td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="8" class="text-center text-muted">Aucune promotion trouvée.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {% for promotion in promotions %}
+        <div class="card mb-4 shadow-sm border-0" style="background-color: #1e2a38; color: #f1f1f1;">
+            <div class="card-body">
+                <h5 class="card-title text-primary">
+                    <i class="bi bi-arrow-up-circle-fill me-2"></i>{{ promotion.postePromo }}
+                </h5>
+                <span class="badge bg-primary mb-2">{{ promotion.typePromo }}</span>
+                <p class="card-text"><strong>Raison :</strong> {{ promotion.raison }}</p>
+                <p class="card-text"><strong>Date :</strong> {{ promotion.datePromo ? promotion.datePromo|date('Y-m-d') : 'N/A' }}</p>
+                <p class="card-text"><strong>Nouveau Salaire :</strong> {{ promotion.nouvSal }} €</p>
+                <p class="card-text"><strong>Avantages :</strong> {{ promotion.avantageSupp }}</p>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            Aucune promotion trouvée.
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}
