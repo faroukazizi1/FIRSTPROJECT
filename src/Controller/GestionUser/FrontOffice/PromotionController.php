@@ -17,8 +17,9 @@ final class PromotionController extends AbstractController
     #[Route('/GestionPromotion',name: 'app_promotion_index', methods: ['GET'])]
     public function List(PromotionRepository $promotionRepository): Response
     {
+        $user = $this->getUser();
         return $this->render('GestionUser\FrontOffice\promotion\List.html.twig', [
-            'promotions' => $promotionRepository->findAll(),
+            'promotions' => $promotionRepository->findPromotionById($user->getUserIdentifier()),
         ]);
     }
 }

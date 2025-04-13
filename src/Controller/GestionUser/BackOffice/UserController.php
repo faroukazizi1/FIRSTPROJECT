@@ -22,18 +22,6 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/home_back/GestionUser/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
-    {
-        // Check if the CSRF token is valid
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_user_List');
-    }
-
     #[Route('/home_back/GestionUser/Ajout', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager ,  UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -42,7 +30,9 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-    
+            $PlainPasswod = $user->getPassword();
+            $HashedPasswod = $passwordHasher->hashPassword($user,$PlainPasswod);
+            $user->setPassword($HashedPasswod);
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -53,6 +43,18 @@ final class UserController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/home_back/GestionUser/{id}', name: 'app_user_delete', methods: ['POST'])]
+    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    {
+        // Check if the CSRF token is valid
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($user);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_user_List');
     }
 
     #[Route('/home_back/GestionUser/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]

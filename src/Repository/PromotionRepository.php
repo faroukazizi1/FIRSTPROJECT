@@ -40,4 +40,12 @@ class PromotionRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findPromotionById(int $userId)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.user = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
 }

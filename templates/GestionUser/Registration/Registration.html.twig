@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{{ asset('Registration/fonts/material-icon/css/material-design-iconic-font.min.css') }}">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{{ asset('Registration/css/style.css') }}">
+</head>
+<body>
+
+<div class="main">
+    <div class="container">
+        <h2>Education Appointment Form</h2>
+        {{ form_start(form) }}  <!-- Start the form -->
+        
+        <div class="form-group-1">
+            {{ form_row(form.cin) }} <!-- Symfony form for 'cin' -->
+            {{ form_row(form.nom) }} <!-- Symfony form for 'nom' -->
+            {{ form_row(form.prenom) }} <!-- Symfony form for 'prenom' -->
+            {{ form_row(form.email) }} <!-- Symfony form for 'email' -->
+            {{ form_row(form.username) }} <!-- Symfony form for 'username' -->
+            {{ form_row(form.password) }} <!-- Symfony form for 'password' -->
+            {{ form_row(form.role) }} <!-- Symfony form for 'role' -->
+            {{ form_row(form.sexe) }} <!-- Symfony form for 'sexe' -->
+            {{ form_row(form.adresse) }} <!-- Symfony form for 'adresse' -->
+            {{ form_row(form.numero) }} <!-- Symfony form for 'numero' -->
+        </div>
+
+        <div class="form-group-2">
+            <!-- You can add any additional custom fields here if needed -->
+            <h3>How would you like to be located?</h3>
+            <div class="select-list">
+                <select name="confirm_type" id="confirm_type">
+                    <option value="">By phone</option>
+                    <option value="by_email">By email</option>
+                </select>
+            </div>
+            <div class="select-list">
+                <select name="hour_appointment" id="hour_appointment">
+                    <option value="">Hours: 8am 10pm</option>
+                    <option value="9h-11h">Hours: 9am 11pm</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
+            <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree to the <a href="#" class="term-service">Terms and Conditions</a></label>
+        </div>
+
+        <div class="form-submit">
+            {{ form_row(form.Submit) }} <!-- Symfony form for 'Submit' -->
+        </div>
+
+        {{ form_end(form) }} <!-- End the form -->
+    </div>
+</div>
+
+<!-- JS -->
+<script src="{{ asset('Registration/vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('Registration/js/main.js') }}"></script>
+
+</body>
+</html>

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 use App\Repository\PromotionRepository;
+use Endroid\QrCode\Builder\BuilderInterface;
 
 #[ORM\Entity(repositoryClass: PromotionRepository::class)]
 #[ORM\Table(name: 'promotion')]
@@ -187,5 +188,4 @@ class Promotion
 
         return $this;
     }
-
 }

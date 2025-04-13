@@ -21,9 +21,7 @@ security:
                 enable_csrf: true
                 username_parameter: _email
                 password_parameter: _password
-
-                default_target_path: app_promotion_index
-
+                success_handler: App\Security\LoginSuccessHandler
             logout:
                 path: app_logout
                 target: /login

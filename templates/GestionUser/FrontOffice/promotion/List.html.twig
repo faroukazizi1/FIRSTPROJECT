@@ -20,6 +20,31 @@
                 <p class="card-text"><strong>Nouveau Salaire :</strong> {{ promotion.nouvSal }} €</p>
                 <p class="card-text"><strong>Avantages :</strong> {{ promotion.avantageSupp }}</p>
             </div>
+            <div class="text-center mb-3">
+                <button class="btn btn-outline-light mb-2" onclick="toggleQrCode(this)">
+                    <i class="bi bi-qr-code me-1"></i> QR Code
+                </button>
+                <div class="qr-code-container" style="display: none;">
+                    <img src="{{ qr_code_data_uri(
+                        'Promotion: ' ~ promotion.typePromo ~ ', ' ~
+                        'Poste: ' ~ promotion.postePromo ~ ', ' ~
+                        'Salaire: ' ~ promotion.nouvSal ~ ', ' ~
+                        'Avantage: ' ~ promotion.avantageSupp ~ ', ' ~
+                        'Date: ' ~ (promotion.datePromo ? promotion.datePromo|date('Y-m-d') : 'N/A')
+                    ) }}" alt="QR Code" class="img-fluid mt-2" style="max-width: 200px;" />
+                </div>
+                <script>
+                    function toggleQrCode(button) {
+                        const qrCodeContainer = button.closest('.card').querySelector('.qr-code-container');
+                        if (qrCodeContainer.style.display === 'none' || qrCodeContainer.style.display === '') {
+                            qrCodeContainer.style.display = 'block'; // Show the QR code
+                        } else {
+                            qrCodeContainer.style.display = 'none'; // Hide the QR code
+                        }
+                    }
+                </script>
+            </div>
+            
         </div>
     {% else %}
         <div class="alert alert-info text-center" role="alert">
@@ -27,4 +52,5 @@
         </div>
     {% endfor %}
 </div>
+
 {% endblock %}
