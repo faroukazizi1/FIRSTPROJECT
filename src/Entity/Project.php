@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
+
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Repository\ProjectRepository;
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\Table(name: 'project')]
@@ -19,7 +21,6 @@ class Project
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
-
     #[ORM\OneToMany(
         mappedBy: "project", 
         targetEntity: ProjectTask::class,
@@ -32,6 +33,7 @@ class Project
     {
         $this->tasks = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -48,6 +50,7 @@ class Project
     #[Assert\NotBlank(message: 'Le titre ne doit pas être vide')]
     #[Assert\Length(min: 3, max: 255, minMessage: 'Le titre doit contenir au moins 3 caractères', maxMessage: 'Le titre doit contenir au maximum 255 caractères')]
     #[Assert\Type('string', message: 'Le titre doit être une chaîne de caractères')]
+
     private ?string $titre = null;
 
     public function getTitre(): ?string
@@ -60,11 +63,11 @@ class Project
         $this->titre = $titre;
         return $this;
     }
-
     #[ORM\Column(type: 'text', nullable: false)] // Changed to text for longer descriptions
     #[Assert\NotBlank(message: 'La description ne doit pas être vide')]
     #[Assert\Length(min: 3, max: 255, minMessage: 'La description doit contenir au moins 3 caractères', maxMessage: 'La description doit contenir au maximum 255 caractères')]
     #[Assert\Type('string', message: 'La description doit être une chaîne de caractères')]
+
     private ?string $description = null;
 
     public function getDescription(): ?string
@@ -80,6 +83,7 @@ class Project
 
     #[ORM\Column(type: 'string', nullable: false)]
     #[Assert\NotBlank(message: 'Le statut ne doit pas être vide')]
+
     private ?string $statut = null;
 
     public function getStatut(): ?string
@@ -98,7 +102,6 @@ class Project
     #[Assert\LessThanOrEqual(propertyPath: 'dateFin', message: 'La date de début doit être inférieure à la date de fin')]
     private ?\DateTimeInterface $date_debut = null;
     
-
     public function getDateDebut(): ?\DateTimeInterface
     {
         return $this->date_debut;
@@ -114,6 +117,7 @@ class Project
     #[Assert\NotNull(message: 'La date de fin ne doit pas être vide')]
     #[Assert\GreaterThanOrEqual(propertyPath: 'dateDebut', message: 'La date de fin doit être supérieure à la date de début')]
     private ?\DateTimeInterface $date_fin = null;
+
 
     public function getDateFin(): ?\DateTimeInterface
     {
@@ -155,3 +159,4 @@ class Project
         return $this;
     }
 }
+

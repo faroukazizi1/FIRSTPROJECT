@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection; 
 use App\Repository\ProjectTaskRepository; 
+
 #[ORM\Entity(repositoryClass: ProjectTaskRepository::class)]
 #[ORM\Table(name: 'project_task')]
 class ProjectTask
