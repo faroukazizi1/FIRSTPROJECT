@@ -57,10 +57,20 @@
                     <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
                 
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                
-                    <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+                    
+                      <button class="form-control btn btn-primary submit px-3" type="submit">Sign in</button>
                 </form>
-                
+                <div class="form-group d-md-flex">
+		            	<div class="w-50 text-left">
+			            	<label class="checkbox-wrap checkbox-primary mb-0">Remember Me
+									  <input type="checkbox" checked>
+									  <span class="checkmark"></span>
+										</label>
+									</div>
+									<div class="w-50 text-md-right">
+										<a href="{{ path('app_forgot_password_request')}}">Forgot Password</a>
+									</div>
+		            </div>
                 {% endblock %}
               </div>
             </div>

@@ -14,7 +14,7 @@ class Formateur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', name: "id_Formateur")]
     private ?int $id_Formateur = null;
 
     public function getId_Formateur(): ?int

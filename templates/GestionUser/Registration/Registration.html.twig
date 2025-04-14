@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sign Up Form</title>
 
     <!-- Font Icon -->
@@ -11,54 +10,121 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{ asset('Registration/css/style.css') }}">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 15px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 750px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-label-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label-group label {
+            color: #34495e;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .form-label-group input,
+        .form-label-group select {
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .form-submit {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .form-submit input {
+            background: linear-gradient(to right, #2980b9, #3498db);
+            color: #fff;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 30px;
+            transition: background 0.3s ease;
+        }
+
+        .form-submit input:hover {
+            background: linear-gradient(to right, #2471a3, #2980b9);
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
 <div class="main">
     <div class="container">
-        <h2>Education Appointment Form</h2>
-        {{ form_start(form) }}  <!-- Start the form -->
-        
+        <h2>Create an Account</h2>
+
+        {{ form_start(form) }}  
+
         <div class="form-group-1">
-            {{ form_row(form.cin) }} <!-- Symfony form for 'cin' -->
-            {{ form_row(form.nom) }} <!-- Symfony form for 'nom' -->
-            {{ form_row(form.prenom) }} <!-- Symfony form for 'prenom' -->
-            {{ form_row(form.email) }} <!-- Symfony form for 'email' -->
-            {{ form_row(form.username) }} <!-- Symfony form for 'username' -->
-            {{ form_row(form.password) }} <!-- Symfony form for 'password' -->
-            {{ form_row(form.role) }} <!-- Symfony form for 'role' -->
-            {{ form_row(form.sexe) }} <!-- Symfony form for 'sexe' -->
-            {{ form_row(form.adresse) }} <!-- Symfony form for 'adresse' -->
-            {{ form_row(form.numero) }} <!-- Symfony form for 'numero' -->
-        </div>
-
-        <div class="form-group-2">
-            <!-- You can add any additional custom fields here if needed -->
-            <h3>How would you like to be located?</h3>
-            <div class="select-list">
-                <select name="confirm_type" id="confirm_type">
-                    <option value="">By phone</option>
-                    <option value="by_email">By email</option>
-                </select>
+            <div class="form-label-group">
+                {{ form_row(form.cin) }} 
             </div>
-            <div class="select-list">
-                <select name="hour_appointment" id="hour_appointment">
-                    <option value="">Hours: 8am 10pm</option>
-                    <option value="9h-11h">Hours: 9am 11pm</option>
-                </select>
+            <div class="form-label-group">
+                {{ form_row(form.nom) }} 
             </div>
-        </div>
-
-        <div class="form-check">
-            <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-            <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree to the <a href="#" class="term-service">Terms and Conditions</a></label>
+            <div class="form-label-group">
+                {{ form_row(form.prenom) }} 
+            </div>
+            <div class="form-label-group">
+                {{ form_row(form.email) }} 
+            </div>
+            <div class="form-label-group">
+                {{ form_row(form.username) }} 
+            </div>
+            <div class="form-label-group">
+                {{ form_row(form.password) }} 
+            </div>
+            <div class="form-label-group">
+                {{ form_row(form.sexe) }} 
+            </div>
+            <div class="form-label-group">
+                {{ form_row(form.adresse) }} 
+            </div>
+            <div class="form-label-group">
+                {{ form_row(form.numero) }} 
+            </div>
         </div>
 
         <div class="form-submit">
-            {{ form_row(form.Submit) }} <!-- Symfony form for 'Submit' -->
+            {{ form_row(form.Submit) }}
         </div>
 
-        {{ form_end(form) }} <!-- End the form -->
+        {{ form_end(form) }}
     </div>
 </div>
 
