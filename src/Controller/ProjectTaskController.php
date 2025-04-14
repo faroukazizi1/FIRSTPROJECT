@@ -56,12 +56,7 @@ final class ProjectTaskController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_project_task_edit', methods: ['GET', 'POST'])]
-    public function edit(
-        Request $request, 
-        ProjectTask $projectTask, 
-        EntityManagerInterface $entityManager,
-        ProjectRepository $projectRepository
-    ): Response
+    public function edit(Request $request, ProjectTask $projectTask, EntityManagerInterface $entityManager,ProjectRepository $projectRepository): Response
     {
         $form = $this->createForm(ProjectTaskType::class, $projectTask, [
             'is_edit' => true

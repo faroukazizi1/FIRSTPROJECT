@@ -32,6 +32,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    //Ajout projet
     #[Route('/new', name: 'app_project_new', methods: ['POST'])]
     public function new(Request $request, ProjectRepository $projectRepository, EntityManagerInterface $entityManager): Response
     {
@@ -43,17 +44,21 @@ final class ProjectController extends AbstractController
             if ($form->isValid()) {
                 $entityManager->persist($project);
                 $entityManager->flush();
-
+                $this->addFlash('success', 'Projet enregistré avec succès.');
+                return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
+            } else if ($form->isSubmitted()) {
+                $this->addFlash('error', 'Erreur lors de l\'enregistrement du projet. Veuillez vérifier les champs.');  
             }
         }       
 
         return $this->render('project/index.html.twig', [
             'projects' => $projectRepository->findAll(),
             'form' => $form->createView(),
-            'show_modal' => true, 
+             
         ]); 
     }
 
+    //Show projet
     #[Route('/{id}', name: 'app_project_show', methods: ['GET'])]
     public function show(Project $project, ProjectTaskRepository $projectTaskRepository): Response
     {
@@ -65,6 +70,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    //Modifier projet avec formulaire
     #[Route('/{id}/edit', name: 'app_project_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
@@ -83,6 +89,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    //Modifier projet avec modal
     #[Route('/{id}/edit/modal', name: 'app_project_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(Project $project): Response
     {
@@ -96,6 +103,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    //Delete project
     #[Route('/delete/{id}', name: 'app_project_delete', methods: ['GET','POST'])]
     public function delete($id , ManagerRegistry $managerRegistry , ProjectRepository $projectRepository): Response
     {
@@ -106,53 +114,6 @@ final class ProjectController extends AbstractController
       return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/edit', name: 'app_project_task_edit', methods: ['GET', 'POST'])]
-    public function edit1(Request $request, ProjectTask $projectTask, EntityManagerInterface $entityManager,ProjectRepository $projectRepository): Response
-    {
-        // Handle AJAX requests for modal form
-        if ($request->isXmlHttpRequest() && $request->isMethod('GET')) {
-            $form = $this->createForm(ProjectTaskType::class, $projectTask, [
-                'action' => $this->generateUrl('app_project_task_edit', ['id' => $projectTask->getId()]),
-            ]);
-            
-            return $this->render('project_task/_edit_form.html.twig', [
-                'form' => $form->createView(),
-                'project_task' => $projectTask,
-                'projects' => $projectRepository->findAll(),
-            ]);
-        }
-
-        // Handle regular form submission
-        $form = $this->createForm(ProjectTaskType::class, $projectTask);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            if ($request->isXmlHttpRequest()) {
-                return $this->json([
-                    'success' => true,
-                    'message' => 'Task updated successfully!'
-                ]);
-            }
-            
-            $this->addFlash('success', 'Task updated successfully!');
-            return $this->redirectToRoute('app_project_task_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        // Handle form errors for AJAX submission
-        if ($request->isXmlHttpRequest() && $form->isSubmitted() && !$form->isValid()) {
-            return $this->json([
-                'success' => false,
-                'errors' => $this->getFormErrors($form),
-            ], 400);
-        }
-
-        return $this->render('project_task/edit.html.twig', [
-            'project_task' => $projectTask,
-            'form' => $form->createView(),
-        ]);
-    }
 
     private function getFormErrors(FormInterface $form): array
     {
