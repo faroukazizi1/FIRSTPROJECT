@@ -1,0 +1,137 @@
+{% extends 'BackOffice/base.html.twig' %}
+
+{% block title %}Task Details{% endblock %}
+
+{% block body %}<br><br><br><br>
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h2 class="m-0 font-weight-bold text-primary">Task Details</h2>
+       
+        </div> 
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <tbody> 
+                        <tr>
+                            <th>Title</th>
+                            <td>{{ project_task.titre }}</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>
+                                {% if project_task.description %}
+                                    {{ project_task.description }}
+                                {% else %}
+                                    <span class="text-muted">No description provided</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Due Date</th>
+                            <td>
+                                {{ project_task.date ? project_task.date|date('F j, Y') : 'Not set' }}
+                                {% if project_task.date and project_task.date < date() %}
+                                    <span class="badge badge-danger ml-2">Overdue</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                      {# At the top of your template or in a separate Twig component #}
+{% macro statusBadge(status) %}
+    {% import _self as self %}
+    
+    {% set config = {
+        'todo': {'class': 'secondary', 'label': 'To Do'},
+        'in_progress': {'class': 'warning', 'label': 'In Progress'},
+        'completed': {'class': 'success', 'label': 'Completed'}
+    } %}
+    
+    {% set settings = config[status] ?? {'class': 'info', 'label': status|title} %}
+    
+    <span class="badge badge-{{ settings.class }}">
+        {{ settings.label }}
+    </span>
+{% endmacro %}
+
+{# In your table row #}
+<tr>
+    <th>Status</th>
+    <td>
+        {{ _self.statusBadge(project_task.statut) }}
+    </td>
+</tr>
+                        <tr>
+                            <th>Project</th>
+                            <td>
+                                {% if project_task.project %}
+                                    <a href="{{ path('app_project_show', {'id': project_task.project.id}) }}">
+                                        {{ project_task.project.titre }}
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">No project assigned</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Assigned User</th>
+                            <td>
+                                {% if project_task.userId %}
+                                    test {{ project_task.userId }} (ID: {{ project_task.userId }})
+                                {% else %}
+                                    <span class="text-muted">Unassigned</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+<!-- Optional: History Modal -->
+<div class="modal fade" id="taskHistoryModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Task History</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- History content would go here -->
+                <p class="text-muted">Task history tracking would be displayed here.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .card {
+        border-radius: 0.35rem;
+    }
+    .card-header {
+        border-radius: 0.35rem 0.35rem 0 0 !important;
+    }
+    .btn-circle {
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 2.5rem;
+    }
+    table th {
+        font-weight: 600;
+    }
+    .badge {
+        font-size: 0.85em;
+        font-weight: 500;
+        padding: 0.35em 0.65em;
+    }
+</style>
+{% endblock %}
