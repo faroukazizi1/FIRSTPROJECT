@@ -1,0 +1,36 @@
+{% extends 'FrontOffice/front_base.html.twig' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Mes Demandes de Congé</h1>
+        
+        <a href="{{ path('app_demande_conge_new') }}" class="btn btn-primary mb-4">
+            Nouvelle Demande
+        </a>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date Début</th>
+                    <th>Date Fin</th>
+                    <th>Type</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for demande in demandes %}
+                <tr>
+                    <td>{{ demande.dateDebut|date('d/m/Y') }}</td>
+                    <td>{{ demande.dateFin|date('d/m/Y') }}</td>
+                    <td>{{ demande.typeConge }}</td>
+                    <td>{{ demande.statut }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">Aucune demande trouvée</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

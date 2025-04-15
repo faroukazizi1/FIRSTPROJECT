@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Bulletin de Paie{% endblock %}
+
+{% block body %}
+    <h1>Créer un Nouveau Bulletin de Paie</h1>
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'no-html-validation'}}) }}
+        
+        <div class="form-group">
+            {{ form_label(form.employe_id) }}
+            {{ form_widget(form.employe_id, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.employe_id) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.mois) }}
+            {{ form_widget(form.mois, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.mois) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.annee) }}
+            {{ form_widget(form.annee, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.annee) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.salaire_brut) }}
+            {{ form_widget(form.salaire_brut, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.salaire_brut) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.deductions) }}
+            {{ form_widget(form.deductions, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.deductions) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.salaire_net) }}
+            {{ form_widget(form.salaire_net, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.salaire_net) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.date_generation) }}
+            {{ form_widget(form.date_generation, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.date_generation) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Enregistrer</button>
+    {{ form_end(form) }}
+{% endblock %}
