@@ -1,0 +1,58 @@
+{% extends 'FrontOffice/front_base.html.twig' %}
+
+{% block title %}New Pret{% endblock %}
+
+{% block body %}
+
+    <style>
+        body {
+            background-color: #343a40; /* Fond sombre */
+            color: #ffffff; /* Texte blanc */
+        }
+
+        h1 {
+            font-size: 16px;
+            color: #ffffff; /* Titre en blanc */
+            margin-bottom: 10px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            font-size: 10px;
+            padding: 3px 6px;
+            text-decoration: none;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+
+        a.btn {
+            background-color: #ddd;
+            color: black;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        a.btn:hover {
+            background-color: #5bc0de; /* Changement de couleur au survol */
+            color: #ffffff;
+        }
+
+        .btn:active {
+            background-color: #46b8da; /* Changement de couleur lorsque le bouton est actif */
+        }
+    </style>
+
+    <h1>Create new Pret</h1>
+
+    {{ include('pret/_form.html.twig') }}
+
+    <div class="btn-container">
+        <a href="{{ path('app_pret_index') }}" class="btn" style="color: white; background-color: #6c757d;">Back to list</a>
+
+    </div>
+{% endblock %}

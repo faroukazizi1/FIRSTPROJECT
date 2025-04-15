@@ -1,0 +1,15 @@
+{# templates/reponse/_form.html.twig #}
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_row(form.cin) }}
+    {{ form_row(form.Date_reponse) }}
+    {{ form_row(form.Montant_demande) }}
+    {{ form_row(form.Revenus_bruts) }}
+    {{ form_row(form.Taux_interet) }}
+    {{ form_row(form.Mensualite_credit) }}
+    {{ form_row(form.Potentiel_credit) }}
+    {{ form_row(form.Duree_remboursement) }}
+    {{ form_row(form.Montant_autorise) }}
+    {{ form_row(form.Assurance) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

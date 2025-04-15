@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Reponse</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>ID_reponse</th>
+                <td>{{ reponse.IDReponse }}</td>
+            </tr>
+            <tr>
+                <th>Date_reponse</th>
+                <td>{{ reponse.DateReponse ? reponse.DateReponse|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Montant_demande</th>
+                <td>{{ reponse.MontantDemande }}</td>
+            </tr>
+            <tr>
+                <th>Revenus_bruts</th>
+                <td>{{ reponse.RevenusBruts }}</td>
+            </tr>
+            <tr>
+                <th>Taux_interet</th>
+                <td>{{ reponse.TauxInteret }}</td>
+            </tr>
+            <tr>
+                <th>Mensualite_credit</th>
+                <td>{{ reponse.MensualiteCredit }}</td>
+            </tr>
+            <tr>
+                <th>Potentiel_credit</th>
+                <td>{{ reponse.PotentielCredit }}</td>
+            </tr>
+            <tr>
+                <th>Duree_remboursement</th>
+                <td>{{ reponse.DureeRemboursement }}</td>
+            </tr>
+            <tr>
+                <th>Montant_autorise</th>
+                <td>{{ reponse.MontantAutorise }}</td>
+            </tr>
+            <tr>
+                <th>Assurance</th>
+                <td>{{ reponse.Assurance }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reponse_index') }}">back to list</a>
+
+    <a href="{{ path('app_reponse_edit', {'ID_reponse': reponse.ID_reponse}) }}">edit</a>
+
+    {{ include('reponse/_delete_form.html.twig') }}
+{% endblock %}

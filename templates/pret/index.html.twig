@@ -1,0 +1,113 @@
+{% extends 'FrontOffice/front_base.html.twig' %}
+
+{% block body %}
+    <style>
+        body {
+            color: #ffffff; /* Couleur du texte en blanc */
+            background-color: #343a40; /* Fond sombre pour contraster */
+        }
+
+        h1 {
+            color: #ffffff; /* Titre en blanc */
+        }
+
+        table.table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse; /* Ajoute de l'espace entre les bordures */
+        }
+
+        table.table th, table.table td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            padding: 8px;
+            color: #ffffff; /* Texte des cellules en blanc */
+        }
+
+        table.table th {
+            background-color: #007bff; /* En-têtes avec fond bleu */
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #2c3e50; /* Lignes paires avec un fond gris foncé */
+        }
+
+        tr:nth-child(odd) {
+            background-color: #34495e; /* Lignes impaires avec un fond gris */
+        }
+
+        tr:hover {
+            background-color: #5bc0de; /* Survol des lignes avec fond bleu clair */
+        }
+
+        td.actions a {
+            margin-right: 5px;
+            color: #ffffff; /* Couleur des icônes en blanc */
+            text-decoration: none;
+        }
+
+        td.actions a:hover {
+            color: #ff6347; /* Couleur au survol pour les icônes */
+        }
+
+        .btn {
+            background-color: #5bc0de; /* Boutons avec fond bleu clair */
+            color: white; /* Texte des boutons en blanc */
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background-color: #46b8da; /* Bouton au survol */
+        }
+    </style>
+
+    <h1>Pret index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>CIN</th>
+                <th>Montant</th>
+                <th>Date</th>
+                <th>TMM</th>
+                <th>Taux</th>
+                <th>Revenus</th>
+                <th>Âge</th>
+                <th>Durée</th>
+                <th>Catégorie</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pret in prets %}
+            <tr>
+                <td>{{ pret.cin }}</td>
+                <td>{{ pret.MontantPret }}</td>
+                <td>{{ pret.DatePret ? pret.DatePret|date('Y-m-d') : '' }}</td>
+                <td>{{ pret.TMM }}</td>
+                <td>{{ pret.Taux }}</td>
+                <td>{{ pret.RevenusBruts }}</td>
+                <td>{{ pret.AgeEmploye }}</td>
+                <td>{{ pret.dureeRemboursement }}</td>
+                <td>{{ pret.Categorie }}</td>
+                <td class="actions">
+                    {{ include('pret/_delete_form.html.twig') }}
+                    <a href="{{ path('app_pret_edit', {'id': pret.ID_pret}) }}">✏️</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pret_new') }}" class="btn">Créer un nouveau</a>
+{% endblock %}

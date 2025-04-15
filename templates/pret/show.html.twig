@@ -1,0 +1,58 @@
+{% extends 'FrontOffice/front_base.html.twig' %}
+
+{% block title %}Pret{% endblock %}
+
+{% block body %}
+    <h1>Pret</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>ID_pret</th>
+                <td>{{ pret.IDPret }}</td>
+            </tr>
+            <tr>
+                <th>Cin</th>
+                <td>{{ pret.cin }}</td>
+            </tr>
+            <tr>
+                <th>Montant_pret</th>
+                <td>{{ pret.MontantPret }}</td>
+            </tr>
+            <tr>
+                <th>Date_pret</th>
+                <td>{{ pret.DatePret ? pret.DatePret|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>TMM</th>
+                <td>{{ pret.TMM }}</td>
+            </tr>
+            <tr>
+                <th>Taux</th>
+                <td>{{ pret.Taux }}</td>
+            </tr>
+            <tr>
+                <th>Revenus_bruts</th>
+                <td>{{ pret.RevenusBruts }}</td>
+            </tr>
+            <tr>
+                <th>Age_employe</th>
+                <td>{{ pret.AgeEmploye }}</td>
+            </tr>
+            <tr>
+                <th>Duree_remboursement</th>
+                <td>{{ pret.dureeRemboursement }}</td>
+            </tr>
+            <tr>
+                <th>Categorie</th>
+                <td>{{ pret.Categorie }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pret_index') }}">back to list</a>
+
+    <a href="{{ path('app_pret_edit', {'ID_pret': pret.IDPret}) }}">edit</a>
+
+    {{ include('pret/_delete_form.html.twig') }}
+{% endblock %}

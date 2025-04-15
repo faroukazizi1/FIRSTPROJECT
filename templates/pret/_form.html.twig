@@ -1,0 +1,51 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+<style>
+    .form-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .form-container > div {
+        flex: 1 1 45%;
+        max-width: 45%;
+    }
+
+    form input,
+    form select,
+    form textarea {
+        font-size: 10px; /* très petit texte */
+        padding: 2px 4px; /* très petit padding */
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        height: 20px; /* très petit champ */
+    }
+
+    form label {
+        font-size: 10px; /* très petit label */
+        margin-bottom: 2px;
+        display: inline-block;
+    }
+
+    form div.form-group,
+    form .form-row,
+    form .form-control {
+        margin-bottom: 5px;
+    }
+
+    .btn {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+</style>
+
+<div class="form-container">
+    {{ form_widget(form) }}
+</div>
+
+<button class="btn" style="color: white; background-color: #007bff;">{{ button_label|default('Save') }}</button>
+
+
+{{ form_end(form) }}
