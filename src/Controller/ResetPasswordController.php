@@ -47,7 +47,7 @@ class ResetPasswordController extends AbstractController
             $result = $this->processSendingPasswordResetEmail($email, $mailer, $translator);
             return $result;
         }
-
+        
         return $this->render('reset_password/request.html.twig', [
             'requestForm' => $form,
         ]);
@@ -167,8 +167,6 @@ class ResetPasswordController extends AbstractController
         ;
     
          $mailer->send($email);
-   
-
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);
 
