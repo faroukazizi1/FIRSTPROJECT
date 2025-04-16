@@ -2,7 +2,7 @@
 
 {% block body %}
 	<div class="container">
-		<div class="page-inner">
+		<div class="page-inner"> 
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
@@ -14,8 +14,7 @@
 							</a>
 						</div>
 					</div>
-					<div
-						class="card-body">
+					<div class="card-body">
 						<!-- Add Project Modal -->
 						<div class="modal fade" id="addProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog" role="document">
@@ -164,49 +163,45 @@
 				</div>
 			</div>
 		</div>
-	</div>
-{% if form is defined and not form.vars.valid %}
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-const modal = new bootstrap.Modal(document.getElementById('addProjectModal'));
-modal.show();
-});
-	</script>
-{% endif %}
+		</div>
+
+		{% if form is defined and not form.vars.valid %}
+			<script>
+				document.addEventListener("DOMContentLoaded", function () {
+				const modal = new bootstrap.Modal(document.getElementById('addProjectModal'));
+				modal.show(); });
+			</script>
+		{% endif %}
 
 
 
-	<script>
-		function loadEditForm(projectId) {
-const modalBody = document.querySelector('#editProjectModal .modal-body');
-const form = document.querySelector('#projectEditForm');
+		<script>
+			function loadEditForm(projectId) 
+			{
+				const modalBody = document.querySelector('#editProjectModal .modal-body');
+				const form = document.querySelector('#projectEditForm');
 
-modalBody.innerHTML = `
-        <div class="text-center p-4">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p>Loading project details...</p>
-        </div>
-    `;
+				// Affichage d’un spinner de chargement pendant le fetch
+				modalBody.innerHTML = 
+				`<div class="text-center p-4">
+					<div class="spinner-border text-primary" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+					<p>Loading project details...</p>
+					</div>`;
 
-fetch(`{{ path('app_project_edit', {'id': 'PLACEHOLDER'}) }}`.replace('PLACEHOLDER', projectId), {
-headers: {
-'X-Requested-With': 'XMLHttpRequest'
-}
-}).then(response => response.text()).then(html => {
-modalBody.innerHTML = html;
-// Set the correct form action with the project ID
-form.action = `{{ path('app_project_edit', {'id': 'PLACEHOLDER'}) }}`.replace('PLACEHOLDER', projectId);
-}).catch(error => {
-modalBody.innerHTML = `
-            <div class="alert alert-danger">
-                Error loading form: ${
-error.message
-}
-            </div>
-        `;
-});
-}
-	</script>
+					//Appel dynamique de la route
+					fetch(`{{ path('app_project_edit', {'id': 'PLACEHOLDER'}) }}`.replace('PLACEHOLDER', projectId), 
+					{headers: {'X-Requested-With': 'XMLHttpRequest'}}).then(response => response.text()).then
+					(html => 
+						{ modalBody.innerHTML = html;
+							// Set the correct form action with the project ID
+							form.action = `{{ path('app_project_edit', {'id': 'PLACEHOLDER'}) }}`.replace('PLACEHOLDER', projectId);
+						}
+					).catch(error => {modalBody.innerHTML = `<div class="alert alert-danger">Error loading form: ${error.message}</div>`;});	
+			}
+		</script>
+
+
+		
 {% endblock %}

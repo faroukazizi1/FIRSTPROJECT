@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\GestionProjet;
 
 use App\Entity\ProjectTask;
 use Doctrine\Persistence\ManagerRegistry;
@@ -8,7 +8,7 @@ use App\Repository\ProjectTaskRepository;
 use App\Repository\ProjectRepository;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\ProjectTaskType;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManagerInterface; 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ final class ProjectTaskController extends AbstractController
     {
         $projectTask = new ProjectTask();
         $form = $this->createForm(ProjectTaskType::class, $projectTask);
-        return $this->render('project_task/index.html.twig', [
+        return $this->render('GestionProjet/project_task/index.html.twig', [
             'project_tasks' => $projectTaskRepository->findAll(), 
             'form' => $form->createView(),
             'projects' => $projectRepository->findAll(),
@@ -35,19 +35,25 @@ final class ProjectTaskController extends AbstractController
         $projectTask = new ProjectTask();
         $form = $this->createForm(ProjectTaskType::class, $projectTask);
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($projectTask);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_project_task_index', [], Response::HTTP_SEE_OTHER);
+    
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $entityManager->persist($projectTask);
+                $entityManager->flush();
+                $this->addFlash('success', 'Tâche enregistrée avec succès.');
+                return $this->redirectToRoute('app_project_task_index', [], Response::HTTP_SEE_OTHER);
+            } else {
+                // Ajout d'un message d'erreur si la validation échoue
+                $this->addFlash('error', 'Erreur lors de l\'enregistrement de la tâche. Veuillez vérifier les champs.');
+            }
         }
-
-        return $this->render('project_task/new.html.twig', [
+    
+        return $this->render('GestionProjet/project_task/index.html.twig', [
             'project_task' => $projectTask,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+    
     #[Route('/tasksClient', name: 'tasksClient', methods: ['GET'])]
     public function TasksListClient(ProjectTaskRepository $taskRepo): Response
     {
@@ -82,7 +88,7 @@ final class ProjectTaskController extends AbstractController
     #[Route('/{id}', name: 'app_project_task_show', methods: ['GET'])]
     public function show(ProjectTask $projectTask): Response
     {
-        return $this->render('project_task/show.html.twig', [
+        return $this->render('GestionProjet/project_task/show.html.twig', [
             'project_task' => $projectTask,
         ]);
     }
@@ -107,7 +113,7 @@ final class ProjectTaskController extends AbstractController
             return $this->redirectToRoute('app_project_task_index', [], Response::HTTP_SEE_OTHER);
         }
     
-        return $this->render('project_task/edit.html.twig', [
+        return $this->render('GestionProjet/project_task/edit.html.twig', [
             'project_task' => $projectTask,
             'form' => $form->createView(),
             'projects' => $projectRepository->findAll(), // Pass projects for dropdown
@@ -121,7 +127,7 @@ final class ProjectTaskController extends AbstractController
             'action' => $this->generateUrl('app_project_task_edit', ['id' => $projectTask->getId()])
         ]);
 
-        return $this->render('project_task/_edit_modal_form.html.twig', [
+        return $this->render('GestionProjet/project_task/_edit_modal_form.html.twig', [
             'form' => $form->createView(),
             'projectTask' => $projectTask
         ]);

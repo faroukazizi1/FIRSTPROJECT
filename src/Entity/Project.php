@@ -50,6 +50,10 @@ class Project
     #[Assert\NotBlank(message: 'Le titre ne doit pas être vide')]
     #[Assert\Length(min: 3, max: 255, minMessage: 'Le titre doit contenir au moins 3 caractères', maxMessage: 'Le titre doit contenir au maximum 255 caractères')]
     #[Assert\Type('string', message: 'Le titre doit être une chaîne de caractères')]
+    #[Assert\Regex(
+        pattern: '/^(?=.*[a-zA-Z])[a-zA-Z0-9_#+\s]+$/',
+        message: 'Le titre ne doit contenir que des lettres, chiffres, espaces, #, + ou _ et doit contenir au moins une lettre.'
+    )]
 
     private ?string $titre = null;
 
@@ -65,8 +69,12 @@ class Project
     }
     #[ORM\Column(type: 'text', nullable: false)] // Changed to text for longer descriptions
     #[Assert\NotBlank(message: 'La description ne doit pas être vide')]
-    #[Assert\Length(min: 3, max: 255, minMessage: 'La description doit contenir au moins 3 caractères', maxMessage: 'La description doit contenir au maximum 255 caractères')]
+    #[Assert\Length(min: 10, max: 255, minMessage: 'La description doit contenir au moins 10 caractères.', maxMessage: 'La description doit contenir au maximum 255 caractères')]
     #[Assert\Type('string', message: 'La description doit être une chaîne de caractères')]
+    #[Assert\Regex(
+        pattern: '/(?:.*[a-zA-Z]){7,}/',
+        message: 'La description doit contenir au moins 7 lettres.'
+    )]
 
     private ?string $description = null;
 

@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\GestionProjet;
 
 use App\Entity\Project;
 use App\Entity\ProjectTask;
 use App\Form\ProjectType;
 use App\Form\ProjectTaskType;
-use App\Repository\ProjectRepository;
+use App\Repository\ProjectRepository; //Les repositories pour accéder aux données
 use App\Repository\ProjectTaskRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManagerInterface; //L’EntityManager pour manipuler la base de données
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request; //Les classes utiles de Symfony
+use Symfony\Component\HttpFoundation\Response; //Les classes utiles de Symfony
+use Symfony\Component\Routing\Attribute\Route; //Les classes utiles de Symfony
 
 #[Route('/project')]
 final class ProjectController extends AbstractController
@@ -25,7 +25,7 @@ final class ProjectController extends AbstractController
         $project = new Project();
         $form = $this->createForm(ProjectType::class, $project);
 
-        return $this->render('project/index.html.twig', [
+        return $this->render('GestionProjet/project/index.html.twig', [
             'projects' => $projectRepository->findAll(),
             'form' => $form->createView(),
 
@@ -58,17 +58,19 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    //show eye Affichage un projet et ses tâches
     #[Route('/{id}', name: 'app_project_show', methods: ['GET'])]
     public function show(Project $project, ProjectTaskRepository $projectTaskRepository): Response
     {
-        $tasks = $projectTaskRepository->findBy(['project' => $project]);
+        $tasks = $projectTaskRepository->findBy(['project' => $project]); //Cherche toutes les tâches liées à ce projet.
         
-        return $this->render('project/show.html.twig', [
+        return $this->render('GestionProjet/project/show.html.twig', [
             'project' => $project,
             'tasks' => $tasks,  
         ]);
     }
 
+    //Modifier projet
     #[Route('/{id}/edit', name: 'app_project_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
@@ -81,7 +83,7 @@ final class ProjectController extends AbstractController
             return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('project/edit.html.twig', [
+        return $this->render('GestionProjet/project/edit.html.twig', [
             'project' => $project,
             'form' => $form,
         ]);
@@ -94,7 +96,7 @@ final class ProjectController extends AbstractController
             'action' => $this->generateUrl('app_project_edit', ['id' => $project->getId()])
         ]);
 
-        return $this->render('project/_edit_modal.html.twig', [
+        return $this->render('GestionProjet/project/_edit_modal.html.twig', [
             'project' => $project,
             'form' => $form->createView(),
         ]);
