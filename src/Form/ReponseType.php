@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Form;
 
 use App\Entity\Reponse;
@@ -8,10 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType; use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 
 class ReponseType extends AbstractType
 {
@@ -39,13 +37,9 @@ class ReponseType extends AbstractType
             ])
             // Champ CIN
             ->add('cin', ChoiceType::class, [
-                'choices' => $options['cin_choices'],  // Utilisation de la liste des CIN passés depuis le contrôleur
+                'choices' => $cinChoices,  // Utilisation de la liste des CIN passés depuis le contrôleur
                 'placeholder' => 'Sélectionner un CIN',
-                // 'constraints' => [
-                //     new NotBlank(['message' => 'Le CIN est obligatoire.']),
-                // ],
-            ])
-
+           ])
             // Champ Montant_demande
             ->add('Montant_demande', MoneyType::class, [
                 'label' => 'Montant demandé',
@@ -121,6 +115,7 @@ class ReponseType extends AbstractType
 
     private function getCinChoices(): array
     {
+        // Récupère les CIN distincts depuis le repository
         $cins = $this->pretRepository->findDistinctCins();
         return array_combine($cins, $cins); // Crée un tableau clé => valeur identique
     }
@@ -129,7 +124,7 @@ class ReponseType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Reponse::class,
-            'cin_choices' => [], // Permet de surcharger les choix si besoin
+            'cin_choices' => [], // Permet de passer la liste des CIN comme option
         ]);
     }
 }

@@ -1,20 +1,18 @@
 <?php
 
 namespace App\Entity;
- use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use App\Repository\ReponseRepository;
 
-#[ORM\Entity(repositoryClass: ReponseRepository::class)]
-#[ORM\Table(name: 'reponse')]
-class Reponse
+use App\Repository\ReponseRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+#[ORM\Entity(repositoryClass: ReponseRepository::class)]class Reponse
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $ID_reponse = null;
 
-    #[ORM\Column(type: 'string', length: 20, nullable: true)]  // Champ CIN nullable
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
     #[Assert\NotBlank(message: "Le CIN est obligatoire.")]
     #[Assert\Length(
         min: 8,
@@ -24,22 +22,22 @@ class Reponse
     )]
     private ?string $cin = null;
 
-    #[ORM\Column(type: 'date', nullable: true)]  // Champ Date_reponse nullable
+    #[ORM\Column(type: 'date', nullable: true)]
     #[Assert\NotNull(message: "La date de réponse est obligatoire.")]
     #[Assert\GreaterThanOrEqual("today", message: "La date de réponse doit être aujourd'hui ou dans le futur.")]
     private ?\DateTimeInterface $Date_reponse = null;
 
-    #[ORM\Column(type: 'float', nullable: true)]  // Montant_demande nullable
+    #[ORM\Column(type: 'float', nullable: true)]
     #[Assert\NotNull(message: "Le montant demandé est obligatoire.")]
     #[Assert\Positive(message: "Le montant demandé doit être positif.")]
     private ?float $Montant_demande = null;
 
-    #[ORM\Column(type: 'float', nullable: true)]  // Revenus_bruts nullable
+    #[ORM\Column(type: 'float', nullable: true)]
     #[Assert\NotNull(message: "Les revenus bruts sont obligatoires.")]
     #[Assert\Positive(message: "Les revenus bruts doivent être positifs.")]
     private ?float $Revenus_bruts = null;
 
-    #[ORM\Column(type: 'float', nullable: true)]  // Taux_interet nullable
+    #[ORM\Column(type: 'float', nullable: true)]
     #[Assert\NotNull(message: "Le taux d'intérêt est obligatoire.")]
     #[Assert\Range(
         min: 0,
@@ -48,17 +46,17 @@ class Reponse
     )]
     private ?float $Taux_interet = null;
 
-    #[ORM\Column(type: 'float', nullable: true)]  // Mensualite_credit nullable
+    #[ORM\Column(type: 'float', nullable: true)]
     #[Assert\NotNull(message: "La mensualité est obligatoire.")]
     #[Assert\PositiveOrZero(message: "La mensualité ne peut pas être négative.")]
     private ?float $Mensualite_credit = null;
 
-    #[ORM\Column(type: 'float', nullable: true)]  // Potentiel_credit nullable
+    #[ORM\Column(type: 'float', nullable: true)]
     #[Assert\NotNull(message: "Le potentiel de crédit est obligatoire.")]
     #[Assert\PositiveOrZero(message: "Le potentiel de crédit ne peut pas être négatif.")]
     private ?float $Potentiel_credit = null;
 
-    #[ORM\Column(type: 'integer', nullable: true)]  // Duree_remboursement nullable
+    #[ORM\Column(type: 'integer', nullable: true)]
     #[Assert\NotNull(message: "La durée de remboursement est obligatoire.")]
     #[Assert\Range(
         min: 1,
@@ -67,12 +65,12 @@ class Reponse
     )]
     private ?int $Duree_remboursement = null;
 
-    #[ORM\Column(type: 'float', nullable: true)]  // Montant_autorise nullable
+    #[ORM\Column(type: 'float', nullable: true)]
     #[Assert\NotNull(message: "Le montant autorisé est obligatoire.")]
     #[Assert\PositiveOrZero(message: "Le montant autorisé ne peut pas être négatif.")]
     private ?float $Montant_autorise = null;
 
-    #[ORM\Column(type: 'float', nullable: true)]  // Assurance nullable
+    #[ORM\Column(type: 'float', nullable: true)]
     #[Assert\NotNull(message: "L'assurance est obligatoire.")]
     #[Assert\PositiveOrZero(message: "Le montant de l'assurance ne peut pas être négatif.")]
     private ?float $Assurance = null;
@@ -100,7 +98,8 @@ class Reponse
         $this->cin = $cin;
         return $this;
     }
-   public function getDateReponse(): ?\DateTimeInterface
+
+    public function getDateReponse(): ?\DateTimeInterface
     {
         return $this->Date_reponse;
     }
@@ -108,7 +107,7 @@ class Reponse
     public function setDateReponse(?\DateTimeInterface $Date_reponse): self
     {
         $this->Date_reponse = $Date_reponse;
-      return $this;
+        return $this;
     }
 
     public function getMontantDemande(): ?float
@@ -119,7 +118,7 @@ class Reponse
     public function setMontantDemande(?float $Montant_demande): self
     {
         $this->Montant_demande = $Montant_demande;
-      return $this;
+        return $this;
     }
 
     public function getRevenusBruts(): ?float
@@ -130,7 +129,7 @@ class Reponse
     public function setRevenusBruts(?float $Revenus_bruts): self
     {
         $this->Revenus_bruts = $Revenus_bruts;
-      return $this;
+        return $this;
     }
 
     public function getTauxInteret(): ?float
@@ -140,7 +139,7 @@ class Reponse
 
     public function setTauxInteret(?float $Taux_interet): self
     {
-     $this->Taux_interet = $Taux_interet;
+        $this->Taux_interet = $Taux_interet;
         return $this;
     }
 
@@ -152,7 +151,7 @@ class Reponse
     public function setMensualiteCredit(?float $Mensualite_credit): self
     {
         $this->Mensualite_credit = $Mensualite_credit;
-      return $this;
+        return $this;
     }
 
     public function getPotentielCredit(): ?float
@@ -163,7 +162,7 @@ class Reponse
     public function setPotentielCredit(?float $Potentiel_credit): self
     {
         $this->Potentiel_credit = $Potentiel_credit;
-       return $this;
+        return $this;
     }
 
     public function getDureeRemboursement(): ?int
@@ -174,7 +173,7 @@ class Reponse
     public function setDureeRemboursement(?int $Duree_remboursement): self
     {
         $this->Duree_remboursement = $Duree_remboursement;
-      return $this;
+        return $this;
     }
 
     public function getMontantAutorise(): ?float
@@ -197,24 +196,4 @@ class Reponse
     {
         $this->Assurance = $Assurance;
         return $this;
-    }
-
-    // === MAGIC METHODS ===
-
-    public function __call($name, $arguments)
-    {
-        $property = lcfirst(str_replace('get', '', $name));
-        if (property_exists($this, $property)) {
-            return $this->$property;
-        }
-        throw new \RuntimeException("Method $name not found");
-    }
-
-    public function &__get($name)
-    {
-        if (property_exists($this, $name)) {
-            return $this->$name;
-        }
-        throw new \RuntimeException("Property $name not found");
-    }
-}
+    }}

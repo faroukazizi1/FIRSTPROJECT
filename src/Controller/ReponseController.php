@@ -32,26 +32,25 @@ final class ReponseController extends AbstractController
     #[Route('/new', name: 'app_reponse_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, PretRepository $pretRepository): Response
     {
-        
-        
-        // Récupère les CIN distincts des pret
-    $cinChoices = $pretRepository->createQueryBuilder('a')
-    ->select('a.cin')
-    ->distinct()
-    ->getQuery()
-    ->getResult();
+        // Récupérer les CIN distincts de la table Pret
+        $cinChoices = $pretRepository->createQueryBuilder('a')
+            ->select('a.cin')
+            ->distinct()
+            ->getQuery()
+            ->getResult();
 
-// Créer une liste de CIN pour le formulaire
-$cinList = array_combine(array_column($cinChoices, 'cin'), array_column($cinChoices, 'cin'));
+        // Créer un tableau clé => valeur pour les CIN (clé et valeur étant le CIN)
+        $cinList = array_combine(array_column($cinChoices, 'cin'), array_column($cinChoices, 'cin'));
 
-// Créer une nouvelle entité Penalite
-$reponse = new Reponse();
-// Créer le formulaire avec les CIN récupérés
-$form = $this->createForm(ReponseType::class, $reponse, [
-    'cin_choices' => $cinList,
-]);
+        // Créer une nouvelle entité Reponse
+        $reponse = new Reponse();
 
-$form->handleRequest($request);
+        // Créer le formulaire en passant les CIN récupérés
+        $form = $this->createForm(ReponseType::class, $reponse, [
+            'cin_choices' => $cinList,
+        ]);
+
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($reponse);
@@ -77,9 +76,17 @@ $form->handleRequest($request);
     #[Route('/{ID_reponse}/edit', name: 'app_reponse_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Reponse $reponse, EntityManagerInterface $entityManager, PretRepository $pretRepository): Response
     {
-        // Utilisation de la méthode correcte pour récupérer les CIN
-        $cinList = $pretRepository->findDistinctCins();
+        // Récupérer la liste des CIN distincts
+        $cinList = $pretRepository->createQueryBuilder('a')
+            ->select('a.cin')
+            ->distinct()
+            ->getQuery()
+            ->getResult();
 
+        // Créer un tableau clé => valeur pour les CIN
+        $cinList = array_combine(array_column($cinList, 'cin'), array_column($cinList, 'cin'));
+
+        // Créer le formulaire en passant les CIN récupérés
         $form = $this->createForm(ReponseType::class, $reponse, [
             'cin_choices' => $cinList,
         ]);

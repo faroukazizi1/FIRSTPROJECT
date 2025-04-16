@@ -71,7 +71,7 @@ class Pret
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
     #[Assert\NotBlank(message: "La catégorie est obligatoire.")]
     #[Assert\Choice(
-        choices: ['Cadre', 'Employé', 'Ovrier'],
+        choices: ['Cadre', 'Employé', 'Ouvrier'],
         message: "Choisissez une catégorie valide."
     )]
     private ?string $Categorie = null;
@@ -152,7 +152,7 @@ class Pret
     public function setRevenusBruts(?float $Revenus_bruts): self
     {
         $this->Revenus_bruts = $Revenus_bruts;
-       return $this;
+        return $this;
     }
 
     public function getAgeEmploye(): ?int
@@ -163,7 +163,7 @@ class Pret
     public function setAgeEmploye(?int $Age_employe): self
     {
         $this->Age_employe = $Age_employe;
-     return $this;
+        return $this;
     }
 
     public function getDureeRemboursement(): ?int
@@ -174,7 +174,7 @@ class Pret
     public function setDureeRemboursement(?int $duree_remboursement): self
     {
         $this->duree_remboursement = $duree_remboursement;
-      return $this;
+        return $this;
     }
 
     public function getCategorie(): ?string
@@ -186,4 +186,11 @@ class Pret
     {
         $this->Categorie = $Categorie;
         return $this;
-    }}
+    }
+
+    // ✅ Méthode pour afficher correctement le CIN dans les formulaires
+    public function __toString(): string
+    {
+        return (string) $this->cin;
+    }
+}

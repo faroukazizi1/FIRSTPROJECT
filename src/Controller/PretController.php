@@ -102,5 +102,4 @@ final class PretController extends AbstractController
         }
 
         return $this->redirectToRoute('app_pret_index', [], Response::HTTP_SEE_OTHER);
-    }
-}
+    }}
