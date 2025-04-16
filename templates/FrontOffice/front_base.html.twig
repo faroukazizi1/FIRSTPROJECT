@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
   <!-- Basic -->
@@ -12,53 +12,51 @@
   <meta name="description" content="" />
   <meta name="author" content="" />
 
-  {% block title %}<title>FLEXIRH</title>{% endblock %}
+  <title>{% block title %}FLEXIRH{% endblock %}</title>
 
   {% block css %}
-  
-  <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="{{asset('FrontOffice/css/bootstrap.css')}}" />
+    <!-- Bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('FrontOffice/css/bootstrap.css') }}" />
 
-  <!-- fonts style -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+    <!-- Fonts style -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
 
-  <!-- font awesome style -->
-  <link href="{{asset('FrontOffice/css/font-awesome.min.css')}}"  rel="stylesheet" />
-  <!-- nice select -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4=" crossorigin="anonymous" />
+    <!-- Font Awesome style -->
+    <link href="{{ asset('FrontOffice/css/font-awesome.min.css') }}" rel="stylesheet" />
 
-  <!-- Custom styles for this template -->
-  <link href="{{asset('FrontOffice/css/style.css')}}" rel="stylesheet" />
-  <!-- responsive style -->
-  <link href="{{asset('FrontOffice/css/responsive.css')}}" rel="stylesheet" />
+    <!-- Nice select -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4=" crossorigin="anonymous" />
 
+    <!-- Custom styles for this template -->
+    <link href="{{ asset('FrontOffice/css/style.css') }}" rel="stylesheet" />
+    <link href="{{ asset('FrontOffice/css/responsive.css') }}" rel="stylesheet" />
   {% endblock %}
-
 </head>
 
 <body>
 
-
   <div class="hero_area">
-    <!-- header section strats -->
+    <!-- Header section starts -->
     <div class="header_area">
       {# Include the navbar #}
-      {% include 'FrontOffice/nav_bar.html.twig'  %}
-      
-      <!-- The rest of your content -->
-      {% block content %}{% endblock %}
+      {% include 'FrontOffice/nav_bar.html.twig' %}
     </div>
-    <!-- end header section -->
-    
+    <!-- Header section ends -->
+
+    <!-- Main content -->
+    {% block content %}{% endblock %}
+
+    {% block body %}
+      <div class="container">
+        <h1>Bienvenue sur votre tableau de bord</h1>
+
+        {# Include the chatbot #}
+        {% include 'chatbot/index.html.twig' %}
+      </div>
+    {% endblock %}
   </div>
-  
 
-  {% block body %}
-  
-
-  {% endblock %}
-  
-  <!-- footer section -->
+  <!-- Footer section -->
   <footer class="footer_section">
     <div class="container">
       <p>
@@ -67,18 +65,17 @@
       </p>
     </div>
   </footer>
-  <!-- footer section -->
-  {% block js %}
-    <!-- jQery -->
-    <script src="{{asset('FrontOffice/js/jquery-3.4.1.min.js')}}"></script>
-    <!-- bootstrap js -->
-    <script src="{{asset('FrontOffice/js/bootstrap.js')}}"></script>
-    <!-- nice select -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js" integrity="sha256-Zr3vByTlMGQhvMfgkQ5BtWRSKBGa2QlspKYJnkjZTmo=" crossorigin="anonymous"></script>
-    <!-- custom js -->
-    <script src="{{asset('FrontOffice/js/custom.js')}}"></script>
-  {% endblock %}
 
+  {% block js %}
+    <!-- jQuery -->
+    <script src="{{ asset('FrontOffice/js/jquery-3.4.1.min.js') }}"></script>
+    <!-- Bootstrap js -->
+    <script src="{{ asset('FrontOffice/js/bootstrap.js') }}"></script>
+    <!-- Nice select -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js" integrity="sha256-Zr3vByTlMGQhvMfgkQ5BtWRSKBGa2QlspKYJnkjZTmo=" crossorigin="anonymous"></script>
+    <!-- Custom js -->
+    <script src="{{ asset('FrontOffice/js/custom.js') }}"></script>
+  {% endblock %}
 </body>
 
 </html>
