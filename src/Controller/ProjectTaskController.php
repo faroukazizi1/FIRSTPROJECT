@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Controller;
+
+use App\Entity\ProjectTask;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\ProjectTaskRepository;
 use App\Repository\ProjectRepository;
 use Symfony\Component\HttpFoundation\Response;
-use App\Entity\ProjectTask;
 use App\Form\ProjectTaskType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -45,6 +47,36 @@ final class ProjectTaskController extends AbstractController
             'project_task' => $projectTask,
             'form' => $form,
         ]);
+    }
+    #[Route('/tasksClient', name: 'tasksClient', methods: ['GET'])]
+    public function TasksListClient(ProjectTaskRepository $taskRepo): Response
+    {
+        $userId = 1; // default user ID
+
+        return $this->render('FrontOffice/TasksList.html.twig', [
+            'to_do' => $taskRepo->findByStatutAndUserId('todo', $userId),
+            'in_progress' => $taskRepo->findByStatutAndUserId('in_progress', $userId),
+            'completed' => $taskRepo->findByStatutAndUserId('completed', $userId),
+        ]);
+    }
+
+    #[Route('/update-statut', name: 'task_update_statut', methods: ['POST'])]
+    public function updateStatut(Request $request, ProjectTaskRepository $taskRepository, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $taskId = $data['id'];
+        $newStatut = $data['statut'];
+
+        $task = $taskRepository->find($taskId);
+        if (!$task) {
+            return new JsonResponse(['error' => 'Task not found'], 404);
+        }
+
+        $task->setStatut($newStatut);
+        $em->persist($task);
+        $em->flush();
+
+        return new JsonResponse(['success' => true]);
     }
 
     #[Route('/{id}', name: 'app_project_task_show', methods: ['GET'])]

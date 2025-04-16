@@ -1,186 +1,187 @@
 {% extends 'BackOffice/base.html.twig' %}
 
 {% block body %}
-<div class="container">
-    <div class="page-inner">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex align-items-center">
-                        <h4 class="card-title">Liste Projet</h4>
-                        <a class="btn btn-primary btn-round ms-auto" href="#" data-bs-toggle="modal" data-bs-target="#addProjectModal">
-                            <i class="fa fa-plus"></i>
-                            Add Project
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <!-- Add Project Modal -->
-                    <div class="modal fade" id="addProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header border-0">
-                                    <h5 class="modal-title">
-                                        <span class="fw-mediumbold">Add New Project</span>
-                                    </h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <form action="{{ path('app_project_new') }}" method="post" novalidate>
-                                    <div class="modal-body">
-                                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                                        <div class="form-group">
-                                            {{ form_label(form.titre) }}
-                                            {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
-                                            <div class="text-danger small">{{ form_errors(form.titre) }}</div>
-                                        </div>
-                                        <div class="form-group">
-                                            {{ form_label(form.description) }}
-                                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 3}}) }}
-                                            <div class="text-danger small">{{ form_errors(form.description) }}</div>
-                                        </div>
-                                        <div class="form-group">
-                                            {{ form_label(form.statut) }}
-                                            {{ form_widget(form.statut, {'attr': {'class': 'form-control'}}) }}
-                                            <div class="text-danger small">{{ form_errors(form.statut) }}</div>
-                                        </div>
-                                        <div class="form-group">
-                                            {{ form_label(form.date_debut) }}
-                                            {{ form_widget(form.date_debut, {'attr': {'class': 'form-control'}}) }}
-                                            <div class="text-danger small">{{ form_errors(form.date_debut) }}</div>
-                                        </div>
-                                        <div class="form-group">
-                                            {{ form_label(form.date_fin) }}
-                                            {{ form_widget(form.date_fin, {'attr': {'class': 'form-control'}}) }}
-                                            <div class="text-danger small">{{ form_errors(form.date_fin) }}</div>
-                                        </div> 
-                                    </div>
-                                    <div class="modal-footer border-0">
-                                        <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
-                                        {{ form_end(form) }}
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+	<div class="container">
+		<div class="page-inner">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<div class="d-flex align-items-center">
+							<h4 class="card-title">Liste Projet</h4>
+							<a class="btn btn-primary btn-round ms-auto" href="#" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+								<i class="fa fa-plus"></i>
+								Add Project
+							</a>
+						</div>
+					</div>
+					<div
+						class="card-body">
+						<!-- Add Project Modal -->
+						<div class="modal fade" id="addProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header border-0">
+										<h5 class="modal-title">
+											<span class="fw-mediumbold">Add New Project</span>
+										</h5>
+										<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">×</span>
+										</button>
+									</div>
+									<form action="{{ path('app_project_new') }}" method="post" novalidate>
+										<div class="modal-body">
+											{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+											<div class="form-group">
+												{{ form_label(form.titre) }}
+												{{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+												<div class="text-danger small">{{ form_errors(form.titre) }}</div>
+											</div>
+											<div class="form-group">
+												{{ form_label(form.description) }}
+												{{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+												<div class="text-danger small">{{ form_errors(form.description) }}</div>
+											</div>
+											<div class="form-group">
+												{{ form_label(form.statut) }}
+												{{ form_widget(form.statut, {'attr': {'class': 'form-control'}}) }}
+												<div class="text-danger small">{{ form_errors(form.statut) }}</div>
+											</div>
+											<div class="form-group">
+												{{ form_label(form.date_debut) }}
+												{{ form_widget(form.date_debut, {'attr': {'class': 'form-control'}}) }}
+												<div class="text-danger small">{{ form_errors(form.date_debut) }}</div>
+											</div>
+											<div class="form-group">
+												{{ form_label(form.date_fin) }}
+												{{ form_widget(form.date_fin, {'attr': {'class': 'form-control'}}) }}
+												<div class="text-danger small">{{ form_errors(form.date_fin) }}</div>
+											</div>
+										</div>
+										<div class="modal-footer border-0">
+											<button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+											{{ form_end(form) }}
+											<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
 
-                    <!-- Edit Project Modal -->
-                    <div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header border-0">
-                                    <h5 class="modal-title">
-                                        <span class="fw-mediumbold">Edit</span>
-                                        <span class="fw-light">Project</span>
-                                    </h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <form id="projectEditForm" method="post">
-                                    <div class="modal-body" id="editProjectModalBody">
-                                        <!-- Form content will be loaded here via AJAX -->
-                                    </div> 
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+						<!-- Edit Project Modal -->
+						<div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header border-0">
+										<h5 class="modal-title">
+											<span class="fw-mediumbold">Edit</span>
+											<span class="fw-light">Project</span>
+										</h5>
+										<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">×</span>
+										</button>
+									</div>
+									<form id="projectEditForm" method="post">
+										<div
+											class="modal-body" id="editProjectModalBody"><!-- Form content will be loaded here via AJAX -->
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
 
-                      <!-- Project Table -->
-                    <div class="table-responsive">
-                        <div id="add-row_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-6">
-                                    <div class="dataTables_length" id="add-row_length">
-                                        <label>Show 
-                                            <select name="add-row_length" aria-controls="add-row" class="form-control form-control-sm">
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select> entries
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6">
-                                    <div id="add-row_filter" class="dataTables_filter">
-                                        <label>Search:
-                                            <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="add-row">
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table id="add-row" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="add-row_info">
-                                        <thead>
-                                            <tr role="row">
-                                                <th class="sorting_asc" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 196.938px;">Titre</th>
-                                                <th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 290.75px;">Description</th>
-                                                <th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 159.625px;">Statut</th>
-                                                <th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 159.625px;">Date_debut</th>
-                                                <th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 159.625px;">Date_fin</th>
-                                                <th style="width: 120.688px;" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">Action</th>
-                                            </tr>    
-                                        </thead> 
-                                        <tbody>   
-                                            {% for project in projects %}
-                                                <tr>
-                                                    <td>{{ project.titre }}</td>
-                                                    <td>{{ project.description }}</td>
-                                                    <td>{{ project.statut }}</td>
-                                                    <td>{{ project.dateDebut ? project.dateDebut|date('Y-m-d') : '' }}</td>
-                                                    <td>{{ project.dateFin ? project.dateFin|date('Y-m-d') : '' }}</td>
-                                                    <td>
-                                                        <div class="form-button-action">
-                                                            <button type="button" 
-                                                                    data-bs-toggle="modal" 
-                                                                    data-bs-target="#editProjectModal"
-                                                                    onclick="loadEditForm({{ project.id }})"
-                                                                    class="btn btn-link btn-primary btn-lg edit-project-btn"
-                                                                    data-original-title="Edit Project">
-                                                                <i class="fa fa-edit"></i>
-                                                            </button>
-                                                            <button type="button" onclick="window.location.href='{{ path('app_project_show', {'id': project.id}) }}'" 
-                                                                    data-bs-toggle="tooltip" title="" 
-                                                                    class="btn btn-link btn-primary" 
-                                                                    data-original-title="show project">
-                                                                <i class="fa fa-eye"></i>
-                                                            </button>
-                                                            <button type="button" onclick="window.location.href='{{ path('app_project_delete', {'id': project.id}) }}'" 
-                                                                    data-bs-toggle="tooltip" title="" 
-                                                                    class="btn btn-link btn-danger" 
-                                                                    data-original-title="Remove">
-                                                                <i class="fas fa-trash text-danger text-secondary" aria-hidden="true"></i>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            {% else %}
-                                                <tr>
-                                                    <td colspan="7">no records found</td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+						<!-- Project Table -->
+						<div class="table-responsive">
+							<div id="add-row_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+								<div class="row">
+									<div class="col-sm-12 col-md-6">
+										<div class="dataTables_length" id="add-row_length">
+											<label>Show
+												<select name="add-row_length" aria-controls="add-row" class="form-control form-control-sm">
+													<option value="10">10</option>
+													<option value="25">25</option>
+													<option value="50">50</option>
+													<option value="100">100</option>
+												</select>
+												entries
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-12 col-md-6">
+										<div id="add-row_filter" class="dataTables_filter">
+											<label>Search:
+												<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="add-row">
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<table id="add-row" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="add-row_info">
+											<thead>
+												<tr role="row">
+													<th class="sorting_asc" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 196.938px;">Titre</th>
+													<th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 290.75px;">Description</th>
+													<th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 159.625px;">Statut</th>
+													<th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 159.625px;">Date_debut</th>
+													<th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 159.625px;">Date_fin</th>
+													<th style="width: 120.688px;" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												{% for project in projects %}
+													<tr>
+														<td>{{ project.titre }}</td>
+														<td>{{ project.description }}</td>
+														<td>{{ project.statut }}</td>
+														<td>{{ project.dateDebut ? project.dateDebut|date('Y-m-d') : '' }}</td>
+														<td>{{ project.dateFin ? project.dateFin|date('Y-m-d') : '' }}</td>
+														<td>
+															<div class="form-button-action">
+																<button type="button" data-bs-toggle="modal" data-bs-target="#editProjectModal" onclick="loadEditForm({{ project.id }})" class="btn btn-link btn-primary btn-lg edit-project-btn" data-original-title="Edit Project">
+																	<i class="fa fa-edit"></i>
+																</button>
+																<button type="button" onclick="window.location.href='{{ path('app_project_show', {'id': project.id}) }}'" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary" data-original-title="show project">
+																	<i class="fa fa-eye"></i>
+																</button>
+																<button type="button" onclick="window.location.href='{{ path('app_project_delete', {'id': project.id}) }}'" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove">
+																	<i class="fas fa-trash text-danger text-secondary" aria-hidden="true"></i>
+																</button>
+															</div>
+														</td>
+													</tr>
+												{% else %}
+													<tr>
+														<td colspan="7">no records found</td>
+													</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% if form is defined and not form.vars.valid %}
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+const modal = new bootstrap.Modal(document.getElementById('addProjectModal'));
+modal.show();
+});
+	</script>
+{% endif %}
 
-<script>
-function loadEditForm(projectId) {
-    const modalBody = document.querySelector('#editProjectModal .modal-body');
-    const form = document.querySelector('#projectEditForm');
-     
-    modalBody.innerHTML = `
+
+
+	<script>
+		function loadEditForm(projectId) {
+const modalBody = document.querySelector('#editProjectModal .modal-body');
+const form = document.querySelector('#projectEditForm');
+
+modalBody.innerHTML = `
         <div class="text-center p-4">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -188,25 +189,24 @@ function loadEditForm(projectId) {
             <p>Loading project details...</p>
         </div>
     `;
-     
-    fetch(`{{ path('app_project_edit', {'id': 'PLACEHOLDER'}) }}`.replace('PLACEHOLDER', projectId), {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.text())
-    .then(html => {
-        modalBody.innerHTML = html;
-        // Set the correct form action with the project ID
-        form.action = `{{ path('app_project_edit', {'id': 'PLACEHOLDER'}) }}`.replace('PLACEHOLDER', projectId);
-    })
-    .catch(error => {
-        modalBody.innerHTML = `
+
+fetch(`{{ path('app_project_edit', {'id': 'PLACEHOLDER'}) }}`.replace('PLACEHOLDER', projectId), {
+headers: {
+'X-Requested-With': 'XMLHttpRequest'
+}
+}).then(response => response.text()).then(html => {
+modalBody.innerHTML = html;
+// Set the correct form action with the project ID
+form.action = `{{ path('app_project_edit', {'id': 'PLACEHOLDER'}) }}`.replace('PLACEHOLDER', projectId);
+}).catch(error => {
+modalBody.innerHTML = `
             <div class="alert alert-danger">
-                Error loading form: ${error.message}
+                Error loading form: ${
+error.message
+}
             </div>
         `;
-    });
+});
 }
-</script>
+	</script>
 {% endblock %}

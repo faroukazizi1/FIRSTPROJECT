@@ -32,7 +32,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    //Ajout projet
+
     #[Route('/new', name: 'app_project_new', methods: ['POST'])]
     public function new(Request $request, ProjectRepository $projectRepository, EntityManagerInterface $entityManager): Response
     {
@@ -47,18 +47,17 @@ final class ProjectController extends AbstractController
                 $this->addFlash('success', 'Projet enregistré avec succès.');
                 return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
             } else if ($form->isSubmitted()) {
-                $this->addFlash('error', 'Erreur lors de l\'enregistrement du projet. Veuillez vérifier les champs.');  
+                $this->addFlash('error', 'Erreur lors de l\'enregistrement du projet. Veuillez vérifier les champs.');
             }
-        }       
+        }
 
         return $this->render('project/index.html.twig', [
             'projects' => $projectRepository->findAll(),
             'form' => $form->createView(),
-             
-        ]); 
+
+        ]);
     }
 
-    //Show projet
     #[Route('/{id}', name: 'app_project_show', methods: ['GET'])]
     public function show(Project $project, ProjectTaskRepository $projectTaskRepository): Response
     {
@@ -70,7 +69,6 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    //Modifier projet avec formulaire
     #[Route('/{id}/edit', name: 'app_project_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
@@ -89,7 +87,6 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    //Modifier projet avec modal
     #[Route('/{id}/edit/modal', name: 'app_project_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(Project $project): Response
     {
@@ -103,7 +100,6 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    //Delete project
     #[Route('/delete/{id}', name: 'app_project_delete', methods: ['GET','POST'])]
     public function delete($id , ManagerRegistry $managerRegistry , ProjectRepository $projectRepository): Response
     {
@@ -113,6 +109,7 @@ final class ProjectController extends AbstractController
       $entityManager->flush();
       return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
     }
+
 
 
     private function getFormErrors(FormInterface $form): array
