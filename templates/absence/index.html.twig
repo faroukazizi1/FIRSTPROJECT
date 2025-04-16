@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Absence index{% endblock %}
+
+{% block body %}
+    <h1>Absence index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Nbr_abs</th>
+                <th>Type</th>
+                <th>Cin</th>
+                <th>Image</th> <!-- Affichage du lien de l'image -->
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for absence in absences %}
+            <tr>
+                <td>{{ absence.Date ? absence.Date|date('Y-m-d') : '' }}</td>
+                <td>{{ absence.nbrAbs }}</td>
+                <td>{{ absence.type }}</td>
+                <td>{{ absence.cin }}</td>
+                <td>
+                    {% if absence.imagePath %}
+                        <a href="{{ asset(absence.imagePath) }}" target="_blank">Voir l'image</a>
+                    {% else %}
+                        Aucune image disponible
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_absence_show', {'ID_abs': absence.IDAbs}) }}">Show</a>
+                    <a href="{{ path('app_absence_edit', {'ID_abs': absence.IDAbs}) }}">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">No records found</td>  {# ✅ colspan ajusté après suppression de l'ID #}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_absence_new') }}">Create new</a>
+{% endblock %}

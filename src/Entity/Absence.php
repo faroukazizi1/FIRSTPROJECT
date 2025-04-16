@@ -4,16 +4,17 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\AbsenceRepository;
 
 #[ORM\Entity(repositoryClass: AbsenceRepository::class)]
 #[ORM\Table(name: 'absence')]
 class Absence
 {
-    #[ORM\Column(type: 'date', nullable: false)]
+    // La propriété Date est nullable
+    #[ORM\Column(type: 'date', nullable: true)]  // La date peut être null
+    #[Assert\NotBlank(message: 'La date est obligatoire.')]  // Assure que la date n'est pas vide si présente
+    #[Assert\LessThan('today', message: 'La date doit être dans le passé.')]
     private ?\DateTimeInterface $Date = null;
 
     public function getDate(): ?\DateTimeInterface
@@ -21,13 +22,20 @@ class Absence
         return $this->Date;
     }
 
-    public function setDate(\DateTimeInterface $Date): self
+    // Méthode qui accepte une DateTimeInterface ou null
+    public function setDate(?\DateTimeInterface $Date): self
     {
         $this->Date = $Date;
         return $this;
     }
 
     #[ORM\Column(type: 'integer', nullable: false)]
+    #[Assert\NotBlank(message: 'Le nombre d\'absences est obligatoire.')]
+    #[Assert\Range(
+        min: 1, 
+        max: 999, 
+        notInRangeMessage: 'Le nombre d\'absences doit être entre {{ min }} et {{ max }}.'
+    )]
     private ?int $nbr_abs = null;
 
     public function getNbr_abs(): ?int
@@ -42,6 +50,11 @@ class Absence
     }
 
     #[ORM\Column(type: 'string', nullable: false)]
+    #[Assert\NotBlank(message: 'Le type d\'absence est obligatoire.')]
+    #[Assert\Choice(
+        choices: ['justifiee', 'non_justifiee'],
+        message: 'Le type d\'absence doit être "justifiee" ou "non_justifiee".'
+    )]
     private ?string $type = null;
 
     public function getType(): ?string
@@ -72,6 +85,11 @@ class Absence
     }
 
     #[ORM\Column(type: 'integer', nullable: false)]
+    #[Assert\NotBlank(message: 'Le CIN est obligatoire.')]
+    #[Assert\Regex(
+        pattern: '/^\d+$/', 
+        message: 'Le CIN doit être composé uniquement de chiffres.'
+    )]
     private ?int $cin = null;
 
     public function getCin(): ?int
@@ -86,6 +104,13 @@ class Absence
     }
 
     #[ORM\Column(type: 'string', nullable: true)]
+    #[Assert\Image(
+        maxSize: '2M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/gif'],
+        mimeTypesMessage: 'Seules les images JPEG, PNG et GIF sont acceptées.',
+        maxSizeMessage: 'Le fichier image ne doit pas dépasser 2 Mo.',
+        groups: ['image_required']  // Validation de l'image uniquement dans ce groupe
+    )]
     private ?string $image_path = null;
 
     public function getImage_path(): ?string
@@ -104,10 +129,9 @@ class Absence
         return $this->nbr_abs;
     }
 
-    public function setNbrAbs(int $nbr_abs): static
+    public function setNbrAbs(int $nbr_abs): self
     {
-        $this->nbr_abs = $nbr_abs;
-
+    $this->nbr_abs = $nbr_abs;
         return $this;
     }
 
@@ -121,11 +145,15 @@ class Absence
         return $this->image_path;
     }
 
-    public function setImagePath(?string $image_path): static
+    public function setImagePath(?string $image_path): self
     {
         $this->image_path = $image_path;
-
-        return $this;
+      return $this;
     }
 
+    // Méthode pour vérifier si l'absence est justifiée
+    public function isJustifiee(): bool
+    {
+        return $this->type === 'justifiee';
+    }
 }
