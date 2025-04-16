@@ -3,11 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
+
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-
 use App\Repository\ProjectRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\Table(name: 'project')]
@@ -17,6 +21,19 @@ class Project
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+    #[ORM\OneToMany(
+        mappedBy: "project", 
+        targetEntity: ProjectTask::class,
+        cascade: ["persist", "remove"], // Add "remove" for cascade deletion
+        orphanRemoval: true
+    )]
+    private Collection $tasks;
+
+    public function __construct()
+    {
+        $this->tasks = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -30,6 +47,14 @@ class Project
     }
 
     #[ORM\Column(type: 'string', nullable: false)]
+    #[Assert\NotBlank(message: 'Le titre ne doit pas être vide')]
+    #[Assert\Length(min: 3, max: 255, minMessage: 'Le titre doit contenir au moins 3 caractères', maxMessage: 'Le titre doit contenir au maximum 255 caractères')]
+    #[Assert\Type('string', message: 'Le titre doit être une chaîne de caractères')]
+    #[Assert\Regex(
+        pattern: '/^(?=.*[a-zA-Z])[a-zA-Z0-9_#+\s]+$/',
+        message: 'Le titre ne doit contenir que des lettres, chiffres, espaces, #, + ou _ et doit contenir au moins une lettre.'
+    )]
+
     private ?string $titre = null;
 
     public function getTitre(): ?string
@@ -42,8 +67,15 @@ class Project
         $this->titre = $titre;
         return $this;
     }
+    #[ORM\Column(type: 'text', nullable: false)] // Changed to text for longer descriptions
+    #[Assert\NotBlank(message: 'La description ne doit pas être vide')]
+    #[Assert\Length(min: 10, max: 255, minMessage: 'La description doit contenir au moins 10 caractères.', maxMessage: 'La description doit contenir au maximum 255 caractères')]
+    #[Assert\Type('string', message: 'La description doit être une chaîne de caractères')]
+    #[Assert\Regex(
+        pattern: '/(?:.*[a-zA-Z]){7,}/',
+        message: 'La description doit contenir au moins 7 lettres.'
+    )]
 
-    #[ORM\Column(type: 'string', nullable: false)]
     private ?string $description = null;
 
     public function getDescription(): ?string
@@ -58,6 +90,8 @@ class Project
     }
 
     #[ORM\Column(type: 'string', nullable: false)]
+    #[Assert\NotBlank(message: 'Le statut ne doit pas être vide')]
+
     private ?string $statut = null;
 
     public function getStatut(): ?string
@@ -72,55 +106,65 @@ class Project
     }
 
     #[ORM\Column(type: 'date', nullable: false)]
+    #[Assert\NotNull(message: 'La date de début ne doit pas être vide')]
+    #[Assert\LessThanOrEqual(propertyPath: 'dateFin', message: 'La date de début doit être inférieure à la date de fin')]
     private ?\DateTimeInterface $date_debut = null;
-
-    public function getDate_debut(): ?\DateTimeInterface
-    {
-        return $this->date_debut;
-    }
-
-    public function setDate_debut(\DateTimeInterface $date_debut): self
-    {
-        $this->date_debut = $date_debut;
-        return $this;
-    }
-
-    #[ORM\Column(type: 'date', nullable: false)]
-    private ?\DateTimeInterface $date_fin = null;
-
-    public function getDate_fin(): ?\DateTimeInterface
-    {
-        return $this->date_fin;
-    }
-
-    public function setDate_fin(\DateTimeInterface $date_fin): self
-    {
-        $this->date_fin = $date_fin;
-        return $this;
-    }
-
+    
     public function getDateDebut(): ?\DateTimeInterface
     {
         return $this->date_debut;
     }
 
-    public function setDateDebut(\DateTimeInterface $date_debut): static
+    public function setDateDebut(?\DateTimeInterface $date_debut): self
     {
         $this->date_debut = $date_debut;
-
         return $this;
     }
+    
+    #[ORM\Column(type: 'date', nullable: false)]
+    #[Assert\NotNull(message: 'La date de fin ne doit pas être vide')]
+    #[Assert\GreaterThanOrEqual(propertyPath: 'dateDebut', message: 'La date de fin doit être supérieure à la date de début')]
+    private ?\DateTimeInterface $date_fin = null;
+
 
     public function getDateFin(): ?\DateTimeInterface
     {
         return $this->date_fin;
     }
 
-    public function setDateFin(\DateTimeInterface $date_fin): static
+    public function setDateFin(?\DateTimeInterface $date_fin): self
     {
         $this->date_fin = $date_fin;
+        return $this;
+    }
+    
 
+    /**
+     * @return Collection<int, ProjectTask>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(ProjectTask $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setProject($this);
+        }
         return $this;
     }
 
+    public function removeTask(ProjectTask $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getProject() === $this) {
+                $task->setProject(null);
+            }
+        }
+        return $this;
+    }
 }
+

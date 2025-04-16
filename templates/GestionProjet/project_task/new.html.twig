@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+<title>New ProjectTask</title>
+
+{% block body %}
+    <h1>Create new ProjectTask</h1>
+
+    {{ include('GestionProjet/project_task/_form.html.twig') }}
+
+    <a href="{{ path('app_project_task_index') }}">back to list</a>
+{% endblock %}

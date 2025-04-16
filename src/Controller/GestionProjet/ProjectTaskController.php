@@ -1,0 +1,146 @@
+<?php
+
+namespace App\Controller\GestionProjet;
+
+use App\Entity\ProjectTask;
+use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\ProjectTaskRepository;
+use App\Repository\ProjectRepository;
+use Symfony\Component\HttpFoundation\Response;
+use App\Form\ProjectTaskType;
+use Doctrine\ORM\EntityManagerInterface; 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
+
+#[Route('/task')]
+final class ProjectTaskController extends AbstractController
+{
+    #[Route(name: 'app_project_task_index', methods: ['GET'])]
+    public function index(ProjectTaskRepository $projectTaskRepository ,  ProjectRepository $projectRepository): Response
+    {
+        $projectTask = new ProjectTask();
+        $form = $this->createForm(ProjectTaskType::class, $projectTask);
+        return $this->render('GestionProjet/project_task/index.html.twig', [
+            'project_tasks' => $projectTaskRepository->findAll(), 
+            'form' => $form->createView(),
+            'projects' => $projectRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/new', name: 'app_project_task_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $projectTask = new ProjectTask();
+        $form = $this->createForm(ProjectTaskType::class, $projectTask);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $entityManager->persist($projectTask);
+                $entityManager->flush();
+                $this->addFlash('success', 'Tâche enregistrée avec succès.');
+                return $this->redirectToRoute('app_project_task_index', [], Response::HTTP_SEE_OTHER);
+            } else {
+                // Ajout d'un message d'erreur si la validation échoue
+                $this->addFlash('error', 'Erreur lors de l\'enregistrement de la tâche. Veuillez vérifier les champs.');
+            }
+        }
+    
+        return $this->render('GestionProjet/project_task/index.html.twig', [
+            'project_task' => $projectTask,
+            'form' => $form->createView(),
+        ]);
+    }
+    
+    #[Route('/tasksClient', name: 'tasksClient', methods: ['GET'])]
+    public function TasksListClient(ProjectTaskRepository $taskRepo): Response
+    {
+        $userId = 1; // default user ID
+
+        return $this->render('FrontOffice/TasksList.html.twig', [
+            'to_do' => $taskRepo->findByStatutAndUserId('todo', $userId),
+            'in_progress' => $taskRepo->findByStatutAndUserId('in_progress', $userId),
+            'completed' => $taskRepo->findByStatutAndUserId('completed', $userId),
+        ]);
+    }
+
+    #[Route('/update-statut', name: 'task_update_statut', methods: ['POST'])]
+    public function updateStatut(Request $request, ProjectTaskRepository $taskRepository, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $taskId = $data['id'];
+        $newStatut = $data['statut'];
+
+        $task = $taskRepository->find($taskId);
+        if (!$task) {
+            return new JsonResponse(['error' => 'Task not found'], 404);
+        }
+
+        $task->setStatut($newStatut);
+        $em->persist($task);
+        $em->flush();
+
+        return new JsonResponse(['success' => true]);
+    }
+
+    #[Route('/{id}', name: 'app_project_task_show', methods: ['GET'])]
+    public function show(ProjectTask $projectTask): Response
+    {
+        return $this->render('GestionProjet/project_task/show.html.twig', [
+            'project_task' => $projectTask,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_project_task_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, ProjectTask $projectTask, EntityManagerInterface $entityManager,ProjectRepository $projectRepository): Response
+    {
+        $form = $this->createForm(ProjectTaskType::class, $projectTask, [
+            'is_edit' => true
+        ]);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Ensure the project relation is properly set
+            if ($form->has('project') && $projectTask->getProject()) {
+                $projectTask->setProjectId($projectTask->getProject()->getId());
+            }
+            
+            $entityManager->flush();
+    
+            $this->addFlash('success', 'Task updated successfully!');
+            return $this->redirectToRoute('app_project_task_index', [], Response::HTTP_SEE_OTHER);
+        }
+    
+        return $this->render('GestionProjet/project_task/edit.html.twig', [
+            'project_task' => $projectTask,
+            'form' => $form->createView(),
+            'projects' => $projectRepository->findAll(), // Pass projects for dropdown
+        ]);
+    }
+
+    #[Route('/project_task/{id}/edit/modal', name: 'app_project_task_edit_modal', methods: ['GET'])]
+    public function editModal(Request $request, ProjectTask $projectTask): Response
+    {
+        $form = $this->createForm(ProjectTaskType::class, $projectTask, [
+            'action' => $this->generateUrl('app_project_task_edit', ['id' => $projectTask->getId()])
+        ]);
+
+        return $this->render('GestionProjet/project_task/_edit_modal_form.html.twig', [
+            'form' => $form->createView(),
+            'projectTask' => $projectTask
+        ]);
+    }
+
+    #[Route('/delete/{id}', name: 'app_project_task_delete', methods: ['GET', 'POST'])]
+    public function delete($id, ManagerRegistry $managerRegistry, ProjectTaskRepository $projectTaskRepository): Response
+    {
+        $entityManager = $managerRegistry->getManager();
+        $projectTask = $projectTaskRepository->find($id);
+        $entityManager->remove($projectTask);
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('app_project_task_index', [], Response::HTTP_SEE_OTHER);
+    }
+}

@@ -1,0 +1,421 @@
+{% extends 'BackOffice/base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <div class="page-inner">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <h4 class="card-title">Project Tasks</h4>
+                        <a class="btn btn-primary btn-round ms-auto"  data-bs-toggle="modal" data-bs-target="#addTaskModal">
+                            <i class="fa fa-plus"></i>
+                            Add Task
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body"> 
+
+                 <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header border-0">
+                                    <h5 class="modal-title">
+                                        <span class="fw-mediumbold">Add New</span>
+                                        <span class="fw-light">Task</span>
+                                    </h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <form action="{{ path('app_project_task_new') }}" method="post">
+                                    <div class="modal-body">
+                                        {{ form_start(form) }}
+                                        <div class="form-group">
+                                            {{ form_label(form.titre) }}
+                                            {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_label(form.description) }}
+                                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_label(form.statut) }}
+                                            {{ form_widget(form.statut, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_label(form.date) }}
+                                            {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                       <div class="form-group">
+                                            {{ form_label(form.project) }}
+                                            {{ form_widget(form.project, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_label(form.user_id) }}
+                                            {{ form_widget(form.user_id, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer border-0">
+                                        <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                                        {{ form_end(form) }}
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+ 
+                            <!-- Edit Project Task Modal -->
+                            <div class="modal fade" id="editProjectTaskModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-0">
+                                            <h5 class="modal-title">
+                                                <span class="fw-mediumbold">Edit</span>
+                                                <span class="fw-light">Task</span>
+                                            </h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <form id="projectTaskEditForm" method="post">
+                                            <input type="hidden" name="_method" value="PUT">
+                                            <div class="modal-body" id="editProjectTaskModalBody">
+                                                <!-- Form content will be loaded here via AJAX -->
+                                            </div> 
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+<script>
+function loadTaskEditForm(taskId) {
+    const modalBody = document.querySelector('#editProjectTaskModalBody');
+    const form = document.querySelector('#projectTaskEditForm');
+    
+    // Show loading spinner
+    modalBody.innerHTML = `
+        <div class="text-center p-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p>Loading task details...</p>
+        </div>
+    `;
+    
+    // Fetch the edit form via AJAX
+    fetch(`{{ path('app_project_task_edit', {'id': 'PLACEHOLDER'}) }}`.replace('PLACEHOLDER', taskId), {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'text/html'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(html => {
+        modalBody.innerHTML = html;
+        // Update form action with the correct task ID
+        form.action = `{{ path('app_project_task_edit', {'id': 'PLACEHOLDER'}) }}`.replace('PLACEHOLDER', taskId);
+    })
+    .catch(error => {
+        modalBody.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                Error loading form: ${error.message}
+                <button class="btn btn-sm btn-outline-secondary ms-3" onclick="loadTaskEditForm(${taskId})">
+                    <i class="fas fa-sync-alt me-1"></i> Retry
+                </button>
+            </div>
+        `;
+    });
+}
+
+// Initialize modal when shown
+document.getElementById('editProjectTaskModal').addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget; // Button that triggered the modal
+    const taskId = button.getAttribute('data-task-id');
+    loadTaskEditForm(taskId);
+});
+</script>
+
+<script>
+function loadTaskEditForm(taskId) {
+    const modalBody = document.querySelector('#editProjectTaskModalBody');
+
+<script>
+// JavaScript to populate the modal with existing task data
+document.addEventListener('DOMContentLoaded', function() {
+    $('.edit-task-btn').click(function() {
+        var taskId = $(this).data('id');
+        var taskTitre = $(this).data('titre');
+        var taskDescription = $(this).data('description');
+        var taskDate = $(this).data('date');
+        var taskStatut = $(this).data('statut');
+        var taskProject = $(this).data('project');
+        var taskUser = $(this).data('user');
+        
+        $('#editTaskId').val(taskId);
+        $('#editTaskTitre').val(taskTitre);
+        $('#editTaskDescription').val(taskDescription);
+        $('#editTaskDate').val(taskDate);
+        $('#editTaskStatut').val(taskStatut);
+        $('#editTaskProject').val(taskProject);
+        $('#editTaskUser').val(taskUser);
+        
+        // Update form action URL with correct ID
+        var form = $('#projectTaskEditForm');
+        var action = form.attr('action');
+        form.attr('action', action.replace('/0', '/' + taskId));
+        
+        $('#editProjectTaskModal').modal('show');
+    });
+});
+</script>
+                   
+                    <div class="table-responsive">
+                      <div id="add-row_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="add-row_length"><label>Show <select name="add-row_length" aria-controls="add-row" class="form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="add-row_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="add-row"></label></div></div></div><div class="row"><div class="col-sm-12"><table id="add-row" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="add-row_info">
+                        <thead>
+                          <tr role="row">
+                          <th class="sorting_asc" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 196.938px;">Titre</th>
+                          <th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 290.75px;">Description</th>
+                          <th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 290.75px;">Date</th>
+                          <th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 159.625px;">Statut</th>
+                          <th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 159.625px;">Project</th>
+                          <th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 159.625px;">Assigned To</th>
+                          <th style="width: 120.688px;" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">Action</th></tr>    
+                        </thead> 
+                            <tbody>
+                                {% for project_task in project_tasks %}
+                                <tr>
+                                    <td>{{ project_task.titre }}</td>
+                                    <td>{{ project_task.description }}</td>
+                                    <td>{{ project_task.date ? project_task.date|date('Y-m-d') : '' }}</td>
+                                    <td>
+                                        <span class="badge badge-{{ project_task.statut == 'Completed' ? 'success' : 'warning' }}">
+                                            {{ project_task.statut }}
+                                        </span>
+                                    </td>   
+                                    <td>{{ project_task.project.titre }}</td>
+                                    <td>{{ project_task.userId }}</td>
+                                    <td>
+                                        <div class="form-button-action">
+                                        <button type="button" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editProjectTaskModal"
+                                                onclick="loadTaskEditForm({{ project_task.id }})"
+                                                class="btn btn-link btn-primary  edit-task-btn"
+                                                data-original-title="Edit Task"
+                                                data-task-id="{{ project_task.id }}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                            <button type="button" onclick="window.location.href='{{ path('app_project_task_show', {'id': project_task.id}) }}'" 
+                                                    data-bs-toggle="tooltip" title="" 
+                                                    class="btn btn-link btn-primary" 
+                                                    data-original-title="View Task">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                            <button type="button" onclick="if(confirm('Are you sure?')) window.location.href='{{ path('app_project_task_delete', {'id': project_task.id}) }}'" 
+                                                    data-bs-toggle="tooltip" title="" 
+                                                    class="btn btn-link btn-danger" 
+                                                    data-original-title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="8">no records found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.querySelectorAll('.delete-task').forEach(button => {
+    button.addEventListener('click', function() {
+        if (confirm('Are you sure you want to delete this task?')) {
+            fetch(this.dataset.url, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    _token: '{{ csrf_token('delete') }}'
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Error deleting task');
+                }
+            });
+        }
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Bootstrap tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Edit Task Modal
+    const editTaskModal = document.getElementById('editTaskModal');
+    if (editTaskModal) {
+        editTaskModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const taskId = button.getAttribute('data-task-id');
+            const modalBody = document.getElementById('editTaskModalBody');
+            
+            // Show loading state
+            modalBody.innerHTML = `
+                <div class="text-center p-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading task details...</p>
+                </div>
+            `;
+            
+            // Fetch the edit form
+            fetch(`/project_task/${taskId}/edit/modal`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(html => {
+                modalBody.innerHTML = html;
+                
+                // Initialize date picker if needed
+                const dateInput = modalBody.querySelector('input[type="date"]');
+                if (dateInput) {
+                    // Initialize a date picker here if needed
+                }
+            })
+            .catch(error => {
+                modalBody.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> Error loading task form. Please try again.
+                    </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-primary" onclick="window.location.reload()">
+                            <i class="fas fa-sync-alt"></i> Reload Page
+                        </button>
+                    </div>
+                `;
+                console.error('Error loading edit form:', error);
+            });
+        });
+    }
+
+    // Handle form submission
+    document.addEventListener('submit', function(e) {
+        if (e.target && e.target.matches('#taskEditForm')) {
+            e.preventDefault();
+            const form = e.target;
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            
+            // Show loading state on button
+            submitButton.disabled = true;
+            submitButton.innerHTML = `
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Updating...
+            `;
+            
+            // Collect form data
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.success) {
+                    // Show success message
+                    const modalBody = document.getElementById('editTaskModalBody');
+                    modalBody.innerHTML = `
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> Task updated successfully!
+                        </div>
+                        <div class="text-center mt-3">
+                            <button class="btn btn-primary" data-bs-dismiss="modal" onclick="window.location.reload()">
+                                <i class="fas fa-check"></i> Close & Refresh
+                            </button>
+                        </div>
+                    `;
+                } else if (data && data.errors) {
+                    // Show validation errors
+                    const modalBody = document.getElementById('editTaskModalBody');
+                    
+                    // Clear previous errors
+                    const errorElements = modalBody.querySelectorAll('.is-invalid, .invalid-feedback');
+                    errorElements.forEach(el => {
+                        el.classList.remove('is-invalid');
+                        el.textContent = '';
+                    });
+                    
+                    // Add new errors
+                    for (const field in data.errors) {
+                        const input = modalBody.querySelector(`[name="${field}"]`);
+                        const feedback = input ? input.nextElementSibling : null;
+                        
+                        if (input) input.classList.add('is-invalid');
+                        if (feedback) feedback.textContent = data.errors[field];
+                    }
+                    
+                    // Re-enable button
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const modalBody = document.getElementById('editTaskModalBody');
+                modalBody.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> An error occurred while updating the task.
+                    </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-primary" onclick="window.location.reload()">
+                            <i class="fas fa-sync-alt"></i> Reload Page
+                        </button>
+                    </div>
+                `;
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,148 @@
+{% extends 'BackOffice/base.html.twig' %}
+
+{% block title %}{{ project.titre }} - Details{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h1 class="page-header-title">
+                    <i class="fas fa-project-diagram text-primary me-2"></i>
+                    {{ project.titre }}
+                    <span class="badge bg-{{ 
+                        project.statut == 'completed' ? 'success' : 
+                        (project.statut == 'in_progress' ? 'warning' : 'secondary') 
+                    }} ms-2">
+                        {{ project.statut|replace({'_': ' '})|title }}
+                    </span>
+                </h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('app_project_index') }}">Projects</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ project.titre }}</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-auto">
+                <a href="{{ path('app_project_edit', {'id': project.id}) }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-edit me-1"></i> Edit Project
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-info-circle text-primary me-2"></i>Project Details
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-muted">Description</h6>
+                    <p class="mb-4">{{ project.description }}</p>
+                </div>
+             <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <h6 class="text-muted">Start Date</h6>
+                            <p>{{ project.dateDebut ? project.dateDebut|date('M d, Y') : 'Not set' }}</p>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="text-muted">End Date</h6>
+                            <p>{{ project.dateFin ? project.dateFin|date('M d, Y') : 'Not set' }}</p>
+                        </div>
+                    </div>
+                    <div class="progress mt-3" style="height: 8px;">
+                        {% set completed_tasks = tasks|filter(t => t.statut == 'completed')|length %}
+                        {% set total_tasks = tasks|length %}
+                        {% set progress = total_tasks > 0 ? (completed_tasks / total_tasks * 100) : 0 %}
+                        <div class="progress-bar bg-success" role="progressbar" 
+                            style="width: {{ progress }}%" 
+                            aria-valuenow="{{ progress }}" 
+                            aria-valuemin="0" 
+                            aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">
+                        {{ progress|round }}% completed ({{ completed_tasks }}/{{ total_tasks }} tasks)
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-tasks text-primary me-2"></i>Project Tasks
+            </h5> 
+        </div>
+        <div class="card-body">
+            {% if tasks|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th width="30%">Task Title</th>
+                                <th width="15%">Status</th>
+                                <th width="15%">Due Date</th>
+                                <th width="20%">Assigned To</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in tasks %}
+                            <tr>
+                                <td>
+                                    <a href="{{ path('app_project_task_show', {'id': task.id}) }}" class="text-dark">
+                                        <strong>{{ task.titre }}</strong>
+                                    </a>
+                                    {% if task.description %}
+                                    <p class="text-muted small mb-0">{{ task.description|length > 50 ? task.description|slice(0, 50) ~ '...' : task.description }}</p>                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge rounded-pill bg-{{ 
+                                        task.statut == 'completed' ? 'success' : 
+                                        (task.statut == 'in_progress' ? 'warning' : 'secondary') 
+                                    }}">
+                                        {{ task.statut|replace({'_': ' '})|title }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {{ task.date ? task.date|date('M d, Y') : 'Not set' }}
+                                    {% if task.date and task.date < date() and task.statut != 'completed' %}
+                                        <span class="badge bg-danger ms-1">Overdue</span>
+                                    {% endif %}
+                                </td>
+                                <td> 
+                                        <span class="badge bg-light text-dark">
+                                             {{ task.userId}}
+                                        </span> 
+                                </td> 
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No tasks found for this project</h5> 
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script> 
+document.addEventListener('DOMContentLoaded', function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
+{% endblock %}

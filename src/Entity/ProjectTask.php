@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Entity;
-
+namespace App\Entity; 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-
-use App\Repository\ProjectTaskRepository;
+use Doctrine\Common\Collections\Collection; 
+use App\Repository\ProjectTaskRepository; 
 
 #[ORM\Entity(repositoryClass: ProjectTaskRepository::class)]
 #[ORM\Table(name: 'project_task')]
@@ -16,7 +14,24 @@ class ProjectTask
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    private ?int $id = null; 
+
+
+    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: "tasks")]
+    #[ORM\JoinColumn(name: "project_id", referencedColumnName: "id", onDelete: "CASCADE")]
+    private ?Project $project = null;
+
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+        return $this;
+    }
 
     public function getId(): ?int
     {
