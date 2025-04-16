@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Twilio\Rest\Client;
 
 #[Route('/pret')]
 final class PretController extends AbstractController
@@ -32,6 +33,30 @@ final class PretController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($pret);
             $entityManager->flush();
+
+            // Configuration Twilio
+            $sid = ''; // Ton SID Twilio
+            $authToken = ''; // Ton Auth Token Twilio
+            $fromNumber = ''; // Ton numéro Twilio
+            $toNumber = ''; // Numéro du destinataire
+
+            $client = new Client($sid, $authToken);
+
+            // Message personnalisé avec le numéro de CIN
+            $message = "Votre demande avec le CIN " . $pret->getCin() . " est prise en considération.";
+
+            try {
+                $client->messages->create(
+                    $toNumber,
+                    [
+                        'from' => $fromNumber,
+                        'body' => $message,
+                    ]
+                );
+                $this->addFlash('success', "Le prêt a été ajouté et un SMS de confirmation a été envoyé.");
+            } catch (\Exception $e) {
+                $this->addFlash('warning', "Le prêt a été ajouté, mais l'envoi du SMS a échoué.");
+            }
 
             return $this->redirectToRoute('app_pret_index', [], Response::HTTP_SEE_OTHER);
         }
