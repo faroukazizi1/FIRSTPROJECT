@@ -132,21 +132,21 @@
             </div>
           </li>
           <li class="nav-item">
-            <a data-bs-toggle="collapse" href="#maps">
-              <i class="fas fa-map-marker-alt"></i>
-              <p>Absence</p>
+            <a data-bs-toggle="collapse" href="#absencesMenu">
+              <i class="fas fa-calendar-alt"></i>
+              <p>Absences</p>
               <span class="caret"></span>
             </a>
-            <div class="collapse" id="maps">
+            <div class="collapse" id="absencesMenu">
               <ul class="nav nav-collapse">
                 <li>
-                  <a href="maps/googlemaps.html">
-                    <span class="sub-item">Google Maps</span>
+                  <a href="{{ path('app_absence_new') }}"> 
+                    <span class="sub-item">Absences</span>
                   </a>
                 </li>
                 <li>
-                  <a href="maps/jsvectormap.html">
-                    <span class="sub-item">Jsvectormap</span>
+                  <a href="{{ path('app_penalite_new') }}"> 
+                    <span class="sub-item">Pénalités</span>
                   </a>
                 </li>
               </ul>

@@ -175,7 +175,8 @@ class PenaliteController extends AbstractController
 
         return $this->json(['nbr_abs' => $nbrAbs]);
     }
-    #[Route('/{ID_pen}', name: 'app_penalite_delete', methods: ['POST'])]
+    #[Route('/penalite/{ID_pen}', name: 'app_penalite_delete', methods: ['POST'])]
+
     public function delete(Request $request, Penalite $penalite, EntityManagerInterface $entityManager): Response
     {
         // Vérification du token CSRF pour la suppression
