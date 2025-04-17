@@ -36,7 +36,7 @@
 
             <div class="form-group mb-3">
                 {{ form_label(form.seuil_abs, 'Seuil de pénalité', {'attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.seuil_abs, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.seuil_abs, {'attr': {'class': 'form-control',  'autocomplete': 'off'}}) }}
                 {{ form_errors(form.seuil_abs) }}
             </div>
 

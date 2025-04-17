@@ -34,7 +34,7 @@
 
             <div class="form-group mb-3">
                 {{ form_label(form.seuil_abs, 'Seuil de pénalité', {'attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.seuil_abs, {'attr': {'class': 'form-control form-control-lg', 'required': false, 'pattern': '\d+(\.\d+)?', 'title': 'Veuillez entrer un nombre valide pour le seuil de pénalité'}}) }}
+                {{ form_widget(form.seuil_abs, {'attr': {'class': 'form-control form-control-lg', 'required': false, 'pattern': '\d+(\.\d+)?', 'title': 'Veuillez entrer un nombre valide pour le seuil de pénalité',  'autocomplete': 'off'}}) }}
                 {{ form_errors(form.seuil_abs) }}
             </div>
 

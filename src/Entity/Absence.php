@@ -84,13 +84,14 @@ class Absence
         return $this;
     }
 
-    #[ORM\Column(type: 'integer', nullable: false)]
-    #[Assert\NotBlank(message: 'Le CIN est obligatoire.')]
-    #[Assert\Regex(
-        pattern: '/^\d+$/', 
-        message: 'Le CIN doit être composé uniquement de chiffres.'
-    )]
-    private ?int $cin = null;
+    #[ORM\Column(type: 'string', length: 8, nullable: false)]
+#[Assert\NotBlank(message: 'Le CIN est obligatoire.')]
+#[Assert\Regex(
+    pattern: '/^\d{8}$/',
+    message: 'Le CIN doit être composé exactement de 8 chiffres.'
+)]
+private ?string $cin = null;
+
 
     public function getCin(): ?int
     {

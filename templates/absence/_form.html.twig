@@ -18,7 +18,7 @@
     {# Champ Nbr_abs avec l'attribut 'required' mis à false #}
     <div class="form-group mb-3">
         {{ form_label(form.nbr_abs, 'Nombre d\'absences', {'attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.nbr_abs, {'attr': {'class': 'form-control'}}) }}
+        {{ form_widget(form.nbr_abs, {'attr': {'class': 'form-control',  'autocomplete': 'off'}}) }}
         {{ form_errors(form.nbr_abs) }}
     </div>
     
@@ -32,7 +32,7 @@
     {# Champ Cin avec l'attribut 'required' mis à false #}
     <div class="form-group mb-3">
         {{ form_label(form.cin, 'Numéro CIN', {'attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.cin, {'attr': {'class': 'form-control'}}) }}
+        {{ form_widget(form.cin, {'attr': {'class': 'form-control',  'autocomplete': 'off'}}) }}
         {{ form_errors(form.cin) }}
     </div>
 
