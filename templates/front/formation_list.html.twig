@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="formations, Hirevac, apprentissage" />
+  <meta name="description" content="Découvrez nos formations professionnelles pour booster votre carrière" />
+  <meta name="author" content="Hirevac Team" />
+
+  <title>Liste des Formations | Hirevac</title>
+
+  {% block css %}
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{{asset('FrontOffice/css/bootstrap.css')}}" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- font awesome style -->
+  <link href="{{asset('FrontOffice/css/font-awesome.min.css')}}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- nice select -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4=" crossorigin="anonymous" />
+
+  <!-- Custom styles for this template -->
+  <link href="{{asset('FrontOffice/css/style.css')}}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{{asset('FrontOffice/css/responsive.css')}}" rel="stylesheet" />
+
+  <style>
+    .formations {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .formation-card {
+      border: none;
+      border-radius: 16px;
+      width: 320px;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease;
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .formation-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .formation-card img {
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      max-height: 180px;
+      object-fit: cover;
+      width: 100%;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0d6efd;
+    }
+
+    .card-text {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .heading_container.heading_center {
+      margin-top: 60px;
+    }
+
+    .section-title {
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .stretched-link::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      content: "";
+    }
+  </style>
+  {% endblock %}
+</head>
+
+<body>
+
+  <div class="hero_area">
+    <!-- header section strats -->
+    <div class="header_area">
+      {# Include the navbar #}
+      {% include 'FrontOffice/nav_bar.html.twig' %}
+    </div>
+    <!-- end header section -->
+  </div>
+
+  <!-- Formation List Section -->
+  <section class="job_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2 class="section-title">
+          Nos Formations Disponibles
+        </h2>
+      </div>
+
+      <div class="formations">
+        {% for formation in formations %}
+        <div class="formation-card">
+          {% if formation.Image %}
+          <img src="{{ formation.Image }}" class="card-img-top" alt="{{ formation.Titre }}">
+          {% else %}
+          <img src="https://via.placeholder.com/320x180?text=Aucune+Image" class="card-img-top" alt="No image">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="{{ path('front_formation_detail', { id: formation.id_form }) }}" class="text-decoration-none">
+                {{ formation.Titre }}
+              </a>
+            </h5>
+            <p class="card-text"><strong>Dates :</strong> du {{ formation.DateD|date('d/m/Y') }} au {{ formation.DateF|date('d/m/Y') }}</p>
+            <p class="card-text"><strong>Durée :</strong> {{ formation.Duree }} jours</p>
+            <p class="card-text"><strong>Formateur :</strong> {{ formation.formateur.nomF }} {{ formation.formateur.prenomF }}</p>
+          </div>
+          <!-- Lien cliquable -->
+          <a href="{{ path('front_formation_detail', { id: formation.id_form }) }}" class="stretched-link"></a>
+        </div>
+        {% else %}
+        <p class="text-center">Aucune formation trouvée.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <!-- End Formation List Section -->
+
+  <!-- info section -->
+  <section class="info_section ">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2 info_links">
+          <h4>
+            Menu
+          </h4>
+          <ul>
+            <li class="active">
+              <a href="index.html">
+                Home
+              </a>
+            </li>
+            <li>
+              <a href="about.html">
+                About
+              </a>
+            </li>
+            <li>
+              <a class="" href="job.html">
+                Jobs
+              </a>
+            </li>
+            <li>
+              <a class="" href="freelancer.html">
+                Freelancers
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h4>
+            Jobs
+          </h4>
+          <p>
+            Established fact that a reader will be distracted by the readable content of a page when looking at its
+            layout. The point of using Lorem Ipsum
+          </p>
+        </div>
+        <div class="col-md-3">
+          <div class="info_social">
+            <h4>
+              Social Link
+            </h4>
+            <div class="social_container">
+              <div>
+                <a href="">
+                  <i class="fa fa-facebook" aria-hidden="true"></i>
+                </a>
+              </div>
+              <div>
+                <a href="">
+                  <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+              </div>
+              <div>
+                <a href="">
+                  <i class="fa fa-linkedin" aria-hidden="true"></i>
+                </a>
+              </div>
+              <div>
+                <a href="">
+                  <i class="fa fa-instagram" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="info_form">
+            <h4>
+              Newsletter
+            </h4>
+            <form action="">
+              <input type="text" placeholder="Enter Your Email" />
+              <button type="submit">
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end info_section -->
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <p>
+        &copy; <span id="displayYear"></span> All Rights Reserved By
+        <a href="https://html.design/">Free Html Templates</a>
+      </p>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script src="{{asset('FrontOffice/js/jquery-3.4.1.min.js')}}"></script>
+  <!-- bootstrap js -->
+  <script src="{{asset('FrontOffice/js/bootstrap.js')}}"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js" integrity="sha256-Zr3vByTlMGQhvMfgkQ5BtWRSKBGa2QlspKYJnkjZTmo=" crossorigin="anonymous"></script>
+  <!-- custom js -->
+  <script src="{{asset('FrontOffice/js/custom.js')}}"></script>
+
+</body>
+
+</html>

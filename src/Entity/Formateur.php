@@ -2,103 +2,36 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-
 use App\Repository\FormateurRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: FormateurRepository::class)]
-#[ORM\Table(name: 'formateur')]
 class Formateur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer', name: "id_Formateur")]
-    private ?int $id_Formateur = null;
 
-    public function getId_Formateur(): ?int
-    {
-        return $this->id_Formateur;
-    }
+    #[ORM\Column(name: 'id_Formateur', type: 'integer')]
+    private ?int $idFormateur = null;
 
-    public function setId_Formateur(int $id_Formateur): self
-    {
-        $this->id_Formateur = $id_Formateur;
-        return $this;
-    }
+    #[ORM\Column(type: 'string', length: 100)]
+    private ?string $nomF = null;
 
-    #[ORM\Column(type: 'integer', nullable: false)]
-    private ?int $Numero = null;
+    #[ORM\Column(type: 'string', length: 100)]
+    private ?string $prenomF = null;
 
-    public function getNumero(): ?int
-    {
-        return $this->Numero;
-    }
+    #[ORM\Column(type: 'string', length: 20)]
+    private ?string $numero = null; // Ajout du champ numéro
 
-    public function setNumero(int $Numero): self
-    {
-        $this->Numero = $Numero;
-        return $this;
-    }
+    #[ORM\Column(type: 'string', length: 150)]
+    private ?string $email = null;
 
-    #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $Nom_F = null;
+    #[ORM\Column(type: 'string', length: 100)]
+    private ?string $specialite = null;
 
-    public function getNom_F(): ?string
-    {
-        return $this->Nom_F;
-    }
-
-    public function setNom_F(string $Nom_F): self
-    {
-        $this->Nom_F = $Nom_F;
-        return $this;
-    }
-
-    #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $Prenom_F = null;
-
-    public function getPrenom_F(): ?string
-    {
-        return $this->Prenom_F;
-    }
-
-    public function setPrenom_F(string $Prenom_F): self
-    {
-        $this->Prenom_F = $Prenom_F;
-        return $this;
-    }
-
-    #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $Email = null;
-
-    public function getEmail(): ?string
-    {
-        return $this->Email;
-    }
-
-    public function setEmail(string $Email): self
-    {
-        $this->Email = $Email;
-        return $this;
-    }
-
-    #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $Specialite = null;
-
-    public function getSpecialite(): ?string
-    {
-        return $this->Specialite;
-    }
-
-    public function setSpecialite(string $Specialite): self
-    {
-        $this->Specialite = $Specialite;
-        return $this;
-    }
-
-    #[ORM\OneToMany(targetEntity: Formation::class, mappedBy: 'formateur')]
+    #[ORM\OneToMany(mappedBy: 'formateur', targetEntity: Formation::class)]
     private Collection $formations;
 
     public function __construct()
@@ -106,58 +39,103 @@ class Formateur
         $this->formations = new ArrayCollection();
     }
 
-    /**
-     * @return Collection<int, Formation>
-     */
-    public function getFormations(): Collection
-    {
-        if (!$this->formations instanceof Collection) {
-            $this->formations = new ArrayCollection();
-        }
-        return $this->formations;
-    }
-
-    public function addFormation(Formation $formation): self
-    {
-        if (!$this->getFormations()->contains($formation)) {
-            $this->getFormations()->add($formation);
-        }
-        return $this;
-    }
-
-    public function removeFormation(Formation $formation): self
-    {
-        $this->getFormations()->removeElement($formation);
-        return $this;
-    }
-
     public function getIdFormateur(): ?int
     {
-        return $this->id_Formateur;
+        return $this->idFormateur;
     }
+    public function setIdFormateur(int $idFormateur): self
+    {
+        $this->idFormateur = $idFormateur;
+        return $this;
+    }
+
 
     public function getNomF(): ?string
     {
-        return $this->Nom_F;
+        return $this->nomF;
     }
 
-    public function setNomF(string $Nom_F): static
+    public function setNomF(?string $nomF): self
     {
-        $this->Nom_F = $Nom_F;
-
+        $this->nomF = $nomF;
         return $this;
     }
 
     public function getPrenomF(): ?string
     {
-        return $this->Prenom_F;
+        return $this->prenomF;
     }
 
-    public function setPrenomF(string $Prenom_F): static
+    public function setPrenomF(?string $prenomF): self
     {
-        $this->Prenom_F = $Prenom_F;
+        $this->prenomF = $prenomF;
+        return $this;
+    }
+
+    public function getNumero(): ?string
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(?string $numero): self
+    {
+        $this->numero = $numero;
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    public function getSpecialite(): ?string
+    {
+        return $this->specialite;
+    }
+
+    public function setSpecialite(?string $specialite): self
+    {
+        $this->specialite = $specialite;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formation>
+     */
+    public function getFormations(): Collection
+    {
+        return $this->formations;
+    }
+
+    public function addFormation(Formation $formation): self
+    {
+        if (!$this->formations->contains($formation)) {
+            $this->formations->add($formation);
+            $formation->setFormateur($this);
+        }
 
         return $this;
     }
 
+    public function removeFormation(Formation $formation): self
+    {
+        if ($this->formations->removeElement($formation)) {
+            if ($formation->getFormateur() === $this) {
+                $formation->setFormateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->nomF . ' ' . $this->prenomF;
+    }
 }

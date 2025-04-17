@@ -40,4 +40,14 @@ class FormationRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findByTitre(string $titre): array
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.Titre LIKE :titre')
+            ->setParameter('titre', '%' . $titre . '%')
+            ->getQuery()
+            ->getResult();
+    }
+    
+
 }

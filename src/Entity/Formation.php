@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-
 use App\Repository\FormationRepository;
+use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Formateur;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
 #[ORM\Table(name: 'formation')]
@@ -17,6 +17,28 @@ class Formation
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id_form = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $Titre = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $Description = null;
+
+    #[ORM\Column(type: 'date', nullable: true)]
+private ?\DateTimeInterface $dateD = null;
+
+#[ORM\Column(type: 'date', nullable: true)]
+private ?\DateTimeInterface $dateF = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $Duree = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $Image = null;
+
+    #[ORM\ManyToOne(targetEntity: Formateur::class, inversedBy: 'formations')]
+    #[ORM\JoinColumn(name: 'id_Formateur', referencedColumnName: 'id_Formateur')]
+    private ?Formateur $formateur = null;
 
     public function getId_form(): ?int
     {
@@ -29,9 +51,6 @@ class Formation
         return $this;
     }
 
-    #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $Titre = null;
-
     public function getTitre(): ?string
     {
         return $this->Titre;
@@ -42,9 +61,6 @@ class Formation
         $this->Titre = $Titre;
         return $this;
     }
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $Description = null;
 
     public function getDescription(): ?string
     {
@@ -57,37 +73,27 @@ class Formation
         return $this;
     }
 
-    #[ORM\Column(type: 'date', nullable: true)]
-    private ?\DateTimeInterface $Date_D = null;
-
-    public function getDate_D(): ?\DateTimeInterface
+    public function getDateD(): ?\DateTimeInterface
     {
-        return $this->Date_D;
+        return $this->dateD;
     }
-
-    public function setDate_D(?\DateTimeInterface $Date_D): self
+    
+    public function setDateD(?\DateTimeInterface $dateD): self
     {
-        $this->Date_D = $Date_D;
+        $this->dateD = $dateD;
         return $this;
     }
-
-    #[ORM\Column(type: 'date', nullable: true)]
-    private ?\DateTimeInterface $Date_F = null;
-
-    public function getDate_F(): ?\DateTimeInterface
+    
+    public function getDateF(): ?\DateTimeInterface
     {
-        return $this->Date_F;
+        return $this->dateF;
     }
-
-    public function setDate_F(?\DateTimeInterface $Date_F): self
+    
+    public function setDateF(?\DateTimeInterface $dateF): self
     {
-        $this->Date_F = $Date_F;
+        $this->dateF = $dateF;
         return $this;
     }
-
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $Duree = null;
-
     public function getDuree(): ?int
     {
         return $this->Duree;
@@ -98,9 +104,6 @@ class Formation
         $this->Duree = $Duree;
         return $this;
     }
-
-    #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $Image = null;
 
     public function getImage(): ?string
     {
@@ -113,10 +116,7 @@ class Formation
         return $this;
     }
 
-    #[ORM\ManyToOne(targetEntity: Formateur::class, inversedBy: 'formations')]
-    #[ORM\JoinColumn(name: 'id_Formateur', referencedColumnName: 'id_Formateur')]
-    private ?Formateur $formateur = null;
-
+    // Méthodes pour la relation avec Formateur
     public function getFormateur(): ?Formateur
     {
         return $this->formateur;
@@ -124,37 +124,39 @@ class Formation
 
     public function setFormateur(?Formateur $formateur): self
     {
+        if ($this->formateur && $this->formateur !== $formateur) {
+            $this->formateur->removeFormation($this);
+        }
+
         $this->formateur = $formateur;
-        return $this;
-    }
 
-    public function getIdForm(): ?int
-    {
-        return $this->id_form;
-    }
-
-    public function getDateD(): ?\DateTimeInterface
-    {
-        return $this->Date_D;
-    }
-
-    public function setDateD(?\DateTimeInterface $Date_D): static
-    {
-        $this->Date_D = $Date_D;
+        if ($formateur) {
+            $formateur->addFormation($this);
+        }
 
         return $this;
     }
 
-    public function getDateF(): ?\DateTimeInterface
+    public function __toString(): string
     {
-        return $this->Date_F;
+        return $this->Titre ?? 'Nouvelle formation'; // Correction du nom de la propriété
+    }
+    #[Assert\Callback]
+public function validateDates(ExecutionContextInterface $context): void
+{
+    $today = new \DateTime('today');
+
+    if ($this->dateD && $this->dateD < $today) {
+        $context->buildViolation('La date de début ne peut pas être dans le passé.')
+            ->atPath('dateD')
+            ->addViolation();
     }
 
-    public function setDateF(?\DateTimeInterface $Date_F): static
-    {
-        $this->Date_F = $Date_F;
-
-        return $this;
+    if ($this->dateD && $this->dateF && $this->dateF < $this->dateD) {
+        $context->buildViolation('La date de fin doit être postérieure à la date de début.')
+            ->atPath('dateF')
+            ->addViolation();
     }
+}
 
 }
