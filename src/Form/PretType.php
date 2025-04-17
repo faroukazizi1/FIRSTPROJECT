@@ -72,5 +72,4 @@ class PretType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Pret::class,
         ]);
-    }
-}
+    }}

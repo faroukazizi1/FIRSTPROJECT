@@ -196,4 +196,4 @@ use Symfony\Component\Validator\Constraints as Assert;
     {
         $this->Assurance = $Assurance;
         return $this;
-    }}
+}}

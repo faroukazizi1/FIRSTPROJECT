@@ -5,9 +5,11 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use App\Repository\PretRepository;
 
 #[ORM\Entity(repositoryClass: PretRepository::class)]
+#[UniqueEntity(fields: ['cin'], message: 'Un prêt existe déjà pour ce CIN.')]
 #[ORM\Table(name: 'pret')]
 class Pret
 {
@@ -16,7 +18,7 @@ class Pret
     #[ORM\Column(type: 'integer')]
     private ?int $ID_pret = null;
 
-    #[ORM\Column(type: 'string', length: 20, nullable: false)]
+    #[ORM\Column(type: 'string', length: 20, unique: true)] // ✅ unicité au niveau base
     #[Assert\NotBlank(message: "Le CIN est obligatoire.")]
     #[Assert\Length(
         min: 8,
@@ -33,7 +35,7 @@ class Pret
         notInRangeMessage: "Le montant du prêt doit être supérieur à 0."
     )]
     private ?float $Montant_pret = null;
-    
+
     #[ORM\Column(type: 'date', nullable: false)]
     #[Assert\NotBlank(message: "La date du prêt est obligatoire.")]
     #[Assert\GreaterThanOrEqual("today", message: "La date du prêt doit être aujourd'hui ou dans le futur.")]
@@ -188,8 +190,7 @@ class Pret
         return $this;
     }
 
-    // ✅ Méthode pour afficher correctement le CIN dans les formulaires
-    public function __toString(): string
+  public function __toString(): string
     {
         return (string) $this->cin;
     }

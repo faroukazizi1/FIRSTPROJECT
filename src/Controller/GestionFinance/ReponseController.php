@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\GestionFinance;
 
 use App\Entity\Reponse;
 use App\Form\ReponseType;
@@ -24,7 +24,7 @@ final class ReponseController extends AbstractController
     #[Route(name: 'app_reponse_index', methods: ['GET'])]
     public function index(ReponseRepository $reponseRepository): Response
     {
-        return $this->render('reponse/index.html.twig', [
+        return $this->render('GestionFinance/reponse/index.html.twig', [
             'reponses' => $reponseRepository->findAll(),
         ]);
     }
@@ -59,7 +59,7 @@ final class ReponseController extends AbstractController
             return $this->redirectToRoute('app_reponse_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('reponse/new.html.twig', [
+        return $this->render('GestionFinance/reponse/new.html.twig', [
             'reponse' => $reponse,
             'form' => $form->createView(),
         ]);
@@ -68,7 +68,7 @@ final class ReponseController extends AbstractController
     #[Route('/{ID_reponse}', name: 'app_reponse_show', methods: ['GET'])]
     public function show(Reponse $reponse): Response
     {
-        return $this->render('reponse/show.html.twig', [
+        return $this->render('GestionFinance/reponse/show.html.twig', [
             'reponse' => $reponse,
         ]);
     }
@@ -99,7 +99,7 @@ final class ReponseController extends AbstractController
             return $this->redirectToRoute('app_reponse_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('reponse/edit.html.twig', [
+        return $this->render('GestionFinance/reponse/edit.html.twig', [
             'reponse' => $reponse,
             'form' => $form->createView(),
         ]);

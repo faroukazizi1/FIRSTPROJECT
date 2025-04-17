@@ -126,5 +126,4 @@ class ReponseType extends AbstractType
             'data_class' => Reponse::class,
             'cin_choices' => [], // Permet de passer la liste des CIN comme option
         ]);
-    }
-}
+    }}

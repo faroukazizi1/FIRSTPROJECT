@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\GestionFinance;
 
 use App\Entity\Pret;
 use App\Form\PretType;
@@ -18,7 +18,7 @@ final class PretController extends AbstractController
     #[Route(name: 'app_pret_index', methods: ['GET'])]
     public function index(PretRepository $pretRepository): Response
     {
-        return $this->render('pret/index.html.twig', [
+        return $this->render('GestionFinance/pret/index.html.twig', [
             'prets' => $pretRepository->findAll(),
         ]);
     }
@@ -34,12 +34,10 @@ final class PretController extends AbstractController
             $entityManager->persist($pret);
             $entityManager->flush();
 
-            // Configuration Twilio
             $sid = ''; // Ton SID Twilio
             $authToken = ''; // Ton Auth Token Twilio
             $fromNumber = ''; // Ton numéro Twilio
             $toNumber = ''; // Numéro du destinataire
-
             $client = new Client($sid, $authToken);
 
             // Message personnalisé avec le numéro de CIN
@@ -61,7 +59,7 @@ final class PretController extends AbstractController
             return $this->redirectToRoute('app_pret_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('pret/new.html.twig', [
+        return $this->render('GestionFinance/pret/new.html.twig', [
             'pret' => $pret,
             'form' => $form->createView(),
         ]);
@@ -70,7 +68,7 @@ final class PretController extends AbstractController
     #[Route('/{id}', name: 'app_pret_show', methods: ['GET'])]
     public function show(Pret $pret): Response
     {
-        return $this->render('pret/show.html.twig', [
+        return $this->render('GestionFinance/pret/show.html.twig', [
             'pret' => $pret,
         ]);
     }
@@ -87,7 +85,7 @@ final class PretController extends AbstractController
             return $this->redirectToRoute('app_pret_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('pret/edit.html.twig', [
+        return $this->render('GestionFinance/pret/edit.html.twig', [
             'pret' => $pret,
             'form' => $form->createView(),
         ]);
