@@ -1,165 +1,265 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Liste des Formations | Hirevac</title>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="formations, Hirevac, apprentissage" />
+  <meta name="description" content="Découvrez nos formations professionnelles pour booster votre carrière" />
+  <meta name="author" content="Hirevac Team" />
 
-    <!-- Fonts + Bootstrap + Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Liste des Formations | Hirevac</title>
 
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f4f6f8;
-        }
+  {% block css %}
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{{asset('FrontOffice/css/bootstrap.css')}}" />
 
-        .navbar {
-            background-color: #ffffff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-        .navbar-brand span {
-            font-weight: bold;
-            font-size: 24px;
-            color: #0d6efd;
-        }
+  <!-- font awesome style -->
+  <link href="{{asset('FrontOffice/css/font-awesome.min.css')}}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        .nav-link {
-            margin-right: 15px;
-            color: #333 !important;
-            font-weight: 500;
-        }
+  <!-- nice select -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4=" crossorigin="anonymous" />
 
-        .nav-link:hover {
-            color: #0d6efd !important;
-        }
+  <!-- Custom styles for this template -->
+  <link href="{{asset('FrontOffice/css/style.css')}}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{{asset('FrontOffice/css/responsive.css')}}" rel="stylesheet" />
 
-        h1 {
-            margin-top: 60px;
-            font-weight: 700;
-            text-align: center;
-        }
+  <style>
+    .formations {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      padding: 40px 20px;
+    }
 
-        .formations {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            justify-content: center;
-            padding: 40px 20px;
-        }
+    .formation-card {
+      border: none;
+      border-radius: 16px;
+      width: 320px;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease;
+      position: relative;
+      margin-bottom: 30px;
+    }
 
-        .card {
-            border: none;
-            border-radius: 16px;
-            width: 320px;
-            background: #fff;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            transition: transform 0.2s ease;
-            position: relative;
-        }
+    .formation-card:hover {
+      transform: translateY(-5px);
+    }
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
+    .formation-card img {
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      max-height: 180px;
+      object-fit: cover;
+      width: 100%;
+    }
 
-        .card img {
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
-            max-height: 180px;
-            object-fit: cover;
-        }
+    .card-body {
+      padding: 20px;
+    }
 
-        .card-body {
-            padding: 20px;
-        }
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0d6efd;
+    }
 
-        .card-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #0d6efd;
-        }
+    .card-text {
+      font-size: 14px;
+      color: #555;
+    }
 
-        .card-text {
-            font-size: 14px;
-            color: #555;
-        }
+    .heading_container.heading_center {
+      margin-top: 60px;
+    }
 
-        footer {
-            margin-top: 60px;
-            padding: 20px;
-            background: #fff;
-            text-align: center;
-            color: #888;
-            border-top: 1px solid #ddd;
-        }
-    </style>
+    .section-title {
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .stretched-link::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      content: "";
+    }
+  </style>
+  {% endblock %}
 </head>
+
 <body>
 
-<!-- Navbar moderne -->
-<header class="header_section">
-    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="#"><span>Hirevac</span></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="#">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">À propos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Jobs</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Freelancers</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-sign-in-alt me-1"></i>Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-user-plus me-1"></i>Sign Up</a></li>
-                    <form class="d-flex ms-3">
-                        <input class="form-control me-2" type="search" placeholder="Rechercher..." aria-label="Search">
-                        <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
-                    </form>
-                </ul>
-            </div>
+  <div class="hero_area">
+    <!-- header section strats -->
+    <div class="header_area">
+      {# Include the navbar #}
+      {% include 'FrontOffice/nav_bar.html.twig' %}
+    </div>
+    <!-- end header section -->
+  </div>
+
+  <!-- Formation List Section -->
+  <section class="job_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2 class="section-title">
+          Nos Formations Disponibles
+        </h2>
+      </div>
+
+      <div class="formations">
+        {% for formation in formations %}
+        <div class="formation-card">
+          {% if formation.Image %}
+          <img src="{{ formation.Image }}" class="card-img-top" alt="{{ formation.Titre }}">
+          {% else %}
+          <img src="https://via.placeholder.com/320x180?text=Aucune+Image" class="card-img-top" alt="No image">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="{{ path('front_formation_detail', { id: formation.id_form }) }}" class="text-decoration-none">
+                {{ formation.Titre }}
+              </a>
+            </h5>
+            <p class="card-text"><strong>Dates :</strong> du {{ formation.DateD|date('d/m/Y') }} au {{ formation.DateF|date('d/m/Y') }}</p>
+            <p class="card-text"><strong>Durée :</strong> {{ formation.Duree }} jours</p>
+            <p class="card-text"><strong>Formateur :</strong> {{ formation.formateur.nomF }} {{ formation.formateur.prenomF }}</p>
+          </div>
+          <!-- Lien cliquable -->
+          <a href="{{ path('front_formation_detail', { id: formation.id_form }) }}" class="stretched-link"></a>
         </div>
-    </nav>
-</header>
+        {% else %}
+        <p class="text-center">Aucune formation trouvée.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <!-- End Formation List Section -->
 
-<!-- Titre -->
-<h1>Nos Formations Disponibles</h1>
-
-<!-- Liste des formations -->
-<div class="formations">
-    {% for formation in formations %}
-        <div class="card">
-            {% if formation.Image %}
-                <img src="{{ formation.Image }}" class="card-img-top" alt="{{ formation.Titre }}">
-            {% else %}
-                <img src="https://via.placeholder.com/320x180?text=Aucune+Image" class="card-img-top" alt="No image">
-            {% endif %}
-            <div class="card-body">
-                <h5>
-                    <a href="{{ path('front_formation_detail', { id: formation.id_form }) }}" class="text-decoration-none text-primary">
-                        {{ formation.Titre }}
-                    </a>
-                </h5>
-                <p class="card-text"><strong>Dates :</strong> du {{ formation.DateD|date('d/m/Y') }} au {{ formation.DateF|date('d/m/Y') }}</p>
-                <p class="card-text"><strong>Durée :</strong> {{ formation.Duree }} jours</p>
-                <p class="card-text"><strong>Formateur :</strong> {{ formation.formateur.nomF }} {{ formation.formateur.prenomF }}</p>
-            </div>
-            <!-- Lien cliquable -->
-            <a href="{{ path('front_formation_detail', { id: formation.id_form }) }}" class="stretched-link"></a>
+  <!-- info section -->
+  <section class="info_section ">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2 info_links">
+          <h4>
+            Menu
+          </h4>
+          <ul>
+            <li class="active">
+              <a href="index.html">
+                Home
+              </a>
+            </li>
+            <li>
+              <a href="about.html">
+                About
+              </a>
+            </li>
+            <li>
+              <a class="" href="job.html">
+                Jobs
+              </a>
+            </li>
+            <li>
+              <a class="" href="freelancer.html">
+                Freelancers
+              </a>
+            </li>
+          </ul>
         </div>
-    {% else %}
-        <p>Aucune formation trouvée.</p>
-    {% endfor %}
-</div>
+        <div class="col-md-3">
+          <h4>
+            Jobs
+          </h4>
+          <p>
+            Established fact that a reader will be distracted by the readable content of a page when looking at its
+            layout. The point of using Lorem Ipsum
+          </p>
+        </div>
+        <div class="col-md-3">
+          <div class="info_social">
+            <h4>
+              Social Link
+            </h4>
+            <div class="social_container">
+              <div>
+                <a href="">
+                  <i class="fa fa-facebook" aria-hidden="true"></i>
+                </a>
+              </div>
+              <div>
+                <a href="">
+                  <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+              </div>
+              <div>
+                <a href="">
+                  <i class="fa fa-linkedin" aria-hidden="true"></i>
+                </a>
+              </div>
+              <div>
+                <a href="">
+                  <i class="fa fa-instagram" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="info_form">
+            <h4>
+              Newsletter
+            </h4>
+            <form action="">
+              <input type="text" placeholder="Enter Your Email" />
+              <button type="submit">
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end info_section -->
 
-<!-- Footer simple -->
-<footer>
-    &copy; {{ "now"|date("Y") }} Hirevac. Tous droits réservés.
-</footer>
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <p>
+        &copy; <span id="displayYear"></span> All Rights Reserved By
+        <a href="https://html.design/">Free Html Templates</a>
+      </p>
+    </div>
+  </footer>
+  <!-- footer section -->
 
-<!-- JS Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- jQery -->
+  <script src="{{asset('FrontOffice/js/jquery-3.4.1.min.js')}}"></script>
+  <!-- bootstrap js -->
+  <script src="{{asset('FrontOffice/js/bootstrap.js')}}"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js" integrity="sha256-Zr3vByTlMGQhvMfgkQ5BtWRSKBGa2QlspKYJnkjZTmo=" crossorigin="anonymous"></script>
+  <!-- custom js -->
+  <script src="{{asset('FrontOffice/js/custom.js')}}"></script>
+
 </body>
+
 </html>
