@@ -1,6 +1,5 @@
 <?php
 
-// src/Form/BulletinpaieType.php
 namespace App\Form;
 
 use App\Entity\Bulletinpaie;
@@ -10,14 +9,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class BulletinpaieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('employe_id', IntegerType::class, [
+            ->add('employeId', IntegerType::class, [
                 'attr' => ['class' => 'form-control']
             ])
             ->add('mois', TextType::class, [
@@ -26,7 +24,7 @@ class BulletinpaieType extends AbstractType
             ->add('annee', IntegerType::class, [
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('salaire_brut', NumberType::class, [
+            ->add('salaireBrut', NumberType::class, [
                 'scale' => 2,
                 'attr' => ['class' => 'form-control']
             ])
@@ -34,14 +32,10 @@ class BulletinpaieType extends AbstractType
                 'scale' => 2,
                 'attr' => ['class' => 'form-control'],
                 'html5' => true,
-                'required' => false // If deductions can be empty
+                'required' => false
             ])
-            ->add('salaire_net', NumberType::class, [
+            ->add('salaireNet', NumberType::class, [
                 'scale' => 2,
-                'attr' => ['class' => 'form-control']
-            ])
-            ->add('date_generation', DateType::class, [
-                'widget' => 'single_text',
                 'attr' => ['class' => 'form-control']
             ]);
     }

@@ -3,47 +3,84 @@
 namespace App\Controller;
 
 use App\Entity\Demandeconge;
-use App\Form\DemandeCongeType;
+use App\Form\DemandecongeType;
+use App\Repository\DemandecongeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-class DemandeCongeController extends AbstractController
+#[Route('/demandeconge')]
+final class DemandeCongeController extends AbstractController
 {
-    #[Route('/demande-conge', name: 'app_demande_conge')]
-    public function index(EntityManagerInterface $entityManager): Response
+    #[Route('/', name: 'app_demandeconge_index', methods: ['GET'])]
+    public function index(DemandecongeRepository $demandecongeRepository): Response
     {
-        $demandes = $entityManager->getRepository(Demandeconge::class)->findAll();
-        
-        return $this->render('FrontOffice/demande_conge/index.html.twig', [
-            'demandes' => $demandes,
+        return $this->render('demandeconge/index.html.twig', [
+            'demandeconges' => $demandecongeRepository->findAll(),
         ]);
     }
 
-    #[Route('/demande-conge/new', name: 'app_demande_conge_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new', name: 'app_demande_conge_new', methods: ['GET', 'POST'])]
+public function new(Request $request, EntityManagerInterface $entityManager): Response
+{
+    $demandeconge = new Demandeconge();
+
+    // Set default statut
+    $demandeconge->setStatut('en_attente');
+
+    $form = $this->createForm(DemandecongeType::class, $demandeconge);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $demandeconge->setDateDemande(new \DateTime()); // Optional: set the request date here too
+
+        $entityManager->persist($demandeconge);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_demande_conge_index');
+    }
+
+    return $this->render('demandeconge/new.html.twig', [
+        'form' => $form,
+    ]);
+}
+
+
+    #[Route('/{id}', name: 'app_demandeconge_show', methods: ['GET'])]
+    public function show(Demandeconge $demandeconge): Response
     {
-        $demande = new Demandeconge();
-        $form = $this->createForm(DemandeCongeType::class, $demande);
-        
+        return $this->render('demandeconge/show.html.twig', [
+            'demandeconge' => $demandeconge,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_demandeconge_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Demandeconge $demandeconge, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(DemandecongeType::class, $demandeconge);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // Set additional data
-            $demande->setDateDemande(new \DateTime());
-            $demande->setStatut('En attente');
-            
-            $entityManager->persist($demande);
             $entityManager->flush();
-            
-            $this->addFlash('success', 'Votre demande de congé a été soumise avec succès.');
-            return $this->redirectToRoute('app_demande_conge');
+            return $this->redirectToRoute('app_demandeconge_index', [], Response::HTTP_SEE_OTHER);
         }
-        
-        return $this->render('FrontOffice/demande_conge/new.html.twig', [
+
+        return $this->render('demandeconge/edit.html.twig', [
+            'demandeconge' => $demandeconge,
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/{id}', name: 'app_demandeconge_delete', methods: ['POST'])]
+    public function delete(Request $request, Demandeconge $demandeconge, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$demandeconge->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($demandeconge);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_demandeconge_index', [], Response::HTTP_SEE_OTHER);
     }
 }

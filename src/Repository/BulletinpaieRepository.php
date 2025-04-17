@@ -16,6 +16,19 @@ class BulletinpaieRepository extends ServiceEntityRepository
         parent::__construct($registry, Bulletinpaie::class);
     }
 
+    public function findByMonthAndYear(int $month, int $year)
+    {
+        $startDate = new \DateTime("$year-$month-01");
+        $endDate = (clone $startDate)->modify('last day of this month');
+    
+        return $this->createQueryBuilder('b')
+            ->where('b.dateCreation BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $endDate)
+            ->orderBy('b.dateCreation', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return Bulletinpaie[] Returns an array of Bulletinpaie objects
     //     */
@@ -40,4 +53,5 @@ class BulletinpaieRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    
 }

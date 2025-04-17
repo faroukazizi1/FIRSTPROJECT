@@ -1,0 +1,16 @@
+<h3>Nouvelle demande de congé</h3>
+
+<p>
+    L'employé {{ demande.employe.nomComplet }} a soumis une nouvelle demande :
+</p>
+
+<ul>
+    <li>Type : {{ demande.typeConge }}</li>
+    <li>Du : {{ demande.dateDebut|date('d/m/Y') }}</li>
+    <li>Au : {{ demande.dateFin|date('d/m/Y') }}</li>
+    <li>Commentaire : {{ demande.commentaire ?? 'Aucun' }}</li>
+</ul>
+
+<p>
+    <a href="{{ url('rh_demande_conge_index') }}">Voir les demandes en attente</a>
+</p>

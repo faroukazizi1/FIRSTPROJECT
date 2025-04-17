@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande de Congé Index{% endblock %}
+
+{% block body %}
+    <h1>Demande de Congé Index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>EmployeId</th>
+                <th>DateDebut</th>
+                <th>DateFin</th>
+                <th>TypeConge</th>
+                <th>Statut</th>
+                <th>DateDemande</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for demandeconge in demandeconges %}
+            <tr>
+                <td>{{ demandeconge.id }}</td>
+                <td>{{ demandeconge.employeId }}</td>
+                <td>{{ demandeconge.dateDebut ? demandeconge.dateDebut|date('Y-m-d') : '' }}</td>
+                <td>{{ demandeconge.dateFin ? demandeconge.dateFin|date('Y-m-d') : '' }}</td>
+                <td>{{ demandeconge.typeConge }}</td>
+                <td>{{ demandeconge.statut }}</td>
+                <td>{{ demandeconge.dateDemande ? demandeconge.dateDemande|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_demande_conge_show', {'id': demandeconge.id}) }}" aria-label="View details of demandeconge {{ demandeconge.id }}">View Details</a>
+                    <a href="{{ path('app_demande_conge_edit', {'id': demandeconge.id}) }}" aria-label="Edit demandeconge {{ demandeconge.id }}">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8" class="text-center">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_demande_conge_new') }}" class="btn btn-primary">Create New</a>
+{% endblock %}
