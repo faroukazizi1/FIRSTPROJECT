@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\GestionAbsence;
 
 use App\Entity\Absence;
 use App\Entity\Penalite;

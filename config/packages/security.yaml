@@ -1,43 +1,23 @@
+# config/packages/security.yaml
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    enable_authenticator_manager: true
+
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+
     providers:
-        users_in_memory: { memory: null }
+        # No user provider for now
+        in_memory: { memory: null }
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
-            provider: users_in_memory
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
-    access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-
-when@test:
-    security:
-    enable_authenticator_manager: true
-    firewalls:
-        main:
-            lazy: true
-            provider: app_user_provider
-            logout:
-                path: app_logout  # Utilise le nom de la route
-                target: app_login  # Redirige vers la page de connexion après déconnexion
+            provider: in_memory
+            # No authentication configured
 
     access_control:
-        - { path: ^/backoffice, roles: ROLE_ADMIN }  # Sécurise l'accès au backoffice
-        - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/logout, roles: PUBLIC_ACCESS }
-
+        # Allow everything by default
+        - { path: ^/, roles: PUBLIC_ACCESS }

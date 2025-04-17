@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\GestionAbsence;
 
 use App\Entity\Penalite;
 use App\Form\PenaliteType;
@@ -26,7 +26,7 @@ class PenaliteController extends AbstractController
         // Utilisation de l'EntityManager pour récupérer les pénalités
         $penalites = $this->entityManager->getRepository(Penalite::class)->findAll();
 
-        return $this->render('penalite/index.html.twig', [
+        return $this->render('GestionAbsence/penalite/index.html.twig', [
             'penalites' => $penalites,
         ]);
     }
@@ -108,7 +108,7 @@ class PenaliteController extends AbstractController
         return $this->redirectToRoute('app_penalite_index');
     }
 
-    return $this->render('penalite/new.html.twig', [
+    return $this->render('GestionAbsence/penalite/new.html.twig', [
         'form' => $form->createView(),
     ]);
 }
@@ -127,7 +127,7 @@ class PenaliteController extends AbstractController
             throw $this->createNotFoundException('Pénalité non trouvée');
         }
 
-        return $this->render('penalite/show.html.twig', [
+        return $this->render('GestionAbsence/penalite/show.html.twig', [
             'penalite' => $penalite,
         ]);
     }
@@ -155,7 +155,7 @@ class PenaliteController extends AbstractController
             return $this->redirectToRoute('app_penalite_index');
         }
 
-        return $this->render('penalite/edit.html.twig', [
+        return $this->render('GestionAbsence/penalite/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
