@@ -1,0 +1,144 @@
+{# templates/formation/index.html.twig #}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Formations</title>
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/plugins.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/kaiadmin.min.css') }}">
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="header_area">
+        {% include 'BackOffice/side_bar.html.twig' %}
+
+        <div class="main-panel">
+            <div class="content">
+                <div class="page-inner">
+                    <div class="page-header">
+                        <h4 class="page-title">Liste des Formations</h4>
+                        <ul class="breadcrumbs">
+                            <li class="nav-home"><a href="#"><i class="flaticon-home"></i></a></li>
+                            <li class="separator"><i class="flaticon-right-arrow"></i></li>
+<li class="nav-item">
+  <a href="{{ path('app_formateur_index') }}">Formateurs</a>
+</li>
+                        </ul>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div class="card-title">Liste des Formations</div>
+                                    <a href="{{ path('app_formation_new') }}" class="btn btn-success btn-sm">
+                                        <i class="fas fa-plus"></i> Créer nouveau
+                                    </a>
+                                </div>
+
+                                <div class="card-body">
+
+                                   {{ form_start(form, {'method': 'GET'}) }}
+    <div class="form-inline mb-3">
+        <div class="form-group mr-2">
+            {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher par titre'}}) }}
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i> Rechercher
+        </button>
+    </div>
+{{ form_end(form) }}
+
+
+                                    {# TABLEAU DES FORMATIONS #}
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-bordered">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Titre</th>
+                                                <th>Description</th>
+                                                <th>Date Début</th>
+                                                <th>Date Fin</th>
+                                                <th>Durée</th>
+                                                <th>Image</th>
+                                                <th>Formateur</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for formation in formations %}
+                                                <tr>
+                                                    <td>{{ formation.id_form }}</td>
+                                                    <td>{{ formation.Titre }}</td>
+                                                    <td>{{ formation.Description|slice(0, 50) }}...</td>
+                                                    <td>{{ formation.DateD ? formation.DateD|date('Y-m-d') : '' }}</td>
+                                                    <td>{{ formation.DateF ? formation.DateF|date('Y-m-d') : '' }}</td>
+                                                    <td>{{ formation.Duree }}h</td>
+                                                    <td>
+                                                        {% if formation.Image %}
+    <img src="{{ formation.image }}" alt="Image formation" style="width: 50px; height: auto; border-radius: 4px;">
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if formation.formateur %}
+                                                            {{ formation.formateur.nomF }} {{ formation.formateur.PrenomF }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ path('app_formation_show', {'id_form': formation.id_form}) }}" class="btn btn-info btn-sm">
+                                                            <i class="fas fa-eye"></i> Voir
+                                                        </a>
+                                                        <a href="{{ path('app_formation_edit', {'id_form': formation.id_form}) }}" class="btn btn-warning btn-sm">
+                                                            <i class="fas fa-edit"></i> Modifier
+                                                        </a>
+                                                        <form method="POST" action="{{ path('app_formation_delete', {'id_form': formation.id_form}) }}"
+                                                              style="display:inline-block;"
+                                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette formation ?');">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formation.id_form) }}">
+                                                            <button class="btn btn-danger btn-sm">
+                                                                <i class="fas fa-trash-alt"></i> Supprimer
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="9" class="text-center">Aucune formation trouvée.</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <footer class="footer">
+                <div class="container-fluid d-flex justify-content-between">
+                    <div class="copyright">
+                        &copy; {{ "now"|date("Y") }}, made with <i class="fa fa-heart heart text-danger"></i> by You
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script src="{{ asset('BackOffice/assets/js/core/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/core/popper.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/core/bootstrap.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/kaiadmin.min.js') }}"></script>
+
+</body>
+</html>

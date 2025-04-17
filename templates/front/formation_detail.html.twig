@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ formation.Titre }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap & Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand span {
+            font-weight: bold;
+            font-size: 24px;
+            color: #0d6efd;
+        }
+
+        .nav-link {
+            margin-right: 15px;
+            color: #333 !important;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: #0d6efd !important;
+        }
+
+        .btn-back {
+            margin-bottom: 25px;
+        }
+
+        .card-details {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            padding: 30px;
+        }
+
+        img.img-fluid {
+            border-radius: 10px;
+            max-height: 350px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        h2 {
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 20px;
+            background: #fff;
+            text-align: center;
+            color: #888;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="header_section">
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><span>Hirevac</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">À propos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Jobs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Freelancers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-sign-in-alt me-1"></i>Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-user-plus me-1"></i>Sign Up</a></li>
+                    <form class="d-flex ms-3">
+                        <input class="form-control me-2" type="search" placeholder="Rechercher..." aria-label="Search">
+                        <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Contenu -->
+<div class="container my-5">
+    <a href="{{ path('front_formations') }}" class="btn btn-secondary btn-back">
+        <i class="fas fa-arrow-left"></i> Retour à la liste
+    </a>
+
+    <div class="row">
+        <div class="col-md-6">
+            {% if formation.Image %}
+                <img src="{{ formation.Image }}" class="img-fluid" alt="{{ formation.Titre }}">
+            {% else %}
+                <div class="alert alert-light">Aucune image disponible</div>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <div class="card-details">
+                <h2>{{ formation.Titre }}</h2>
+                <p><strong>Dates :</strong> du {{ formation.DateD|date('d/m/Y') }} au {{ formation.DateF|date('d/m/Y') }}</p>
+                <p><strong>Durée :</strong> {{ formation.Duree }} jours</p>
+                <hr>
+                <p><strong>Description :</strong><br>{{ formation.Description|nl2br }}</p>
+<p><strong>Formateur :</strong> 
+    <a href="{{ path('front_formateur_detail', { id: formateur.idFormateur }) }}" class="text-decoration-none text-primary">
+        {{ formateur.nomF }} {{ formateur.prenomF }}
+    </a>
+</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    &copy; {{ "now"|date("Y") }} Hirevac. Tous droits réservés.
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
