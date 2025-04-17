@@ -1,12 +1,32 @@
-{% extends 'BackOffice/base.html.twig' %}
-
-{% block body %}
-
-    <h1>Edit Project</h1>
-
-    {{ include('GestionProjet/project/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_project_index') }}">back to list</a>
-
-    {{ include('GestionProjet/project/_delete_form.html.twig') }}
-{% endblock %}
+{# GestionProjet/project/_edit_modal.html.twig #}
+{{ form_start(form, {'attr': {'id': 'editProjectForm', 'novalidate': 'novalidate'}}) }}
+<div class="form-group">
+    {{ form_label(form.titre) }}
+    {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+    <div class="text-danger small">{{ form_errors(form.titre) }}</div>
+</div>
+<div class="form-group">
+    {{ form_label(form.description) }}
+    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+    <div class="text-danger small">{{ form_errors(form.description) }}</div>
+</div>
+<div class="form-group">
+    {{ form_label(form.statut) }}
+    {{ form_widget(form.statut, {'attr': {'class': 'form-control'}}) }}
+    <div class="text-danger small">{{ form_errors(form.statut) }}</div>
+</div>
+<div class="form-group">
+    {{ form_label(form.date_debut) }}
+    {{ form_widget(form.date_debut, {'attr': {'class': 'form-control'}}) }}
+    <div class="text-danger small">{{ form_errors(form.date_debut) }}</div>
+</div>
+<div class="form-group">
+    {{ form_label(form.date_fin) }}
+    {{ form_widget(form.date_fin, {'attr': {'class': 'form-control'}}) }}
+    <div class="text-danger small">{{ form_errors(form.date_fin) }}</div>
+</div>
+<div class="modal-footer border-0">
+    <button type="submit" class="btn btn-primary">{{ button_label|default('Update') }}</button>
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+</div>
+{{ form_end(form) }}

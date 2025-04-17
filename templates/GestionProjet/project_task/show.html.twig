@@ -7,7 +7,6 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h2 class="m-0 font-weight-bold text-primary">Task Details</h2>
-       
         </div> 
         <div class="card-body">
             <div class="table-responsive">
@@ -36,30 +35,26 @@
                                 {% endif %}
                             </td>
                         </tr>
-                      {# At the top of your template or in a separate Twig component #}
-{% macro statusBadge(status) %}
-    {% import _self as self %}
-    
-    {% set config = {
-        'todo': {'class': 'secondary', 'label': 'To Do'},
-        'in_progress': {'class': 'warning', 'label': 'In Progress'},
-        'completed': {'class': 'success', 'label': 'Completed'}
-    } %}
-    
-    {% set settings = config[status] ?? {'class': 'info', 'label': status|title} %}
-    
-    <span class="badge badge-{{ settings.class }}">
-        {{ settings.label }}
-    </span>
-{% endmacro %}
+                        {% macro statusBadge(status) %}
+                            {% set config = {
+                                'todo': {'class': 'secondary', 'label': 'To Do'},
+                                'in_progress': {'class': 'warning', 'label': 'In Progress'},
+                                'completed': {'class': 'success', 'label': 'Completed'}
+                            } %}
+                            
+                            {% set settings = config[status] ?? {'class': 'info', 'label': status|title} %}
+                            
+                            <span class="badge badge-{{ settings.class }}">
+                                {{ settings.label }}
+                            </span>
+                        {% endmacro %}
 
-{# In your table row #}
-<tr>
-    <th>Status</th>
-    <td>
-        {{ _self.statusBadge(project_task.statut) }}
-    </td>
-</tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                {{ _self.statusBadge(project_task.statut) }}
+                            </td>
+                        </tr>
                         <tr>
                             <th>Project</th>
                             <td>
@@ -73,19 +68,30 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Assigned User</th>
+                            <th>Assigned To</th>
                             <td>
-                                {% if project_task.userId %}
-                                    test {{ project_task.userId }} (ID: {{ project_task.userId }})
+                                {% if project_task.user %}
+                                    <div class="d-flex align-items-center">
+                                        {# If you have user avatars, you can add them here #}
+                                        <span class="font-weight-bold">{{ project_task.user.username }}</span>
+                                        <span class="text-muted ml-2">({{ project_task.user.email }})</span>
+                                    </div>
                                 {% else %}
                                     <span class="text-muted">Unassigned</span>
                                 {% endif %}
                             </td>
                         </tr>
+                        <tr>
+                            <th>Created At</th>
+                            <td>{{ project_task.date|date('Y-m-d H:i:s') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Last Updated</th>
+                            <td>{{ project_task.date|date('Y-m-d H:i:s') }}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-          
         </div>
     </div>
 </div>

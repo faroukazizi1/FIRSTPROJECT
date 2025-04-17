@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\ProjectTask;
 use App\Entity\Project;
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -11,14 +12,23 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;  
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Security\Core\Security;
 
 class ProjectTaskType extends AbstractType
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $isAdmin = $options['is_admin'] ?? false;
         $isEdit = $options['is_edit'] ?? false;
+        $currentUser = $this->security->getUser();
 
         $builder
             ->add('titre', TextType::class, [
@@ -44,31 +54,49 @@ class ProjectTaskType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'label' => 'Status',
                 'required' => true,
-                'placeholder' => $isEdit ? false : 'Choose a status' // Show placeholder only for new tasks
+                'placeholder' => $isEdit ? false : 'Choose a status'
             ])
             ->add('project', EntityType::class, [
                 'class' => Project::class,
                 'choice_label' => 'titre',
                 'attr' => ['class' => 'form-control'],
                 'label' => 'Project',
-                'placeholder' => $isEdit ? false : 'Select a project' // Show placeholder only for new tasks
+                'placeholder' => $isEdit ? false : 'Select a project'
             ])
-            ->add('user_id', IntegerType::class, [
+            ->add('user', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'username', // or whatever field you want to display
                 'attr' => ['class' => 'form-control'],
-                'label' => 'User ID'
+                'label' => 'Assigned To',
+                'data' => $currentUser, // Set current user as default
+                'disabled' => true, // Make it non-editable
+                'required' => true
             ]);
-    }
+            if ($isAdmin) {
+                $builder->add('user', EntityType::class, [
+                    'class' => User::class,
+                    'choice_label' => 'username', // or whatever field you want to display
+                    'attr' => ['class' => 'form-control'],
+                    'label' => 'Assign To',
+                    'required' => true,
+                    'placeholder' => 'Select user'
+                ]);
+            }
+        }
+    
 
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => ProjectTask::class,
-            'csrf_protection' => true,
-            'csrf_field_name' => '_token',
-            'csrf_token_id' => 'project_task_form',
-            'is_edit' => false, // Default to false (create mode)
-        ]);
-
-        $resolver->setAllowedTypes('is_edit', 'bool');
-    }
+        public function configureOptions(OptionsResolver $resolver): void
+        {
+            $resolver->setDefaults([
+                'data_class' => ProjectTask::class,
+                'csrf_protection' => true,
+                'csrf_field_name' => '_token',
+                'csrf_token_id' => 'project_task_form',
+                'is_edit' => false,
+                'is_admin' => false,
+            ]);
+        
+            $resolver->setAllowedTypes('is_edit', 'bool');
+            $resolver->setAllowedTypes('is_admin', 'bool');
+        }
 }

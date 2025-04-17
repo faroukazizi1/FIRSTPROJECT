@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Entity; 
+namespace App\Entity;
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection; 
-use App\Repository\ProjectTaskRepository; 
+use Doctrine\Common\Collections\Collection;
+use App\Repository\ProjectTaskRepository;
 
 #[ORM\Entity(repositoryClass: ProjectTaskRepository::class)]
 #[ORM\Table(name: 'project_task')]
@@ -14,13 +15,32 @@ class ProjectTask
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null; 
+    private ?int $id = null;
 
-
-    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: "tasks")]
-    #[ORM\JoinColumn(name: "project_id", referencedColumnName: "id", onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'tasks')]
+    #[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?Project $project = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'projectTasks')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\Column(type: 'string', nullable: false)]
+    private ?string $titre = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column(type: 'date', nullable: false)]
+    private ?\DateTimeInterface $date = null;
+
+    #[ORM\Column(type: 'string', nullable: false)]
+    private ?string $statut = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getProject(): ?Project
     {
@@ -33,19 +53,16 @@ class ProjectTask
         return $this;
     }
 
-    public function getId(): ?int
+    public function getUser(): ?User
     {
-        return $this->id;
+        return $this->user;
     }
 
-    public function setId(int $id): self
+    public function setUser(?User $user): self
     {
-        $this->id = $id;
+        $this->user = $user;
         return $this;
     }
-
-    #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $titre = null;
 
     public function getTitre(): ?string
     {
@@ -58,9 +75,6 @@ class ProjectTask
         return $this;
     }
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $description = null;
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -71,9 +85,6 @@ class ProjectTask
         $this->description = $description;
         return $this;
     }
-
-    #[ORM\Column(type: 'date', nullable: false)]
-    private ?\DateTimeInterface $date = null;
 
     public function getDate(): ?\DateTimeInterface
     {
@@ -86,9 +97,6 @@ class ProjectTask
         return $this;
     }
 
-    #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $statut = null;
-
     public function getStatut(): ?string
     {
         return $this->statut;
@@ -99,57 +107,4 @@ class ProjectTask
         $this->statut = $statut;
         return $this;
     }
-
-    #[ORM\Column(type: 'integer', nullable: false)]
-    private ?int $project_id = null;
-
-    public function getProject_id(): ?int
-    {
-        return $this->project_id;
-    }
-
-    public function setProject_id(int $project_id): self
-    {
-        $this->project_id = $project_id;
-        return $this;
-    }
-
-    #[ORM\Column(type: 'integer', nullable: false)]
-    private ?int $user_id = null;
-
-    public function getUser_id(): ?int
-    {
-        return $this->user_id;
-    }
-
-    public function setUser_id(int $user_id): self
-    {
-        $this->user_id = $user_id;
-        return $this;
-    }
-
-    public function getProjectId(): ?int
-    {
-        return $this->project_id;
-    }
-
-    public function setProjectId(int $project_id): static
-    {
-        $this->project_id = $project_id;
-
-        return $this;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->user_id;
-    }
-
-    public function setUserId(int $user_id): static
-    {
-        $this->user_id = $user_id;
-
-        return $this;
-    }
-
 }

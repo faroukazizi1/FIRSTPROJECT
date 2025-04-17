@@ -26,7 +26,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         }
 
         if (in_array('ROLE_Employe', $user->getRoles())) {
-            return new RedirectResponse($this->router->generate('app_home_front'));
+            return new RedirectResponse($this->router->generate('tasksClient'));
         }
 
         // Redirection par défaut

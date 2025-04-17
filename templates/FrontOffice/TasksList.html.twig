@@ -1,30 +1,11 @@
+{% extends 'FrontOffice/front_base.html.twig' %}
+{% block title %}
+    <title>Liste des tasks</title>
+{% endblock %}
+
+{% block body %}
 <html lang="en-US">
 	<head>
-		<meta charset="UTF-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<title>Tasks Dashboard</title>
-		<link
-		href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-		<!-- bootstrap core css -->
-		<link
-		rel="stylesheet" type="text/css" href="{{asset('FrontOffice/css/bootstrap.css')}}"/>
-
-		<!-- fonts style -->
-		<link
-		href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
-
-		<!-- font awesome style -->
-		<link
-		href="{{asset('FrontOffice/css/font-awesome.min.css')}}" rel="stylesheet"/>
-		<!-- nice select -->
-		<link
-		rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4=" crossorigin="anonymous"/>
-
-		<!-- Custom styles for this template -->
-		<link
-		href="{{asset('FrontOffice/css/style.css')}}" rel="stylesheet"/>
-		<!-- responsive style -->
-		<link href="{{asset('FrontOffice/css/responsive.css')}}" rel="stylesheet"/>
 
 
 		<style>
@@ -228,73 +209,7 @@
 	</head>
 
 	<body>
-		<header class="header_section" style="background:#030d47">
-
-
-			<div class="container-fluid">
-				<nav class="navbar navbar-expand-lg custom_nav-container">
-					<a class="navbar-brand" href="#">
-						<span>FLEXIRH</span>
-
-					</a>
-
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<span class=""></span>
-					</button>
-
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<ul class="navbar-nav ml-auto">
-							<li class="nav-item">
-		
-								<a class="nav-link" href="{{ path('app_home_front')}}">Home</a>
-							</li>
-		
-							<li class="nav-item">
-								<a class="nav-link" href="{{ path('app_promotion_index')}}">Promotion</a>
-							</li>
-		
-							<li class="nav-item">
-								<a class="nav-link" href="{{ path('chatbot') }}">Absence</a>
-							</li>
-		
-							<li class="nav-item">
-								<a class="nav-link" href="{{ path('tasksClient')}}">Projet</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">Formation</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">Conges</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">Absence</a>
-		
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">Finance</a>
-							</li>
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-									<i class="fa fa-user" aria-hidden="true"></i>
-									<span>Account</span>
-								</a>
-								<ul class="dropdown-menu" aria-labelledby="accountDropdown">
-									<li><a class="dropdown-item" href="/settings">Settings</a></li>
-									<li><hr class="dropdown-divider"></li>
-									<li><a class="dropdown-item" href="{{ path('app_logout') }}">Sign Out</a></li>
-								</ul>
-							</li>
-							
-							<form class="form-inline">
-								<button class="btn nav_search-btn" type="submit">
-									<i class="fa fa-search" aria-hidden="true"></i>
-								</button>
-							</form>
-						</ul>
-					</div>
-				</nav>
-			</div>
-		</header>
+	
 
 		<div class="container-fluid">
 			<div
@@ -544,5 +459,7 @@ console.error("Error:", error);
 
 
 	</body>
+
 </html>
+	{% endblock %}
 

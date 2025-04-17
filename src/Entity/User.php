@@ -176,7 +176,9 @@ class User implements UserInterface , PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->promotions = new ArrayCollection();
+        $this->projectTasks = new ArrayCollection();
     }
+    
 
     /**
      * @return Collection<int, Promotion>
@@ -224,6 +226,41 @@ class User implements UserInterface , PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->id;
+    }
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ProjectTask::class, orphanRemoval: true)]
+    private Collection $projectTasks;
+
+ 
+
+    /**
+     * @return Collection<int, ProjectTask>
+     */
+    public function getProjectTasks(): Collection
+    {
+        if (!$this->projectTasks instanceof Collection) {
+            $this->projectTasks = new ArrayCollection();
+        }
+        return $this->projectTasks;
+    }
+
+    public function addProjectTask(ProjectTask $projectTask): self
+    {
+        if (!$this->getProjectTasks()->contains($projectTask)) {
+            $this->getProjectTasks()->add($projectTask);
+            $projectTask->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeProjectTask(ProjectTask $projectTask): self
+    {
+        if ($this->projectTasks->removeElement($projectTask)) {
+            // set the owning side to null (unless already changed)
+            if ($projectTask->getUser() === $this) {
+                $projectTask->setUser(null);
+            }
+        }
+        return $this;
     }
 
 }

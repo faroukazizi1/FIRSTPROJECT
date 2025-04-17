@@ -40,15 +40,15 @@ class ProjectTaskRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-    public function findByStatutAndUserId(string $statut, int $userId): array
+    public function findByStatutAndUserId(string $statut, string $userId)
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.statut = :statut')
-            ->andWhere('t.user_id = :userId')
+            ->andWhere('t.user = :userId')
             ->setParameter('statut', $statut)
             ->setParameter('userId', $userId)
-            ->orderBy('t.date', 'DESC')
             ->getQuery()
             ->getResult();
     }
+
 }
