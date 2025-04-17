@@ -40,7 +40,6 @@
       {# Include the navbar #}
       {% include 'FrontOffice/nav_bar.html.twig' %}
     </div>
-    <!-- Header section ends -->
 
     <!-- Main content -->
     {% block content %}{% endblock %}
@@ -51,18 +50,58 @@
 
         {# Include the chatbot #}
         {% include 'FrontOffice/chatbot/index.html.twig' %}
+    
+
+    <div class="container">
+        <h1>Bienvenue sur votre tableau de bord</h1>
+        
+        {# Inclure le chatbot en tant que page complète #}
+        {% include 'pret/index.html.twig' %}
+    </div>
+{% endblock %}
+
+
+
+
+    <!-- end header section -->
+    <!-- slider section -->
+    <section class="slider_section ">
+      <div class="container ">
+        <div class="row">
+          <div class="col-lg-7 col-md-8 mx-auto">
+           
+          </div>
+        </div>
+        
+            <ul class="job_check_list">
+              <li class=" ">
+                <input id="checkbox_qu_01" type="checkbox" class="styled-checkbox">
+                <label for="checkbox_qu_01">
+                  Freelancer
+                </label>
+              </li>
+              <li class=" ">
+                <input id="checkbox_qu_02" type="checkbox" class="styled-checkbox">
+                <label for="checkbox_qu_02">
+                  Part Time
+                </label>
+              </li>
+              <li class=" ">
+                <input id="checkbox_qu_03" type="checkbox" class="styled-checkbox">
+                <label for="checkbox_qu_03">
+                  Full Time
+                </label>
+              </li>
+            </ul>
+          </div>
+        </div>
+
       </div>
     {% endblock %}
   </div>
-
-  <!-- Footer section -->
+  
   <footer class="footer_section">
-    <div class="container">
-      <p>
-        &copy; <span id="displayYear"></span> All Rights Reserved By
-        <a href="https://html.design/">Free Html Templates</a>
-      </p>
-    </div>
+    
   </footer>
 
   {% block js %}

@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <style>
+        table.table {
+            width: 100%;
+            table-layout: fixed;
+        }
+        table.table th, table.table td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            padding: 8px;
+        }
+        table.table th {
+            font-weight: bold;
+        }
+        td.actions a {
+            margin-right: 5px;
+        }
+    </style>
+
+    <h1>Reponse index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date_reponse</th>
+                <th>Montant_demande</th>
+                <th>Revenus_bruts</th>
+                <th>Taux_interet</th>
+                <th>Mensualite_credit</th>
+                <th>Potentiel_credit</th>
+                <th>Duree_remboursement</th>
+                <th>Montant_autorise</th>
+                <th>Assurance</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reponse in reponses %}
+            <tr>
+                <td>{{ reponse.DateReponse ? reponse.DateReponse|date('Y-m-d') : '' }}</td>
+                <td>{{ reponse.MontantDemande }}</td>
+                <td>{{ reponse.RevenusBruts }}</td>
+                <td>{{ reponse.TauxInteret }}</td>
+                <td>{{ reponse.MensualiteCredit }}</td>
+                <td>{{ reponse.PotentielCredit }}</td>
+                <td>{{ reponse.DureeRemboursement }}</td>
+                <td>{{ reponse.MontantAutorise }}</td>
+                <td>{{ reponse.Assurance }}</td>
+                <td>
+                    {{ include('GestionFinance/reponse/_delete_form.html.twig') }}
+                    <a href="{{ path('app_reponse_edit', {'ID_reponse': reponse.ID_reponse}) }}">✏️</a>
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reponse_new') }}">Create new</a>
+{% endblock %}
