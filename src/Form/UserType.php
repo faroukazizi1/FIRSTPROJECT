@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
 
 class UserType extends AbstractType
 {
@@ -29,7 +30,7 @@ class UserType extends AbstractType
             ])
             ->add('nom', null, [
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le nom est requis.']),
+                    new Assert\NotBlank(['message' => 'Le nommm est requis.']),
                     new Assert\Length(['min' => 2]),
                 ],
             ])
@@ -52,11 +53,14 @@ class UserType extends AbstractType
                 ],
             ])
             ->add('password', PasswordType::class, [
+                'required' => false, // So it's optional when editing
+                'mapped' => false, // Don't overwrite the password automatically
+                'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le mot de passe est requis.']),
-                    new Assert\Length([
+                    new Length([
                         'min' => 6,
-                        'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
+                        'minMessage' => 'Le mot de passe doit comporter au moins {{ limit }} caractères.',
+                        'max' => 4096,
                     ]),
                 ],
             ])
