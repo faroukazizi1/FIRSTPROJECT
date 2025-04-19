@@ -64,7 +64,7 @@ final class ProjectTaskController extends AbstractController
     #[Route('/tasksClient', name: 'tasksClient', methods: ['GET'])]
     public function TasksListClient(ProjectTaskRepository $taskRepo): Response
     {
-        $user = $this->getUser();
+        $user = $this->getUser();// Récupère user actuellement authentifié (ou null si pas de session).
         if (!$user) {
             throw new AccessDeniedException('User must be logged in to view tasks.');
         }
@@ -90,10 +90,10 @@ final class ProjectTaskController extends AbstractController
 
         // Allow admins to update any task's status
         if (!$this->isGranted('ROLE_RHR') && $task->getUser() !== $this->getUser()) {
-            return new JsonResponse(['error' => 'Access denied'], 403);
+            return new JsonResponse(['error' => 'Access denied'], 403);// Accès refusé si l’utilisateur n’est ni admin ni propriétaire.
         }
 
-        $task->setStatut($newStatut);
+        $task->setStatut($newStatut);  // Modifie le statut de la tâche.
         $em->persist($task);
         $em->flush();
 
@@ -103,9 +103,6 @@ final class ProjectTaskController extends AbstractController
     #[Route('/{id}', name: 'app_project_task_show', methods: ['GET'])]
     public function show(ProjectTask $projectTask): Response
     {
-       
-      
-
         return $this->render('GestionProjet/project_task/show.html.twig', [
             'project_task' => $projectTask,
         ]);
@@ -114,8 +111,6 @@ final class ProjectTaskController extends AbstractController
     #[Route('/{id}/edit', name: 'app_project_task_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, ProjectTask $projectTask, EntityManagerInterface $entityManager, ProjectRepository $projectRepository): Response
     {
-     
-
         $form = $this->createForm(ProjectTaskType::class, $projectTask, [
             'is_edit' => true,
             'is_admin' => true // Enable user selection for admins
@@ -138,8 +133,6 @@ final class ProjectTaskController extends AbstractController
     #[Route('/delete/{id}', name: 'app_project_task_delete', methods: ['GET', 'POST'])]
     public function delete($id, ManagerRegistry $managerRegistry, ProjectTaskRepository $projectTaskRepository): Response
     {
-     
-
         $projectTask = $projectTaskRepository->find($id);
         
         if (!$projectTask) {
