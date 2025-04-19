@@ -4,13 +4,14 @@ namespace App\Controller\GestionUser\BackOffice;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\EditUserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserController extends AbstractController
 {
@@ -30,9 +31,6 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $PlainPasswod = $user->getPassword();
-            $HashedPasswod = $passwordHasher->hashPassword($user,$PlainPasswod);
-            $user->setPassword($HashedPasswod);
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -60,7 +58,7 @@ final class UserController extends AbstractController
     #[Route('/home_back/GestionUser/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class RegistrationType extends AbstractType
@@ -19,7 +20,9 @@ class RegistrationType extends AbstractType
         ->add('prenom')
         ->add('email')
         ->add('username')
-        ->add('password')
+        ->add('password', PasswordType::class , [
+            'always_empty' => 'true'
+        ])
         ->add('sexe', ChoiceType::class , [
         
             'choices' => [ 

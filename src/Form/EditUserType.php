@@ -4,12 +4,12 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
-class UserType extends AbstractType
+class EditUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -23,26 +23,27 @@ class UserType extends AbstractType
                 'always_empty' => 'true' ,
                 'mapped' => false,
                 'required' => false,
-                'hash_property_path' => 'password',  
+                'label' => 'New Password (leave blank to keep current)',
+                'hash_property_path' => 'password',
             ])
             ->add('role' , ChoiceType::class , [
             
-            'choices' => [ 
-                'Responsable Ressource Humaine'=> 'RHR',
-                'Employe' => 'Employe'
-            ],
-            'multiple' => false,
-
-            ])
-            ->add('sexe', ChoiceType::class , [
-            
                 'choices' => [ 
-                    'Homme'=> 'Homme',
-                    'Femme' => 'Femme'
+                    'Responsable Ressource Humaine'=> 'RHR',
+                    'Employe' => 'Employe'
                 ],
                 'multiple' => false,
     
                 ])
+                ->add('sexe', ChoiceType::class , [
+                
+                    'choices' => [ 
+                        'Homme'=> 'Homme',
+                        'Femme' => 'Femme'
+                    ],
+                    'multiple' => false,
+        
+                    ])
             ->add('adresse')
             ->add('numero')
         ;
