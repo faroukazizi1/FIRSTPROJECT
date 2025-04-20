@@ -173,9 +173,16 @@ class User implements UserInterface , PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Promotion::class, mappedBy: 'user')]
     private Collection $promotions;
 
+    /**
+     * @var Collection<int, ResetPasswordToken>
+     */
+    #[ORM\OneToMany(targetEntity: ResetPasswordToken::class, mappedBy: 'user')]
+    private Collection $resetPasswordTokens;
+
     public function __construct()
     {
         $this->promotions = new ArrayCollection();
+        $this->resetPasswordTokens = new ArrayCollection();
     }
 
     /**
@@ -225,5 +232,36 @@ class User implements UserInterface , PasswordAuthenticatedUserInterface
     {
         return $this->id;
     }
+
+    /**
+     * @return Collection<int, ResetPasswordToken>
+     */
+    public function getResetPasswordTokens(): Collection
+    {
+        return $this->resetPasswordTokens;
+    }
+
+    public function addResetPasswordToken(ResetPasswordToken $resetPasswordToken): static
+    {
+        if (!$this->resetPasswordTokens->contains($resetPasswordToken)) {
+            $this->resetPasswordTokens->add($resetPasswordToken);
+            $resetPasswordToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResetPasswordToken(ResetPasswordToken $resetPasswordToken): static
+    {
+        if ($this->resetPasswordTokens->removeElement($resetPasswordToken)) {
+            // set the owning side to null (unless already changed)
+            if ($resetPasswordToken->getUser() === $this) {
+                $resetPasswordToken->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
 
 }
