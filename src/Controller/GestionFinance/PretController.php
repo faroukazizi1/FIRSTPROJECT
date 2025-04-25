@@ -36,10 +36,10 @@ final class PretController extends AbstractController
             $entityManager->flush();
 
             // Envoi de SMS
-            $sid = '';
+            /*$sid = '';
             $authToken = '';
             $fromNumber = '';
-            $toNumber = '';
+            $toNumber = '';*/
             $client = new Client($sid, $authToken);
 
          $message = "Votre demande avec le CIN " . $pret->getCin() . " est prise en considération.";
