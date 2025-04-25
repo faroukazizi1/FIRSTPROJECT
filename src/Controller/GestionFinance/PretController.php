@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-//use Twilio\Rest\Client;
+use Twilio\Rest\Client;
 
 #[Route('/pret')]
 final class PretController extends AbstractController
@@ -35,9 +35,12 @@ final class PretController extends AbstractController
             $entityManager->persist($pret);
             $entityManager->flush();
 
-            // Envoi de SMS
-        
-            //$client = new Client($sid, $authToken);
+            $sid = getenv('TWILIO_SID');
+            $authToken = getenv('TWILIO_AUTH_TOKEN');
+            $fromNumber = getenv('TWILIO_FROM_NUMBER');
+            $toNumber = getenv('TWILIO_TO_NUMBER');
+            
+            $client = new Client($sid, $authToken);
 
          $message = "Votre demande avec le CIN " . $pret->getCin() . " est prise en considération.";
 
