@@ -12,6 +12,10 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType; // ✅ Correct
  // Import the built-in DateType
  use Symfony\Component\Form\Extension\Core\Type\UrlType;
+ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+
+ use Symfony\Component\Validator\Constraints as Assert;
+
 
 
 
@@ -45,7 +49,16 @@ class FormationType extends AbstractType
             ])
             
             
-            ->add('Duree')
+            ->add('Duree', IntegerType::class, [
+                'label' => 'Durée (en heures)',
+                'constraints' => [
+                    new Assert\Range([
+                        'min' => 1,
+                        'max' => 8,
+                        'notInRangeMessage' => 'La durée doit être comprise entre {{ min }} et {{ max }} heures.',
+                    ]),
+                ],
+            ])
             ->add('Image', UrlType::class, [
                 'label' => 'Image URL',
                 'required' => false,

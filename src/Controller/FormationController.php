@@ -12,60 +12,85 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Formateur;
 use App\Form\FormationSearchType;
+use App\Service\MailService;
 
 
 
 #[Route('/formation')]
 final class FormationController extends AbstractController
 {
-    #[Route(name: 'app_formation_index', methods: ['GET'])]
-public function index(Request $request, FormationRepository $formationRepository): Response
-{
-    $form = $this->createForm(FormationSearchType::class);
-    $form->handleRequest($request);
-
-    $formations = [];
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $data = $form->getData();
-        $titre = $data['titre'] ?? '';
-
-        $formations = $formationRepository->createQueryBuilder('f')
-            ->where('f.Titre LIKE :titre')
-            ->setParameter('titre', '%' . $titre . '%')
-            ->getQuery()
-            ->getResult();
-    } else {
-        $formations = $formationRepository->findAll();
+    // src/Controller/FormationController.php
+    #[Route('/', name: 'formation_index', methods: ['GET'])]
+    public function index(Request $request, FormationRepository $formationRepository): Response
+    {
+        $form = $this->createForm(FormationSearchType::class);
+        $form->handleRequest($request);
+    
+        // Debug: afficher les données du formulaire
+        if ($form->isSubmitted()) {
+            dump($form->getData());
+        }
+    
+        $formations = $formationRepository->searchAndSort(
+            $form->isSubmitted() ? $form->getData() : [],
+            $request->query->get('sort')
+        );
+    
+        // Debug: afficher les résultats
+        dump($formations);
+    
+        return $this->render('formation/index.html.twig', [
+            'formations' => $formations,
+            'form' => $form->createView()
+        ]);
     }
 
-    return $this->render('formation/index.html.twig', [
-        'formations' => $formations,
-        'form' => $form->createView()
+// Nouvelle route pour les statistiques
+#[Route('/statistiques', name: 'app_formation_stats', methods: ['GET'])]
+public function statistics(FormationRepository $formationRepository): Response
+{
+    $stats = [
+        'total_formations' => $formationRepository->count([]),
+        'formations_par_type' => $formationRepository->countByType(),
+        'duree_moyenne' => $formationRepository->averageDuration(),
+        'prochaines_formations' => $formationRepository->findUpcoming(5)
+    ];
+
+    return $this->render('formation/statistics.html.twig', [
+        'stats' => $stats
     ]);
 }
 
 
 
-    #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $formation = new Formation();
-        $form = $this->createForm(FormationType::class, $formation);
-        $form->handleRequest($request);
+#[Route('/formation/new', name: 'app_formation_new')]
+public function new(Request $request, EntityManagerInterface $em, MailService $mailService): Response
+{
+    $formation = new Formation();
+    $form = $this->createForm(FormationType::class, $formation);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($formation);
-            $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em->persist($formation);
+        $em->flush();
 
-            return $this->redirectToRoute('app_formation_index', [], Response::HTTP_SEE_OTHER);
-        }
+        // Envoi de mail au formateur
+        $formateur = $formation->getFormateur();
+        $mailService->envoyerMail(
+            $formateur->getEmail(),
+            'Nouvelle formation assignée',
+            "Bonjour " . $formateur->getNomF() . ",\n\nVous êtes assigné à la formation : " . $formation->getTitre()
+        );
 
-        return $this->render('formation/new.html.twig', [
-            'formation' => $formation,
-            'form' => $form,
-        ]);
+        $this->addFlash('success', 'Formation ajoutée et mail envoyé.');
+
+        return $this->redirectToRoute('formation_index');
     }
+
+    return $this->render('formation/new.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
 
     #[Route('/{id_form}', name: 'app_formation_show', methods: ['GET'])]
     public function show(Formation $formation): Response
