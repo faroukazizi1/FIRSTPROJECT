@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\GestionFormation;
 
 use App\Entity\Formation;
 use App\Form\FormationType;
