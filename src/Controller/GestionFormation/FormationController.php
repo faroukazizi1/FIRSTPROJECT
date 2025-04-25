@@ -12,13 +12,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Formateur;
 use App\Form\FormationSearchType;
+
 use App\Service\MailService;
+
 
 
 
 #[Route('/formation')]
 final class FormationController extends AbstractController
 {
+
     // src/Controller/FormationController.php
     #[Route('/', name: 'formation_index', methods: ['GET'])]
     public function index(Request $request, FormationRepository $formationRepository): Response
@@ -91,6 +94,7 @@ public function new(Request $request, EntityManagerInterface $em, MailService $m
         'form' => $form->createView(),
     ]);
 }
+
 
     #[Route('/{id_form}', name: 'app_formation_show', methods: ['GET'])]
     public function show(Formation $formation): Response
