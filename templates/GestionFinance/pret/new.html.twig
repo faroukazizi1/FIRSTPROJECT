@@ -49,9 +49,14 @@
 
     <h1>Create new Pret</h1>
 
+    <a href="{{ path('pret_calendar') }}" target="_blank" style="display: inline-block; margin-bottom: 15px; color: blue;">
+        📅 Voir le calendrier des prêts
+    </a>
+
     {{ include('GestionFinance/pret/_form.html.twig') }}
 
     <div class="btn-container">
         <a href="{{ path('app_pret_index') }}" class="btn" style="color: white; background-color: #6c757d;">Back to list</a>
+    </div>
 
-    </div> {% endblock %}
+{% endblock %}

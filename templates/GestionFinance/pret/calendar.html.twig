@@ -1,0 +1,48 @@
+{# templates/GestionFinance/pret/calendar.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Calendrier des prêts</title>
+    
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
+
+    <style>
+        #calendar {
+            max-width: 900px;
+            margin: 40px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center;">Calendrier des prêts</h1>
+    <div id="calendar"></div>
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: {{ path('api_prets')|json_encode|raw }},
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault(); // Empêche la navigation directe
+                    if (info.event.url) {
+                        window.open(info.event.url, '_blank');
+                    }
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
+
+</body>
+</html>
