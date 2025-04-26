@@ -1,0 +1,187 @@
+{# templates/calendar/index.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier des Formations</title>
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/plugins.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/kaiadmin.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {# FullCalendar CSS #}
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <style>
+        .fc-toolbar-title {
+            font-size: 1.25rem;
+            color: #3A3B45;
+        }
+        .fc-button {
+            background-color: #4e73df !important;
+            border-color: #4e73df !important;
+        }
+        .fc-button:hover {
+            background-color: #2e59d9 !important;
+            border-color: #2653d4 !important;
+        }
+        .fc-daygrid-event {
+            background-color: #4e73df;
+            border-color: #4e73df;
+        }
+        .fc-event-title {
+            white-space: normal;
+        }
+        .card-calendar {
+            border: none;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="header_area">
+        {% include 'BackOffice/side_bar.html.twig' %}
+
+        <div class="main-panel">
+            <div class="content">
+                <div class="page-inner">
+                    <div class="page-header">
+                        <h4 class="page-title">Calendrier des Formations</h4>
+                        <ul class="breadcrumbs">
+                            <li class="nav-home"><a href="#"><i class="flaticon-home"></i></a></li>
+                            <li class="separator"><i class="flaticon-right-arrow"></i></li>
+                            <li class="nav-item">
+                                <a href="{{ path('formation_index') }}">Formations</a>
+                            </li>
+                            <li class="separator"><i class="flaticon-right-arrow"></i></li>
+                            <li class="nav-item">
+                                <a href="{{ path('app_calendar') }}">Calendrier</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-calendar">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div class="card-title">Calendrier des Formations</div>
+                                    <div>
+                                        <a href="{{ path('formation_index') }}" class="btn btn-secondary btn-sm">
+                                            <i class="fas fa-list"></i> Liste des formations
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <div id="calendar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <div class="container-fluid d-flex justify-content-between">
+                    <div class="copyright">
+                        &copy; {{ "now"|date("Y") }}, made with <i class="fa fa-heart heart text-danger"></i> by You
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script src="{{ asset('BackOffice/assets/js/core/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/core/popper.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/core/bootstrap.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/kaiadmin.min.js') }}"></script>
+{# FullCalendar JS #}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/fr.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Initialisation du calendrier
+        var calendarEl = document.getElementById('calendar');
+        
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'fr',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            buttonText: {
+                today: 'Aujourd\'hui',
+                month: 'Mois',
+                week: 'Semaine',
+                day: 'Jour'
+            },
+            firstDay: 1, // Lundi comme premier jour
+            navLinks: true,
+            editable: false,
+            selectable: false,
+            nowIndicator: true,
+            
+            // Source des événements
+            events: {
+                url: '{{ path('app_calendar_events') }}',
+                method: 'GET',
+                failure: function() {
+                    toastr.error('Erreur lors du chargement des événements');
+                }
+            },
+            
+            // Personnalisation des événements
+            eventDisplay: 'block',
+            eventColor: '#4e73df',
+            eventTextColor: '#ffffff',
+            
+            // Gestion du clic sur un événement
+            eventClick: function(info) {
+                // Vous pouvez utiliser un modal Bootstrap ici si vous voulez
+                // Par exemple:
+                // $('#eventModal').modal('show');
+                // $('#eventModalTitle').text(info.event.title);
+                // $('#eventModalBody').html('<p>Début: ' + info.event.start.toLocaleString() + '</p>');
+                
+                // Solution temporaire avec alert
+                alert('Formation: ' + info.event.title + '\n' + 
+                      'Début: ' + info.event.start.toLocaleString() + 
+                      (info.event.end ? '\nFin: ' + info.event.end.toLocaleString() : ''));
+                
+                info.jsEvent.preventDefault();
+            },
+            
+            // Personnalisation des vues
+            views: {
+                timeGrid: {
+                    dayMaxEventRows: 4
+                }
+            },
+            
+            // Adapte la hauteur du calendrier
+            height: 'auto',
+            contentHeight: 650
+        });
+
+        // Affichage du calendrier
+        calendar.render();
+        
+        // Si vous utilisez toastr pour les notifications
+        if (typeof toastr !== 'undefined') {
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right"
+            };
+        }
+    });
+</script>
+</body>
+</html>

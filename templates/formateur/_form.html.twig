@@ -2,18 +2,77 @@
   <div class="card-header">
     <div class="card-title">{{ button_label|default('Save') }} Formateur</div>
   </div>
+
   <div class="card-body">
+    <style>
+      .invalid-feedback {
+        display: block;
+        color: red !important;
+      }
+      .is-invalid {
+        border-color: red !important;
+      }
+    </style>
+
     {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
-      <div class="row">
-        <div class="col-md-12">
-          {{ form_widget(form) }}
+
+    <div class="row">
+      <div class="col-md-12">
+
+        {# Champ Numéro #}
+        <div class="form-group">
+          {{ form_label(form.Numero) }}
+          {{ form_widget(form.Numero, {'attr': {'class': 'form-control' ~ (form_errors(form.Numero) ? ' is-invalid' : '')}}) }}
+          <div class="invalid-feedback">
+            {{ form_errors(form.Numero) }}
+          </div>
         </div>
+
+        {# Champ Nom Formateur #}
+        <div class="form-group">
+          {{ form_label(form.Nom_F) }}
+          {{ form_widget(form.Nom_F, {'attr': {'class': 'form-control' ~ (form_errors(form.Nom_F) ? ' is-invalid' : '')}}) }}
+          <div class="invalid-feedback">
+            {{ form_errors(form.Nom_F) }}
+          </div>
+        </div>
+
+        {# Champ Prénom Formateur #}
+        <div class="form-group">
+          {{ form_label(form.Prenom_F) }}
+          {{ form_widget(form.Prenom_F, {'attr': {'class': 'form-control' ~ (form_errors(form.Prenom_F) ? ' is-invalid' : '')}}) }}
+          <div class="invalid-feedback">
+            {{ form_errors(form.Prenom_F) }}
+          </div>
+        </div>
+
+        {# Champ Email #}
+        <div class="form-group">
+          {{ form_label(form.Email) }}
+          {{ form_widget(form.Email, {'attr': {'class': 'form-control' ~ (form_errors(form.Email) ? ' is-invalid' : '')}}) }}
+          <div class="invalid-feedback">
+            {{ form_errors(form.Email) }}
+          </div>
+        </div>
+
+        {# Champ Spécialité #}
+        <div class="form-group">
+          {{ form_label(form.Specialite) }}
+          {{ form_widget(form.Specialite, {'attr': {'class': 'form-control' ~ (form_errors(form.Specialite) ? ' is-invalid' : '')}}) }}
+          <div class="invalid-feedback">
+            {{ form_errors(form.Specialite) }}
+          </div>
+        </div>
+
       </div>
-      <div class="form-group mt-3">
-        <button class="btn btn-primary">
-          <i class="fas fa-save"></i> {{ button_label|default('Save') }}
-        </button>
-      </div>
+    </div>
+
+    <div class="form-group mt-3">
+      <button class="btn btn-primary">
+        <i class="fas fa-save"></i> {{ button_label|default('Save') }}
+      </button>
+    </div>
+
     {{ form_end(form) }}
   </div>
 </div>

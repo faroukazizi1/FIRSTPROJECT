@@ -95,11 +95,17 @@ public function edit(Request $request, Formateur $formateur, EntityManagerInterf
     #[Route('/{idFormateur}/delete', name: 'app_formateur_delete', methods: ['POST'])]
     public function delete(Request $request, Formateur $formateur, EntityManagerInterface $entityManager): Response
     {
+        if (count($formateur->getFormations()) > 0) {
+            $this->addFlash('error', 'Ce formateur est encore assigné à une ou plusieurs formations. Veuillez d\'abord modifier ou supprimer ces formations.');
+            return $this->redirectToRoute('app_formateur_index');
+        }
+    
         if ($this->isCsrfTokenValid('delete' . $formateur->getIdFormateur(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($formateur);
             $entityManager->flush();
+            $this->addFlash('success', 'Formateur supprimé avec succès.');
         }
-
+    
         return $this->redirectToRoute('app_formateur_index', [], Response::HTTP_SEE_OTHER);
     }
 }
