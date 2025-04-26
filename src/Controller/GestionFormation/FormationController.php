@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\GestionFormation;
 
 use App\Entity\Formation;
 use App\Form\FormationType;
@@ -12,13 +12,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Formateur;
 use App\Form\FormationSearchType;
+
 use App\Service\MailService;
+
 
 
 
 #[Route('/formation')]
 final class FormationController extends AbstractController
 {
+
     // src/Controller/FormationController.php
     #[Route('/', name: 'formation_index', methods: ['GET'])]
     public function index(Request $request, FormationRepository $formationRepository): Response
@@ -92,6 +95,7 @@ public function new(Request $request, EntityManagerInterface $em, MailService $m
     ]);
 }
 
+
     #[Route('/{id_form}', name: 'app_formation_show', methods: ['GET'])]
     public function show(Formation $formation): Response
     {
@@ -109,7 +113,7 @@ public function new(Request $request, EntityManagerInterface $em, MailService $m
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('formation_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_formation_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('formation/edit.html.twig', [
@@ -126,7 +130,7 @@ public function new(Request $request, EntityManagerInterface $em, MailService $m
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('formation_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_formation_index', [], Response::HTTP_SEE_OTHER);
     }
    
 
