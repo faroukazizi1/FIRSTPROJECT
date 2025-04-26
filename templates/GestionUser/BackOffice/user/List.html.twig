@@ -51,7 +51,10 @@
                                     <td>{{ user.prenom }}</td>
                                     <td>{{ user.sexe }}</td>
                                     <td>{{ user.email }}</td>
-                                    <td>{{ user.adresse }}</td>
+                                    <td ><a href="{{ path('user_show_map', { 'id': user.id }) }}">
+                                        {{ user.adresse }}
+                                    </a>
+                                    </td>
                                     <td>{{ user.username }}</td>
                                     <td>{{ user.role }}</td>
                                     <td>{{ user.numero }}</td>

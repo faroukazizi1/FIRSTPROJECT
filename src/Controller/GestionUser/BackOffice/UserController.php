@@ -1,11 +1,13 @@
 <?php
 
+
 namespace App\Controller\GestionUser\BackOffice;
 
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\EditUserType;
 use App\Repository\UserRepository;
+use App\Service\GeocodingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,6 +72,21 @@ final class UserController extends AbstractController
         return $this->render('GestionUser/BackOffice/user/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/user/{id}/map', name: 'user_show_map')]
+    public function showMap(User $user, GeocodingService $geocodingService): Response
+    {
+        $coords = $geocodingService->geocode($user->getAdresse());
+
+        if (!$coords) {
+            throw $this->createNotFoundException('Could not geocode the address.');
+        }
+
+        return $this->render('GestionUser/BackOffice/user/map.html.twig', [
+            'user' => $user,
+            'coords' => $coords,
         ]);
     }
 
