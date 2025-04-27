@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des projects</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .absence-info {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Liste des projects</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>titre</th>
+                <th>description</th>
+                <th>statut</th>
+                <th>dateDebut</th>
+                <th>dateFin</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for project in projects %}
+            <tr>
+                <td>{{ project.titre }}</td>
+			    <td>{{ project.description }}</td>
+			    <td>{{ project.statut }}</td>
+			    <td>{{ project.dateDebut ? project.dateDebut|date('Y-m-d') : '' }}</td>
+			    <td>{{ project.dateFin ? project.dateFin|date('Y-m-d') : '' }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucune project enregistrée</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

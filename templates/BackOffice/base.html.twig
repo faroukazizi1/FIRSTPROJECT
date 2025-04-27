@@ -36,6 +36,73 @@
         <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/kaiadmin.min.css') }}" /> 
         <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/demo.css') }}" />
         {# Add this to the <head> section of your base template or directly in the index.html.twig #}
+          <style>
+     /* Search box styling */
+     #add-row_filter {
+         position: relative;
+     }
+     
+     #add-row_filter input[type="search"] {
+         padding-right: 30px;
+         width: 100%;
+         transition: width 0.3s ease;
+     }
+     
+     #add-row_filter input[type="search"]:focus {
+         width: 100%;
+         box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+     }
+     
+     .search-clear {
+         position: absolute;
+         right: 10px;
+         top: 50%;
+         transform: translateY(-50%);
+         cursor: pointer;
+         color: #999;
+     }
+     
+     .search-clear:hover {
+         color: #333;
+     }
+     
+     /* Search results highlight */
+     .highlight-match {
+         background-color: rgba(255, 255, 0, 0.3);
+         padding: 2px;
+         border-radius: 2px;
+     }
+     
+     /* Loading indicator */
+     .search-loading {
+         display: inline-block;
+         width: 16px;
+         height: 16px;
+         border: 2px solid rgba(0, 123, 255, 0.3);
+         border-radius: 50%;
+         border-top-color: #007bff;
+         animation: spin 1s ease-in-out infinite;
+         margin-left: 8px;
+         vertical-align: middle;
+     }
+     
+     @keyframes spin {
+         to { transform: rotate(360deg); }
+     }
+     
+     /* Custom no-results message */
+     .no-results-message {
+         padding: 20px;
+         text-align: center;
+         color: #666;
+     }
+     
+     .no-results-message i {
+         font-size: 24px;
+         margin-bottom: 10px;
+         color: #999;
+     }
+ </style>
         <!-- CSS de DataTables -->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
         <!-- jQuery (obligatoire pour DataTables) -->
