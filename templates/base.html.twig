@@ -1,0 +1,236 @@
+{# templates/BackOffice/back_base.html.twig #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>{% block title %}Kaiadmin - Bootstrap 5 Admin Dashboard{% endblock %}</title>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport"/>
+    <link rel="icon" href="{{ asset('BackOffice/assets/img/kaiadmin/favicon.ico') }}" type="image/x-icon"/>
+
+    <!-- Fonts and icons -->
+    <script src="{{ asset('BackOffice/assets/js/plugin/webfont/webfont.min.js') }}"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["{{ asset('BackOffice/assets/css/fonts.min.css') }}"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/plugins.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/kaiadmin.min.css') }}"/>
+
+    <!-- CSS Just for demo purpose -->
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/demo.css') }}"/>
+
+    {% block stylesheets %}
+    		
+<style>
+    #chat-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        background: linear-gradient(135deg, #007bff, #00d4ff);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+    }
+
+    #chat-container {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 350px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        display: none;
+        flex-direction: column;
+        z-index: 1000;
+    }
+
+    .chat-box {
+        padding: 15px;
+        height: 300px;
+        overflow-y: auto;
+        background: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .message {
+        max-width: 75%;
+        padding: 10px 15px;
+        margin: 5px 0;
+        border-radius: 20px;
+        word-wrap: break-word;
+        font-size: 14px;
+    }
+
+    .user-message {
+        background: #007bff;
+        color: #fff;
+        align-self: flex-end;
+    }
+
+    .bot-message {
+        background: #e0e0e0;
+        color: #000;
+        align-self: flex-start;
+    }
+
+    .input-box {
+        display: flex;
+        padding: 10px;
+        background: #fff;
+        border-top: 1px solid #ddd;
+    }
+
+    .input-box input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        outline: none;
+    }
+
+    .input-box button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-left: 10px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .input-box button:hover {
+        background: #0056b3;
+    }
+</style>
+    
+    
+    {% endblock %}
+</head>
+<body>
+<div class="wrapper">
+    <!-- Sidebar -->
+    {% include 'BackOffice/side_bar.html.twig' %}
+    <!-- End Sidebar -->
+
+    <div class="main-panel">
+        <!-- Navbar -->
+        {# {% include 'BackOffice/includes/navbar.html.twig' %} #}
+        <!-- End Navbar -->
+
+        <!-- Main Content -->
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
+
+        <!-- Footer -->
+        {# {% include 'BackOffice/includes/footer.html.twig' %} #}
+    </div>
+</div>
+
+<!-- Core JS Files -->
+<script src="{{ asset('BackOffice/assets/js/core/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/core/popper.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/core/bootstrap.min.js') }}"></script>
+
+<!-- Plugins -->
+<script src="{{ asset('BackOffice/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/plugin/chart.js/chart.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/plugin/chart-circle/circles.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/plugin/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/plugin/jsvectormap/jsvectormap.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/plugin/jsvectormap/world.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
+
+<!-- Kaiadmin JS -->
+<script src="{{ asset('BackOffice/assets/js/kaiadmin.min.js') }}"></script>
+
+<!-- Demo Scripts (optionnel) -->
+<script src="{{ asset('BackOffice/assets/js/setting-demo.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/demo.js') }}"></script>
+
+{% block javascripts %}
+<script>
+    $(document).ready(function () {
+        $("#chat-button").click(function () {
+            $("#chat-container").fadeToggle();
+        });
+
+        $("#send-btn").click(function () {
+            sendMessage();
+        });
+
+        $("#user-message").keypress(function (e) {
+            if (e.which == 13) {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            var userMessage = $("#user-message").val().trim();
+            if (userMessage === "") return;
+
+            $("#chat-box").append('<div class="message user-message">' + userMessage + '</div>');
+            $("#user-message").val("");
+            $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+
+            $.ajax({
+                url: "{{ path('app_home') }}",
+                type: "POST",
+                data: { message: userMessage },
+                dataType: "json",
+                success: function (response) {
+                    $("#chat-box").append('<div class="message bot-message">' + response.bot + '</div>');
+                    $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+                },
+                error: function() {
+                    $("#chat-box").append('<div class="message bot-message">Erreur de connexion au chatbot.</div>');
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
+
+
+<!-- Bouton flottant -->
+<div id="chat-button">💬</div>
+
+<!-- Conteneur du chat -->
+<div id="chat-container">
+    <div class="chat-box" id="chat-box"></div>
+    <div class="input-box">
+        <input type="text" id="user-message" placeholder="Écrivez un message...">
+        <button id="send-btn">Envoyer</button>
+    </div>
+</div>
+</body>
+</html>

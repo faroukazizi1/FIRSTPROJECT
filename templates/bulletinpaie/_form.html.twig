@@ -1,0 +1,21 @@
+{{ form_start(form) }}
+    {{ form_row(form.employe) }} {# Corrected the field name to employeId #}
+    {{ form_row(form.mois) }}
+    {{ form_row(form.annee) }}
+    {{ form_row(form.salaireBrut) }} {# Corrected the field name to salaireBrut #}
+    
+    {# Special handling for deductions #}
+    <div class="form-group">
+        {{ form_label(form.deductions) }}
+        {{ form_widget(form.deductions, {'attr': {
+            'class': 'form-control',
+            'inputmode': 'decimal',
+            'pattern': '[0-9]+([\.,][0-9]+)?'
+        }}) }}
+        {{ form_errors(form.deductions) }}
+    </div>
+    
+    {{ form_row(form.salaireNet) }} {# Corrected the field name to salaireNet #}
+    
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

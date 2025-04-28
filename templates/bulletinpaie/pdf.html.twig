@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 14px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Bulletin de Paie</h2>
+        <p>Date de génération : {{ bulletin.dateGeneration|date('Y-m-d H:i') }}</p>
+    </div>
+
+    <table>
+        <tr><th>Employé ID</th><td>{{ bulletin.employe.nom }}</td></tr>
+        <tr><th>Mois</th><td>{{ bulletin.mois }}</td></tr>
+        <tr><th>Année</th><td>{{ bulletin.annee }}</td></tr>
+        <tr><th>Salaire Brut</th><td>{{ bulletin.salaireBrut }} Dinars</td></tr>
+        <tr><th>Déductions</th><td>{{ bulletin.deductions }} Dinars</td></tr>
+        <tr><th>Salaire Net</th><td>{{ bulletin.salaireNet }} Dinars</td></tr>
+    </table>
+</body>
+</html>

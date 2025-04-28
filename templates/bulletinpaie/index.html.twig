@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bulletinpaie index{% endblock %}
+
+{% block body %}
+    <h1>Bulletinpaie index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Employe</th>
+                <th>Mois</th>
+                <th>Annee</th>
+                <th>Salaire_brut</th>
+                <th>Deductions</th>
+                <th>Salaire_net</th>
+                <th>Date_generation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bulletinpaie in bulletinpaies %}
+            <tr>
+                <td>{{ bulletinpaie.id }}</td>
+                <td>{{ bulletinpaie.employe.nom }}</td>
+                <td>{{ bulletinpaie.mois }}</td>
+                <td>{{ bulletinpaie.annee }}</td>
+                <td>{{ bulletinpaie.salaireBrut }}</td>
+                <td>{{ bulletinpaie.deductions }}</td>
+                <td>{{ bulletinpaie.salaireNet }}</td>
+                <td>{{ bulletinpaie.dateGeneration ? bulletinpaie.dateGeneration|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_bulletinpaie_show', {'id': bulletinpaie.id}) }}">show</a>
+                    <a href="{{ path('app_bulletinpaie_edit', {'id': bulletinpaie.id}) }}">edit</a>
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_bulletinpaie_new') }}">Create new</a>
+{% endblock %}

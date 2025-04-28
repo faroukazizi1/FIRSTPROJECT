@@ -1,0 +1,73 @@
+{# templates/bulletinpaie/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Bulletins de Paie{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Bulletins de Paie</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" action="{{ path('app_bulletinpaie_index') }}" class="row g-3">
+                <div class="col-md-5">
+                    <label for="month" class="form-label">Mois</label>
+                    <select id="month" name="month" class="form-select">
+                        {% for key, name in months %}
+                            <option value="{{ key }}" {{ key == current_month ? 'selected' }}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label for="year" class="form-label">Année</label>
+                    <select id="year" name="year" class="form-select">
+                        {% for year in years %}
+                            <option value="{{ year }}" {{ year == current_year ? 'selected' }}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Filtrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if bulletins|length > 0 %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Employé</th>
+                        <th>Date Création</th>
+                        <th>Salaire Brut</th>
+                        <th>Salaire Net</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bulletin in bulletins %}
+                        <tr>
+                            <td>{{ bulletin.id }}</td>
+                            <td>{{ bulletin.employe.nomComplet }}</td>
+                            <td>{{ bulletin.dateCreation|date('d/m/Y') }}</td>
+                            <td>{{ bulletin.salaireBrut|format_currency('EUR') }}</td>
+                            <td>{{ bulletin.salaireNet|format_currency('EUR') }}</td>
+                            <td>
+                                <a href="{{ path('app_bulletinpaie_show', {'id': bulletin.id}) }}" class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i> Voir
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Aucun bulletin de paie trouvé pour cette période.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

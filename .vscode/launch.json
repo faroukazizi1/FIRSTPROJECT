@@ -1,0 +1,48 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+  
+      // ✅ Attach to a Java process via Shared Memory
+      {
+        "name": "Attach by com.sun.jdi.SharedMemoryListen",
+        "type": "jdk",
+        "request": "attach",
+        "listen": true
+      },
+  
+      // ✅ Launch Java application
+      {
+        "type": "jdk",
+        "request": "launch",
+        "name": "Launch Java App",
+        "mainClass": "com.myapp.Main",
+         : "your-java-project-name", // Optional
+        "env": {
+          "EXAMPLE_ENV": "value"
+        },
+        "preLaunchTask": "build" // Optional
+      },
+  
+      // ✅ Launch Microsoft Edge
+      {
+        "name": "Launch Edge",
+        "type": "msedge",
+        "request": "launch",
+        "url": "http://localhost:8000", // Default Symfony server port
+        "webRoot": "${workspaceFolder}/public"
+      },
+  
+      // ✅ Listen for Xdebug for Symfony (PHP)
+      {
+        "name": "Listen for Xdebug (Symfony)",
+        "type": "php",
+        "request": "launch",
+        "port": 9003,
+        "pathMappings": {
+          "/var/www/html": "${workspaceFolder}"
+        }
+      }
+  
+    ]
+  }
+  

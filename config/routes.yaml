@@ -1,0 +1,63 @@
+index:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: app_home
+        permanent: true
+
+app_home:
+    path: /home
+    controller: App\Controller\HomeController::index
+
+# Demande de Congé Routes
+app_demande_conge_index:
+    path: /demande-conge
+    controller: App\Controller\DemandeCongeController::index
+
+app_demande_conge:
+    path: /demande-conge
+    controller: App\Controller\DemandeCongeController::index
+
+app_demande_conge_new:
+    path: /demande-conge/new
+    controller: App\Controller\DemandeCongeController::new
+
+app_demande_conge_submit:
+    path: /demande-conge/submit
+    controller: App\Controller\DemandeCongeController::submit
+    methods: [POST]
+
+app_demande_conge_show:
+    path: /demande-conge/{id}
+    controller: App\Controller\DemandeCongeController::show
+
+app_demande_conge_edit:
+    path: /demande-conge/{id}/edit
+    controller: App\Controller\DemandeCongeController::edit
+
+app_demande_conge_delete:
+    path: /demande-conge/{id}
+    controller: App\Controller\DemandeCongeController::delete
+    methods: [DELETE, POST]
+
+# Bulletin de Paie Routes
+app_bulletinpaie_index:
+    path: /bulletinpaie
+    controller: App\Controller\BulletinpaieController::index
+
+app_bulletinpaie_new:
+    path: /bulletinpaie/new
+    controller: App\Controller\BulletinpaieController::new
+
+app_bulletinpaie_show:
+    path: /bulletinpaie/{id}
+    controller: App\Controller\BulletinPaieController::show
+
+app_bulletinpaie_edit:
+    path: /bulletinpaie/{id}/edit
+    controller: App\Controller\BulletinPaieController::edit
+
+app_bulletinpaie_delete:
+    path: /bulletinpaie/{id}
+    controller: App\Controller\BulletinPaieController::delete
+    methods: [DELETE, POST]

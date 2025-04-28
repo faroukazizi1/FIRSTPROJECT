@@ -1,0 +1,64 @@
+{# templates/bulletinpaie/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Bulletin Paie{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm rounded">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Nouvelle Bulletin Paie</h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                        {{ form_errors(form) }}
+
+                        <div class="mb-3">
+    {{ form_label(form.employe, 'Employe ID', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.employe, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.employe) }}
+</div>
+
+
+                        <div class="mb-3">
+                            {{ form_label(form.mois, 'Mois', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.mois, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.mois) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.annee, 'Annee', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.annee, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.annee) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.salaireBrut, 'Salaire Brut', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.salaireBrut, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.salaireBrut) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.deductions, 'Deductions', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.deductions, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.deductions) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.salaireNet, 'Salaire Net', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.salaireNet, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.salaireNet) }}
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-success">Envoyer la demande</button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
