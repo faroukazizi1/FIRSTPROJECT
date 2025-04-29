@@ -191,26 +191,26 @@
             </div>
           </li>
           <li class="nav-item">
-            <a data-bs-toggle="collapse" href="#charts">
-              <i class="far fa-chart-bar"></i>
-              <p>Charts</p>
-              <span class="caret"></span>
-            </a>
-            <div class="collapse" id="charts">
-              <ul class="nav nav-collapse">
-                <li>
-                  <a href="charts/charts.html">
-                    <span class="sub-item">Chart Js</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="charts/sparkline.html">
-                    <span class="sub-item">Sparkline</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </li>
+  <a data-bs-toggle="collapse" href="#absencesMenu">
+    <i class="fas fa-calendar-alt"></i>
+    <p>Gestion des Absences</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="absencesMenu">
+    <ul class="nav nav-collapse">
+      <li>
+        <a href="{{ path('app_absence_new') }}"> 
+          <span class="sub-item">Absences</span>
+        </a>
+      </li>
+      <li>
+        <a href="{{ path('app_penalite_new') }}"> 
+          <span class="sub-item">Pénalités</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</li>
           <li class="nav-item">
             <a href="widgets.html">
               <i class="fas fa-desktop"></i>

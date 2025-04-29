@@ -6,6 +6,7 @@
 
 {% block body %}
     <div class="container mt-5">
+    <a href="{{ path('app_meteo') }}" class="btn btn-info">Voir la météo actuelle</a>
         <h1 class="mb-4">Consulter les informations concernant vos absences et pénalités</h1>
 
         {# Affichage du message, si présent #}
@@ -49,6 +50,7 @@
                     <button type="submit" class="btn btn-primary">Envoyer</button>
                 {{ form_end(form) }}
             </div>
+            
         {% endif %}
         
         {# Ajouter un script JavaScript pour la redirection après 3 secondes si le message contient "À bientôt" #}

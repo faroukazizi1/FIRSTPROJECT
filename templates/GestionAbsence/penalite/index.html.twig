@@ -5,33 +5,88 @@
 {% block body %}
     <h1>Penalite index</h1>
 
-    <table class="table">
+    {# --- Champ de recherche CIN --- #}
+    <div class="form-group mb-4">
+        <input type="text" id="search-cin" class="form-control" placeholder="Rechercher par CIN...">
+    </div>
+
+    {# --- Liens pour trier par Seuil d'Absence --- #}
+    <div class="mb-3">
+        <div class="btn-group" role="group">
+            <button type="button" id="sortAsc" class="btn btn-primary btn-sm" data-sort="asc">Trier par Seuil d'Absence (Ascendant)</button>
+            <button type="button" id="sortDesc" class="btn btn-primary btn-sm" data-sort="desc">Trier par Seuil d'Absence (Descendant)</button>
+        </div>
+    </div>
+
+    {# --- Table des pénalités --- #}
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Type</th>
-                <th>Seuil_abs</th>
+                <th>Seuil Absence</th>
                 <th>Cin</th>
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
-        {% for penalite in penalites %}
-            <tr>
-                <td>{{ penalite.type }}</td>
-                <td>{{ penalite.seuilAbs }}</td>
-                <td>{{ penalite.cin }}</td>
-                <td>
-                    <a href="{{ path('app_penalite_show', {'ID_pen': penalite.ID_pen}) }}">show</a>
-                    <a href="{{ path('app_penalite_edit', {'ID_pen': penalite.ID_pen}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">No records found</td> {# ✅ colspan ajusté après suppression de l'ID #}
-            </tr>
-        {% endfor %}
+        <tbody id="penalite-list">
+            {% for penalite in penalites %}
+                <tr>
+                    <td>{{ penalite.type }}</td>
+                    <td>{{ penalite.seuilAbs }}</td>
+                    <td>{{ penalite.cin }}</td>
+                    <td>
+                        <a href="{{ path('app_penalite_show', {'ID_pen': penalite.IDPen}) }}" class="btn btn-info btn-sm">Voir</a>
+                        <a href="{{ path('app_penalite_edit', {'ID_pen': penalite.IDPen}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Aucun enregistrement trouvé.</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_penalite_new') }}">Create new</a>
+    {# --- Boutons actions --- #}
+    <div class="mt-4">
+        <a href="{{ path('app_penalite_new') }}" class="btn btn-success">Créer une nouvelle pénalité</a>
+    </div>
+
+    {# --- Script AJAX pour la recherche et le tri --- #}
+    <script>
+        const searchInput = document.getElementById('search-cin');
+        const penaliteList = document.getElementById('penalite-list');
+        const sortAscLink = document.getElementById('sortAsc');
+        const sortDescLink = document.getElementById('sortDesc');
+
+        searchInput.addEventListener('input', function () {
+            filterResults();
+        });
+
+        sortAscLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            filterResults('asc');
+        });
+
+        sortDescLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            filterResults('desc');
+        });
+
+        // Fonction pour filtrer et trier les pénalités
+        function filterResults(direction = 'asc') {
+            const query = searchInput.value.trim();
+            const url = '{{ path('app_penalite_search') }}?cin=' + encodeURIComponent(query) + '&sort=' + direction;
+
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    penaliteList.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la recherche AJAX :', error);
+                });
+        }
+    </script>
+
 {% endblock %}
