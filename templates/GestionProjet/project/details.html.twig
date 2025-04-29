@@ -1,0 +1,84 @@
+{# templates/GestionProjet/project/details.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du projet{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2>Détails du projet</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Informations générales</h4>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Titre du projet</th>
+                            <td>{{ projet.titre }}</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>{{ projet.description }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date de début</th>
+                            <td>{{ projet.dateDebut|date('d/m/Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date de fin</th>
+                            <td>{{ projet.dateFin|date('d/m/Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Statut</th>
+                            <td>
+                                {% if projet.statut == 'completed' %}
+                                    <span class="badge bg-success">Terminé</span>
+                                {% elseif projet.statut == 'in_progress' %}
+                                    <span class="badge bg-primary">En cours</span>
+                                {% elseif projet.statut == 'on_hold' %}
+                                    <span class="badge bg-warning">En attente</span>
+                                {% elseif projet.statut == 'not_started' %}
+                                    <span class="badge bg-secondary">Non commencé</span>
+                                {% else %}
+                                    <span class="badge bg-info">{{ projet.statut }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="col-md-6">
+                    <h4>Tâches du projet</h4>
+                    {% if projet.tasks|length > 0 %}
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Titre</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for task in projet.tasks %}
+                                    <tr>
+                                        <td>{{ task.titre }}</td>
+                                        <td>{{ task.statut }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <div class="alert alert-info">Aucune tâche associée à ce projet</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('app_project_index') }}" class="btn btn-secondary">Retour à la liste</a>
+            <a href="{{ path('app_project_edit', {'id': projet.id}) }}" class="btn btn-primary">Modifier</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
