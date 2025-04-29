@@ -1,84 +1,190 @@
-{# templates/GestionProjet/project/details.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Détails du projet{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .btn {
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .table th, .table td {
+            border: none;
+        }
+        .table thead th {
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .table tbody tr {
+            border-bottom: 1px solid #e5e7eb;
+            transition: background-color 0.2s ease;
+        }
+        .table tbody tr:hover {
+            background-color: #f9fafb;
+        }
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-<div class="container mt-4">
-    <div class="card">
-        <div class="card-header bg-primary text-white">
-            <h2>Détails du projet</h2>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <h4>Informations générales</h4>
-                    <table class="table table-bordered">
-                        <tr>
-                            <th>Titre du projet</th>
-                            <td>{{ projet.titre }}</td>
-                        </tr>
-                        <tr>
-                            <th>Description</th>
-                            <td>{{ projet.description }}</td>
-                        </tr>
-                        <tr>
-                            <th>Date de début</th>
-                            <td>{{ projet.dateDebut|date('d/m/Y') }}</td>
-                        </tr>
-                        <tr>
-                            <th>Date de fin</th>
-                            <td>{{ projet.dateFin|date('d/m/Y') }}</td>
-                        </tr>
-                        <tr>
-                            <th>Statut</th>
-                            <td>
-                                {% if projet.statut == 'completed' %}
-                                    <span class="badge bg-success">Terminé</span>
-                                {% elseif projet.statut == 'in_progress' %}
-                                    <span class="badge bg-primary">En cours</span>
-                                {% elseif projet.statut == 'on_hold' %}
-                                    <span class="badge bg-warning">En attente</span>
-                                {% elseif projet.statut == 'not_started' %}
-                                    <span class="badge bg-secondary">Non commencé</span>
-                                {% else %}
-                                    <span class="badge bg-info">{{ projet.statut }}</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="col-md-6">
-                    <h4>Tâches du projet</h4>
-                    {% if projet.tasks|length > 0 %}
-                        <table class="table table-striped">
-                            <thead>
+    <div class="container mx-auto px-4 py-8">
+        <div class="card bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="card-header bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6">
+                <h2 class="text-2xl font-bold">Détails du projet: {{ projet.titre }}</h2>
+            </div>
+            <div class="card-body p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- General Information -->
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-800 mb-4">Informations générales</h4>
+                        <div class="bg-gray-50 rounded-lg p-4 shadow-sm">
+                            <table class="table w-full text-gray-700">
                                 <tr>
-                                    <th>Titre</th>
-                                    <th>Statut</th>
+                                    <th class="p-3 text-left font-semibold">Titre du projet</th>
+                                    <td class="p-3">{{ projet.titre }}</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {% for task in projet.tasks %}
-                                    <tr>
-                                        <td>{{ task.titre }}</td>
-                                        <td>{{ task.statut }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <div class="alert alert-info">Aucune tâche associée à ce projet</div>
-                    {% endif %}
+                                <tr>
+                                    <th class="p-3 text-left font-semibold">Description</th>
+                                    <td class="p-3">{{ projet.description }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="p-3 text-left font-semibold">Date de début</th>
+                                    <td class="p-3">{{ projet.dateDebut ? projet.dateDebut|date('d/m/Y') : 'Non défini' }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="p-3 text-left font-semibold">Date de fin</th>
+                                    <td class="p-3">{{ projet.dateFin ? projet.dateFin|date('d/m/Y') : 'Non défini' }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="p-3 text-left font-semibold">Statut</th>
+                                    <td class="p-3">
+                                        {% if projet.statut == 'completed' %}
+                                            <span class="badge bg-green-100 text-green-800">completed</span>
+                                        {% elseif projet.statut == 'in_progress' %}
+                                            <span class="badge bg-blue-100 text-blue-800">in_progress</span>
+                                        {% elseif projet.statut == 'todo ' %}
+                                            <span class="badge bg-yellow-100 text-yellow-800">todo </span>
+                                        {% else %}
+                                            <span class="badge bg-red-100 text-red-800">{{ projet.statut }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Project Tasks -->
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-xl font-semibold text-gray-800">Tâches du projet</h4>
+                            <div class="flex items-center space-x-2">
+                                <select id="taskFilter" class="p-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                                    <option value="all">Toutes les tâches</option>
+                                    <option value="completed">completed </option>
+                                    <option value="in_progress">in_progress</option>
+                                    <option value="todo">todo </option>   
+                                </select>
+                            </div>
+                        </div>
+                        {% if projet.tasks|length > 0 %}
+                            <div class="bg-gray-50 rounded-lg p-4 shadow-sm">
+                                <table class="table w-full text-gray-700" id="taskTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="p-3 text-left font-semibold">Titre</th>
+                                            <th class="p-3 text-left font-semibold">Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for task in projet.tasks %}
+                                            <tr class="task-row" data-status="{{ task.statut }}">
+                                                <td class="p-3">{{ task.titre }}</td>
+                                                <td class="p-3">
+                                                    <span class="badge
+                                                        {% if task.statut == 'completed' %}bg-green-100 text-green-800
+                                                        {% elseif task.statut == 'in_progress' %}bg-blue-100 text-blue-800
+                                                        {% elseif task.statut == 'todo' %}bg-yellow-100 text-yellow-800
+                                                        {% else %}bg-red-100 text-red-800{% endif %}">
+                                                        {{ task.statut }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info bg-blue-50 text-blue-800 p-4 rounded-lg">
+                                Aucune tâche associée à ce projet
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="card-footer">
-            <a href="{{ path('app_project_index') }}" class="btn btn-secondary">Retour à la liste</a>
-            <a href="{{ path('app_project_edit', {'id': projet.id}) }}" class="btn btn-primary">Modifier</a>
+            <div class="card-footer p-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
+                <a href="{{ path('app_project_index') }}" class="btn bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300">
+                    Retour à la liste
+                </a>
+                <a href="{{ path('app_project_edit', {'id': projet.id}) }}" class="btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    Modifier
+                </a>
+            </div>
         </div>
     </div>
-</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const taskFilter = document.getElementById('taskFilter');
+            const taskRows = document.querySelectorAll('.task-row');
+
+            if (taskFilter) {
+                taskFilter.addEventListener('change', function() {
+                    const selectedStatus = this.value;
+                    
+                    taskRows.forEach(row => {
+                        const rowStatus = row.getAttribute('data-status');
+                        if (selectedStatus === 'all' || rowStatus === selectedStatus) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+
+                    // Show message if no tasks are visible
+                    const visibleRows = document.querySelectorAll('.task-row:not([style*="display: none"])');
+                    const taskTable = document.getElementById('taskTable');
+                    let noResultsRow = document.querySelector('#no-results-row');
+
+                    if (visibleRows.length === 0 && !noResultsRow) {
+                        noResultsRow = document.createElement('tr');
+                        noResultsRow.id = 'no-results-row';
+                        noResultsRow.innerHTML = `
+                            <td colspan="2" class="p-3 text-center text-gray-600">
+                                Aucune tâche trouvée pour le statut "${selectedStatus}"
+                            </td>`;
+                        taskTable.querySelector('tbody').appendChild(noResultsRow);
+                    } else if (visibleRows.length > 0 && noResultsRow) {
+                        noResultsRow.remove();
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}

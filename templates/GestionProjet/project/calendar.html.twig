@@ -1,4 +1,3 @@
-{# templates/GestionProjet/project/calendar.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Calendrier des projets{% endblock %}
@@ -7,113 +6,161 @@
     {{ parent() }}
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         #calendar {
             max-width: 1200px;
             margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
-        
-        /* Styles pour la vue annuelle */
+
+        /* Year view styles */
         .fc-dayGridYear-view .fc-daygrid-day {
-            min-height: 20px;
-            max-height: 40px;
+            min-height: 30px;
+            max-height: 50px;
+            border: 1px solid #e5e7eb;
         }
-        
+
         .fc-dayGridYear-view .fc-daygrid-day-events {
-            margin-top: 0;
+            margin-top: 2px;
             min-height: 0;
         }
-        
+
         .fc-dayGridYear-view .fc-event {
-            font-size: 8px;
-            line-height: 1;
-            margin: 1px 0;
+            font-size: 9px;
+            line-height: 1.2;
+            margin: 2px 0;
+            border-radius: 4px;
+            padding: 2px 4px;
+            transition: transform 0.2s ease;
         }
+
+        .fc-dayGridYear-view .fc-event:hover {
+            transform: scale(1.05);
+        }
+
         .fc-event {
             cursor: pointer;
+            background: #3b82f6;
+            border: none;
+            color: white;
+            transition: background 0.3s ease;
         }
+
+        .fc-event:hover {
+            background: #2563eb;
+        }
+
         .fc-event-title {
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
-        /* Styles pour le modal de confirmation */
+
+        /* Modal styles */
         .modal-confirm {
-            max-width: 400px;
+            max-width: 450px;
+        }
+
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: #f3f4f6;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e5e7eb;
+        }
+
+        /* Custom button styles */
+        .fc-button {
+            background: #3b82f6 !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 8px 16px !important;
+            transition: background 0.3s ease !important;
+        }
+
+        .fc-button:hover {
+            background: #2563eb !important;
+        }
+
+        .fc-button.fc-button-active {
+            background: #1d4ed8 !important;
+        }
+
+        /* Statistic cards */
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
     </style>
 {% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
-        <h1 class="text-center mb-4">Calendrier des projets</h1>
-        
-        <!-- Statistiques des projets -->
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Calendrier des projets</h1>
+
+        <!-- Project Statistics -->
         {% if totalProjects is defined %}
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Statistiques des projets</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row text-center">
-                            <div class="col">
-                                <div class="bg-secondary text-white p-3 rounded">
-                                    <h5>Total</h5>
-                                    <h2>{{ totalProjects }}</h2>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="bg-success text-white p-3 rounded">
-                                    <h5>Terminés</h5>
-                                    <h2>{{ completedProjects }}</h2>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="bg-primary text-white p-3 rounded">
-                                    <h5>En cours</h5>
-                                    <h2>{{ inProgressProjects }}</h2>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="bg-warning text-white p-3 rounded">
-                                    <h5>En attente</h5>
-                                    <h2>{{ onHoldProjects }}</h2>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="bg-secondary text-white p-3 rounded">
-                                    <h5>Non commencés</h5>
-                                    <h2>{{ notStartedProjects }}</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+            <div class="stat-card bg-gray-100 text-gray-800 p-6 rounded-xl shadow-lg">
+                <h5 class="text-lg font-semibold">Total</h5>
+                <h2 class="text-4xl font-bold">{{ totalProjects }}</h2>
+            </div>
+            <div class="stat-card bg-green-100 text-green-800 p-6 rounded-xl shadow-lg">
+                <h5 class="text-lg font-semibold">Terminés</h5>
+                <h2 class="text-4xl font-bold">{{ completedProjects }}</h2>
+            </div>
+            <div class="stat-card bg-blue-100 text-blue-800 p-6 rounded-xl shadow-lg">
+                <h5 class="text-lg font-semibold">En cours</h5>
+                <h2 class="text-4xl font-bold">{{ inProgressProjects }}</h2>
+            </div>
+            <div class="stat-card bg-yellow-100 text-yellow-800 p-6 rounded-xl shadow-lg">
+                <h5 class="text-lg font-semibold">En attente</h5>
+                <h2 class="text-4xl font-bold">{{ onHoldProjects }}</h2>
+            </div>
+            <div class="stat-card bg-gray-100 text-gray-800 p-6 rounded-xl shadow-lg">
+                <h5 class="text-lg font-semibold">Non commencés</h5>
+                <h2 class="text-4xl font-bold">{{ notStartedProjects }}</h2>
             </div>
         </div>
         {% endif %}
-        
+
         <div id="calendar"></div>
     </div>
 
-    <!-- Modal de confirmation pour les modifications -->
+    <!-- Confirmation Modal -->
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-confirm">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirmer la modification</h5>
+                <div class="modal-header flex justify-between items-center p-4">
+                    <h5 class="modal-title text-lg font-semibold text-gray-800">Confirmer la modification</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <p>Voulez-vous vraiment modifier les dates de ce projet ?</p>
-                    <div id="eventDetails">
-                        <p><strong>Nouvelle date de début:</strong> <span id="newStartDate"></span></p>
-                        <p><strong>Nouvelle date de fin:</strong> <span id="newEndDate"></span></p>
+                <div class="modal-body p-6">
+                    <p class="text-gray-600 mb-4">Voulez-vous vraiment modifier les dates de ce projet ?</p>
+                    <div id="eventDetails" class="space-y-2">
+                        <p><strong class="text-gray-800">Nouvelle date de début:</strong> <span id="newStartDate" class="text-gray-600"></span></p>
+                        <p><strong class="text-gray-800">Nouvelle date de fin:</strong> <span id="newEndDate" class="text-gray-600"></span></p>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary" id="confirmChange">Confirmer</button>
+                <div class="modal-footer p-4">
+                    <button type="button" class="btn bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" id="confirmChange">Confirmer</button>
                 </div>
             </div>
         </div>
@@ -124,23 +171,21 @@
     {{ parent() }}
     <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-    <!-- Scripts supplémentaires pour la vue annuelle -->
+    <!-- Scripts for year view -->
     <script src="{{ asset('js/calendar-year-view.js') }}"></script>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var eventData = null;
-            
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            const calendarEl = document.getElementById('calendar');
+            let eventData = null;
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'dayGridYear,dayGridMonth,timeGridWeek,timeGridDay'
                 },
-                
-                // Définir les vues disponibles
                 views: {
                     dayGridYear: {
                         type: 'dayGrid',
@@ -151,7 +196,7 @@
                 events: "{{ path('api_projects') }}",
                 eventClick: function(info) {
                     if (!info.jsEvent.ctrlKey && !info.jsEvent.metaKey) {
-                        info.jsEvent.preventDefault(); // Empêche la navigation directe
+                        info.jsEvent.preventDefault();
                         if (info.event.url) {
                             window.location.href = info.event.url;
                         }
@@ -163,62 +208,51 @@
                     hour12: false
                 },
                 displayEventTime: false,
-                dayMaxEvents: true, // Permet d'afficher "plus" quand il y a trop d'événements
-                
-                // Activer le drag and drop
+                dayMaxEvents: true,
                 editable: true,
-                eventDurationEditable: true, // Permet d'étirer les événements
-                eventResizableFromStart: true, // Permet de redimensionner depuis le début
-                
-                // Gestionnaire pour le déplacement d'un événement (drag and drop)
+                eventDurationEditable: true,
+                eventResizableFromStart: true,
                 eventDrop: function(info) {
                     handleEventChange(info);
                 },
-                
-                // Gestionnaire pour le redimensionnement d'un événement
                 eventResize: function(info) {
                     handleEventChange(info);
                 }
             });
-            
-            // Fonction pour gérer les modifications d'événements
+
             function handleEventChange(info) {
-                // Stocker les données de l'événement pour la confirmation
                 eventData = {
                     id: info.event.id,
                     start: info.event.start,
-                    end: info.event.end || info.event.start, // Si pas de fin, utiliser le début
+                    end: info.event.end || info.event.start,
                     title: info.event.title
                 };
-                
-                // Formater les dates pour l'affichage
+
                 const formatDate = (date) => {
-                    return date ? new Date(date).toLocaleDateString('fr-FR') : 'Non défini';
+                    return date ? new Date(date).toLocaleDateString('fr-FR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    }) : 'Non défini';
                 };
-                
-                // Mettre à jour le modal avec les nouvelles dates
+
                 document.getElementById('newStartDate').textContent = formatDate(eventData.start);
                 document.getElementById('newEndDate').textContent = formatDate(eventData.end);
-                
-                // Afficher le modal de confirmation
+
                 const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
                 modal.show();
-                
-                // Si l'utilisateur annule, remettre l'événement à sa position initiale
+
                 document.querySelector('[data-bs-dismiss="modal"]').addEventListener('click', function() {
                     info.revert();
-                });
+                }, { once: true });
             }
-            
-            // Gérer la confirmation de changement
+
             document.getElementById('confirmChange').addEventListener('click', function() {
                 if (eventData) {
-                    // Formatter les dates au format YYYY-MM-DD
                     const formatDateForAPI = (date) => {
                         return date.toISOString().split('T')[0];
                     };
-                    
-                    // Envoyer les nouvelles dates au serveur
+
                     fetch("{{ path('app_project_update_dates') }}", {
                         method: 'POST',
                         headers: {
@@ -234,40 +268,36 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Fermer le modal
                             bootstrap.Modal.getInstance(document.getElementById('confirmModal')).hide();
-                            
-                            // Option : afficher un message de succès
+
                             const alertDiv = document.createElement('div');
-                            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+                            alertDiv.className = 'alert alert-success alert-dismissible fade show fixed top-4 right-4 z-50 max-w-sm';
                             alertDiv.setAttribute('role', 'alert');
                             alertDiv.innerHTML = `
                                 Projet mis à jour avec succès !
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             `;
-                            document.querySelector('.container').prepend(alertDiv);
-                            
-                            // Masquer l'alerte après 3 secondes
+                            document.body.appendChild(alertDiv);
+
                             setTimeout(() => {
                                 const bsAlert = new bootstrap.Alert(alertDiv);
                                 bsAlert.close();
                             }, 3000);
                         } else {
                             alert('Erreur lors de la mise à jour: ' + (data.message || 'Erreur inconnue'));
-                            calendar.refetchEvents(); // Recharger les événements du calendrier
+                            calendar.refetchEvents();
                         }
                     })
                     .catch(error => {
                         console.error('Erreur:', error);
                         alert('Une erreur est survenue lors de la mise à jour du projet');
-                        calendar.refetchEvents(); // Recharger les événements du calendrier
+                        calendar.refetchEvents();
                     });
                 }
             });
-            
+
             calendar.render();
-            
-            // Initialiser la vue annuelle après le rendu
+
             calendar.on('viewDidMount', function() {
                 if (typeof window.initYearView === 'function') {
                     window.initYearView(calendar);
