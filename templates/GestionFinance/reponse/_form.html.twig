@@ -1,14 +1,76 @@
 {# templates/reponse/_form.html.twig #}
 
-{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-    {{ form_row(form.cin) }}
-    {{ form_row(form.Date_reponse) }}
-    {{ form_row(form.Montant_demande) }}
-    {{ form_row(form.Revenus_bruts) }}
-    {{ form_row(form.Taux_interet) }}
-    {{ form_row(form.Mensualite_credit) }}
-    {{ form_row(form.Potentiel_credit) }}
-    {{ form_row(form.Duree_remboursement) }}
-    {{ form_row(form.Montant_autorise) }}
-    {{ form_row(form.Assurance) }}
-    <button class="btn">{{ button_label|default('Save') }}</button> {{ form_end(form) }}
+<style>
+    .form-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* pour ne pas coller en haut */
+        padding-top: 40px;
+        min-height: 100vh;
+        background-color: #f8f9fa; /* couleur de fond claire */
+    }
+
+    .form-container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: 100%;
+    }
+
+    form input,
+    form select,
+    form textarea {
+        font-size: 14px;
+        padding: 8px 10px;
+        height: 36px;
+        width: 100%;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    form label {
+        font-size: 13px;
+        margin-bottom: 4px;
+        display: inline-block;
+    }
+
+    form .form-group {
+        margin-bottom: 16px;
+    }
+
+    form button.btn {
+        font-size: 14px;
+        padding: 8px 16px;
+        background-color: #5bc0de;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    form button.btn:hover {
+        background-color: #31b0d5;
+    }
+</style>
+
+<div class="form-wrapper">
+    <div class="form-container">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{ form_row(form.cin) }}
+            {{ form_row(form.Date_reponse) }}
+            {{ form_row(form.Montant_demande) }}
+            {{ form_row(form.Revenus_bruts) }}
+            {{ form_row(form.Taux_interet) }}
+            {{ form_row(form.Mensualite_credit) }}
+            {{ form_row(form.Potentiel_credit) }}
+            {{ form_row(form.Duree_remboursement) }}
+            {{ form_row(form.Montant_autorise) }}
+            {{ form_row(form.Assurance) }}
+
+            <button class="btn">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
+    </div>
+</div>

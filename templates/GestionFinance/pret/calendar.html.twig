@@ -1,48 +1,228 @@
-{# templates/GestionFinance/pret/calendar.html.twig #}
-
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Calendrier des prêts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier des Prêts</title>
     
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
-
+    
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    
     <style>
-        #calendar {
-            max-width: 900px;
-            margin: 40px auto;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        #calendar-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .fc {
+            --fc-border-color: #e2e8f0;
+            --fc-button-bg-color: #3b82f6;
+            --fc-button-border-color: #3b82f6;
+            --fc-button-hover-bg-color: #2563eb;
+            --fc-button-active-bg-color: #1d4ed8;
+        }
+
+        .fc-toolbar-title {
+            font-size: 1.75rem !important;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .fc-button {
+            border-radius: 6px !important;
+            padding: 8px 16px !important;
+            font-weight: 500 !important;
+            text-transform: capitalize;
+            transition: all 0.2s ease;
+        }
+
+        .fc-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+
+        .fc-event {
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.9rem;
+            transition: transform 0.2s ease;
+        }
+
+        .fc-event:hover {
+            transform: translateY(-2px);
+        }
+
+        .event-tooltip {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 10001;
+            max-width: 300px;
+            font-size: 0.9rem;
+        }
+
+        .success-message {
+            background-color: #10b981;
+            border-radius: 8px;
+            padding: 12px 20px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 10002;
+        }
+
+        .fc-timegrid-event {
+            padding: 4px 8px !important;
+        }
+
+        .fc-multiMonthYear-view .fc-event {
+            font-size: 0.75rem !important;
+        }
+
+        @media (max-width: 640px) {
+            .fc-toolbar {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .fc-toolbar-chunk {
+                margin: 4px 0;
+            }
+
+            .fc-toolbar-title {
+                font-size: 1.25rem !important;
+            }
         }
     </style>
 </head>
-<body>
 
-    <h1 style="text-align: center;">Calendrier des prêts</h1>
-    <div id="calendar"></div>
+<body class="min-h-screen bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-gray-900 text-center mb-8">Calendrier des Prêts</h1>
+        <div id="calendar-container" class="p-6">
+            <div id="calendar"></div>
+        </div>
+        <div id="eventTooltip" class="event-tooltip hidden"></div>
+        <div id="successMessage" class="success-message hidden fixed top-4 right-4">Date mise à jour avec succès</div>
+    </div>
 
     <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/locales/fr.global.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
+            const calendarEl = document.getElementById('calendar');
+            const tooltipEl = document.getElementById('eventTooltip');
+            const successMessageEl = document.getElementById('successMessage');
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
-                events: {{ path('api_prets')|json_encode|raw }},
-                eventClick: function(info) {
-                    info.jsEvent.preventDefault(); // Empêche la navigation directe
-                    if (info.event.url) {
-                        window.open(info.event.url, '_blank');
+                timeZone: 'local',
+                editable: true,
+                locale: 'fr',
+                firstDay: 1,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'multiMonthYear,dayGridMonth,timeGridWeek'
+                },
+                views: {
+                    multiMonthYear: { type: 'multiMonthYear', duration: { years: 1 } },
+                    dayGridMonth: { buttonText: 'Mois' },
+                    timeGridWeek: {
+                        buttonText: 'Semaine',
+                        slotMinTime: '08:00:00',
+                        slotMaxTime: '20:00:00'
                     }
+                },
+                buttonText: {
+                    today: 'Aujourd’hui',
+                    month: 'Mois',
+                    week: 'Semaine',
+                    multiMonthYear: 'Année'
+                },
+                eventSources: [{
+                    url: '{{ path('api_prets') }}',
+                    method: 'GET'
+                }],
+                eventClick(info) {
+                    info.jsEvent.preventDefault();
+                    window.location.href = info.event.url;
+                },
+                eventDrop(info) {
+                    const eventDate = new Date(info.event.start);
+                    const newDate = eventDate.toISOString().split('T')[0];
+                    const eventId = info.event.id;
+
+                    fetch('{{ path('api_update_date') }}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: eventId, newDate })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            successMessageEl.textContent = `Date mise à jour: ${data.date}`;
+                            successMessageEl.classList.remove('hidden');
+                            setTimeout(() => successMessageEl.classList.add('hidden'), 3000);
+                            calendar.refetchEvents();
+                        } else {
+                            info.revert();
+                            alert(`Erreur: ${data.message}`);
+                        }
+                    })
+                    .catch(error => {
+                        info.revert();
+                        alert('Erreur serveur');
+                        console.error('Error:', error);
+                    });
+                },
+                eventMouseEnter(info) {
+                    const props = info.event.extendedProps;
+                    let tooltipContent = `
+                        <div class="font-semibold border-b border-gray-200 pb-2 mb-2">Détails du prêt</div>
+                        <div><strong>CIN:</strong> ${props.cin}</div>
+                        <div><strong>Montant:</strong> ${info.event.title.split(': ')[1]}</div>
+                        <div><strong>Revenus:</strong> ${props.revenus.toLocaleString('fr-FR')} €</div>
+                        <div><strong>Âge:</strong> ${props.age} ans</div>
+                        <div><strong>Catégorie:</strong> ${props.categorie}</div>`;
+
+                    if (props.mensualite) {
+                        tooltipContent += `
+                        <div><strong>Mensualité:</strong> ${props.mensualite.toLocaleString('fr-FR')} €</div>
+                        <div><strong>Durée:</strong> ${props.duree} ${props.duree > 1 ? 'ans' : 'an'}</div>
+                        <div><strong>Taux:</strong> ${props.taux}%</div>`;
+                    }
+
+                    tooltipContent += `<div class="mt-2 text-blue-600 text-sm">Cliquez pour plus de détails</div>`;
+
+                    tooltipEl.innerHTML = tooltipContent;
+                    tooltipEl.classList.remove('hidden');
+                    tooltipEl.style.left = `${info.jsEvent.pageX + 12}px`;
+                    tooltipEl.style.top = `${info.jsEvent.pageY + 12}px`;
+                },
+                eventMouseLeave() {
+                    tooltipEl.classList.add('hidden');
                 }
             });
 
             calendar.render();
         });
     </script>
-
 </body>
 </html>

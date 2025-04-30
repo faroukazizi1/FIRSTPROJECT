@@ -1,11 +1,31 @@
+{# templates/GestionFinance/reponse/new.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Create new Reponse</h1>
+    <style>
+        .title-centered {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <h1 class="title-centered">Create new Reponse</h1>
 
     {{ include('GestionFinance/reponse/_form.html.twig') }}
 
-    <a href="{{ path('app_reponse_index') }}">back to list</a> 
-  
-
-    {% endblock %}
+    <a href="{{ path('app_reponse_index') }}" class="back-link">← Back to list</a>
+{% endblock %}

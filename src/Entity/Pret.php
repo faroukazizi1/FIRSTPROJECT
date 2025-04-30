@@ -19,63 +19,63 @@ class Pret
     private ?int $ID_pret = null;
 
     #[ORM\Column(type: 'string', length: 20, unique: true)] // ✅ unicité au niveau base
-    #[Assert\NotBlank(message: "Le CIN est obligatoire.")]
+    #[Assert\NotBlank(message: "❌Le CIN est obligatoire.")]
     #[Assert\Length(
         min: 8,
         max: 20,
-        minMessage: "Le CIN doit comporter au moins {{ limit }} caractères.",
-        maxMessage: "Le CIN ne doit pas dépasser {{ limit }} caractères."
+        minMessage: "❌Le CIN doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "❌Le CIN ne doit pas dépasser {{ limit }} caractères."
     )]
     private ?string $cin = null;
 
     #[ORM\Column(type: 'float', nullable: false)]
-    #[Assert\NotBlank(message: "Le montant du prêt est obligatoire.")]
+    #[Assert\NotBlank(message: "❌Le montant du prêt est obligatoire.")]
     #[Assert\Range(
         min: 0,
-        notInRangeMessage: "Le montant du prêt doit être supérieur à 0."
+        notInRangeMessage: "❌Le montant du prêt doit être supérieur à 0."
     )]
     private ?float $Montant_pret = null;
 
     #[ORM\Column(type: 'date', nullable: false)]
-    #[Assert\NotBlank(message: "La date du prêt est obligatoire.")]
-    #[Assert\GreaterThanOrEqual("today", message: "La date du prêt doit être aujourd'hui ou dans le futur.")]
+    #[Assert\NotBlank(message: "❌La date du prêt est obligatoire.")]
+    #[Assert\GreaterThanOrEqual("today", message: "❌La date du prêt doit être aujourd'hui ou dans le futur.")]
     private ?\DateTimeInterface $Date_pret = null;
 
     #[ORM\Column(type: 'float', nullable: false)]
-    #[Assert\NotBlank(message: "Le TMM est obligatoire.")]
-    #[Assert\PositiveOrZero(message: "Le TMM ne peut pas être négatif.")]
+    #[Assert\NotBlank(message: "❌Le TMM est obligatoire.")]
+    #[Assert\PositiveOrZero(message: "❌Le TMM ne peut pas être négatif.")]
     private ?float $TMM = null;
 
     #[ORM\Column(type: 'float', nullable: false)]
-    #[Assert\NotBlank(message: "Le taux est obligatoire.")]
-    #[Assert\Positive(message: "Le taux doit être un nombre positif.")]
+    #[Assert\NotBlank(message: "❌Le taux est obligatoire.")]
+    #[Assert\Positive(message: "❌Le taux doit être un nombre positif.")]
     private ?float $Taux = null;
 
     #[ORM\Column(type: 'float', nullable: false)]
-    #[Assert\NotBlank(message: "Les revenus bruts sont obligatoires.")]
-    #[Assert\Positive(message: "Les revenus bruts doivent être supérieurs à 0.")]
+    #[Assert\NotBlank(message: "❌Les revenus bruts sont obligatoires.")]
+    #[Assert\Positive(message: "❌Les revenus bruts doivent être supérieurs à 0.")]
     private ?float $Revenus_bruts = null;
 
     #[ORM\Column(type: 'integer', nullable: false)]
-    #[Assert\NotBlank(message: "L'âge de l'employé est obligatoire.")]
-    #[Assert\GreaterThan(value: 17, message: "L'âge de l'employé doit être supérieur à 18 ans.")]
+    #[Assert\NotBlank(message: "❌L'âge de l'employé est obligatoire.")]
+    #[Assert\GreaterThan(value: 17, message: "❌L'âge de l'employé doit être supérieur à 18 ans.")]
     private ?int $Age_employe = null;
 
     #[ORM\Column(type: 'integer', nullable: false)]
-    #[Assert\NotBlank(message: "La durée de remboursement est obligatoire.")]
+    #[Assert\NotBlank(message: "❌La durée de remboursement est obligatoire.")]
     #[Assert\Range(
         min: 1,
         max: 30,
-        notInRangeMessage: "La durée de remboursement doit être comprise entre 1 et 30 ans."
+        notInRangeMessage: "❌La durée de remboursement doit être comprise entre 1 et 30 ans."
     )]
     private ?int $duree_remboursement = null;
 
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
-    #[Assert\NotBlank(message: "La catégorie est obligatoire.")]
+    #[Assert\NotBlank(message: "❌La catégorie est obligatoire.")]
     #[Assert\Choice(
         choices: ['Cadre', 'Employé', 'Ouvrier'],
-        message: "Choisissez une catégorie valide."
-    )]
+        message: "❌Choisissez une catégorie valide."
+    )] 
     private ?string $Categorie = null;
 
     // Getters et setters

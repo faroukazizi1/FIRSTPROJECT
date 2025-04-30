@@ -31,7 +31,7 @@ public function index(ReponseRepository $reponseRepository): Response
         }
     }
 
-    return $this->render('statistique/index.html.twig', [
+    return $this->render('GestionFinance/reponse/statistique/index.html.twig', [
         'totalReponses' => $totalReponses,
         'courtePeriode' => $courtePeriode,
         'moyennePeriode' => $moyennePeriode,

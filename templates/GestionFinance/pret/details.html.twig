@@ -1,4 +1,136 @@
-<h2>Détails du prêt</h2>
-<p>Date : {{ pret.datePret|date('Y-m-d') }}</p>
-<p>Montant : {{ pret.montantPret }}</p>
-<p>Revenus bruts : {{ pret.revenusBruts }}</p>
+{# templates/GestionFinance/pret/details.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Détails du prêt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .info-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            width: 200px;
+        }
+        
+        .info-value {
+            flex-grow: 1;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Détails du prêt #{{ pret.ID_pret }}</h1>
+        
+        <div class="info-group">
+            <h2>Informations du demandeur</h2>
+            <div class="info-row">
+                <div class="info-label">CIN:</div>
+                <div class="info-value">{{ pret.cin }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Âge:</div>
+                <div class="info-value">{{ pret.ageEmploye }} ans</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Catégorie:</div>
+                <div class="info-value">{{ pret.categorie }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Revenus bruts:</div>
+                <div class="info-value">{{ pret.revenusBruts|number_format(2, ',', ' ') }} €</div>
+            </div>
+        </div>
+        
+        <div class="info-group">
+            <h2>Détails du prêt</h2>
+            <div class="info-row">
+                <div class="info-label">Date du prêt:</div>
+                <div class="info-value">{{ pret.datePret|date('d/m/Y') }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Montant du prêt:</div>
+                <div class="info-value">{{ pret.montantPret|number_format(2, ',', ' ') }} €</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">TMM:</div>
+                <div class="info-value">{{ pret.TMM|number_format(2, ',', ' ') }}%</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Taux:</div>
+                <div class="info-value">{{ pret.taux|number_format(2, ',', ' ') }}%</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Durée de remboursement:</div>
+                <div class="info-value">{{ pret.dureeRemboursement }} {{ pret.dureeRemboursement > 1 ? 'ans' : 'an' }}</div>
+            </div>
+            
+            {% set interets = pret.montantPret * pret.taux / 100 %}
+            {% set total = pret.montantPret + interets %}
+            {% set mensualite = total / pret.dureeRemboursement / 12 %}
+            
+            <div class="info-row">
+                <div class="info-label">Total des intérêts:</div>
+                <div class="info-value">{{ interets|number_format(2, ',', ' ') }} €</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Montant total à rembourser:</div>
+                <div class="info-value">{{ total|number_format(2, ',', ' ') }} €</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Mensualité estimée:</div>
+                <div class="info-value">{{ mensualite|number_format(2, ',', ' ') }} €</div>
+            </div>
+        </div>
+        
+        <a href="{{ path('pret_calendar') }}" class="btn">Retour au calendrier</a>
+        <a href="{{ path('app_pret_edit', {'id': pret.ID_pret}) }}" class="btn">Modifier</a>
+    </div>
+</body>
+</html>

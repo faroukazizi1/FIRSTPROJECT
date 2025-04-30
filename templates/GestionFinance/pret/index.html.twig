@@ -3,18 +3,18 @@
 {% block body %}
     <style>
         body {
-            color: #ffffff; /* Couleur du texte en blanc */
-            background-color: #343a40; /* Fond sombre pour contraster */
+            color: #ffffff;
+            background-color: #343a40;
         }
 
         h1 {
-            color: #ffffff; /* Titre en blanc */
+            color: #ffffff;
         }
 
         table.table {
             width: 100%;
             table-layout: fixed;
-            border-collapse: collapse; /* Ajoute de l'espace entre les bordures */
+            border-collapse: collapse;
         }
 
         table.table th, table.table td {
@@ -23,47 +23,71 @@
             white-space: nowrap;
             font-size: 0.9rem;
             padding: 8px;
-            color: #ffffff; /* Texte des cellules en blanc */
+            color: #ffffff;
         }
 
         table.table th {
-            background-color: #007bff; /* En-têtes avec fond bleu */
+            background-color: #007bff;
             font-weight: bold;
         }
 
         tr:nth-child(even) {
-            background-color: #2c3e50; /* Lignes paires avec un fond gris foncé */
+            background-color: #2c3e50;
         }
 
         tr:nth-child(odd) {
-            background-color: #34495e; /* Lignes impaires avec un fond gris */
+            background-color: #34495e;
         }
 
         tr:hover {
-            background-color: #5bc0de; /* Survol des lignes avec fond bleu clair */
+            background-color: #5bc0de;
         }
 
         td.actions a {
             margin-right: 5px;
-            color: #ffffff; /* Couleur des icônes en blanc */
+            color: #ffffff;
             text-decoration: none;
         }
 
         td.actions a:hover {
-            color: #ff6347; /* Couleur au survol pour les icônes */
+            color: #ff6347;
         }
 
         .btn {
-            background-color: #5bc0de; /* Boutons avec fond bleu clair */
-            color: white; /* Texte des boutons en blanc */
+            background-color: #17a2b8;
+            color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 4px 10px;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 12px;
+            margin-right: 8px;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .btn:hover {
-            background-color: #46b8da; /* Bouton au survol */
+            background-color: #138496;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .calendar-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #00bfff;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .calendar-link:hover {
+            text-decoration: underline;
+            color: #66d9ff;
         }
     </style>
 
@@ -110,12 +134,9 @@
     </table>
 
     <a href="{{ path('app_pret_new') }}" class="btn">Créer un nouveau</a>
-     <a href="{{ path('pret_calendar') }}" target="_blank" style="display: inline-block; margin-bottom: 15px; color: blue;">
+    <a href="{{ path('app_reponse_index') }}" class="btn btn-secondary">Consulter réponse</a>
+
+    <br>
+    <a href="{{ path('pret_calendar') }}" target="_blank" class="calendar-link">
         📅 Voir le calendrier des prêts
-    </a>
-    
-    
- 
-       
-    
-{% endblock %}
+    </a> {% endblock %}

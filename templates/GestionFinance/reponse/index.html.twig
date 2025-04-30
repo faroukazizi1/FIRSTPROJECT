@@ -28,6 +28,24 @@
     .sort-buttons button {
         margin-right: 10px;
     }
+    #reponse-table th {
+        white-space: normal !important;
+        word-wrap: break-word;
+        text-overflow: unset !important;
+        font-size: 13px;
+    }
+    .form-button-action {
+        gap: 4px;
+    }
+    .form-button-action .btn {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.875rem;
+    }
+    .btn-center {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
 </style>
 
 <h1>Liste des Réponses</h1>
@@ -46,30 +64,17 @@
 <div class="sort-buttons">
     <button id="sort-asc" class="btn btn-success">Trier Montant Demandé ↑</button>
     <button id="sort-desc" class="btn btn-warning">Trier Montant Demandé ↓</button>
-</div>
-
-<style>
-    #reponse-table th {
-        white-space: normal !important;
-        word-wrap: break-word;
-        text-overflow: unset !important;
-        font-size: 13px;
-    }
-    .form-button-action {
-        gap: 4px;
-    }
-    .form-button-action .btn {
-        padding: 0.25rem 0.4rem;
-        font-size: 0.875rem;
-    }
-</style>
-
-<!-- ZONE DYNAMIQUE À REMPLACER PAR AJAX -->
+</div> <!-- ZONE DYNAMIQUE À REMPLACER PAR AJAX -->
 <div class="table-responsive" id="reponse-list">
     {% include 'GestionFinance/reponse/_reponse_list.html.twig' with {'reponses': reponses} %}
 </div>
 
 <a href="{{ path('app_reponse_new') }}" class="btn btn-primary" style="margin-top: 15px;">Créer une nouvelle réponse</a>
+
+<!-- BOUTON CENTRÉ EN BAS -->
+<div class="btn-center">
+    <a href="{{ path('app_pret_index') }}" class="btn" style="color: white; background-color: #6c757d;">Consulter pret</a>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -127,4 +132,5 @@
         });
     });
 </script>
+
 {% endblock %}
