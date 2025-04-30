@@ -1,0 +1,23 @@
+{% for absence in absences %}
+    <tr>
+        <td>{{ absence.Date ? absence.Date|date('Y-m-d') : '' }}</td>
+        <td>{{ absence.nbrAbs }}</td>
+        <td>{{ absence.type }}</td>
+        <td>{{ absence.cin }}</td>
+        <td>
+            {% if absence.imagePath %}
+                <a href="{{ asset(absence.imagePath) }}" target="_blank">Voir l'image</a>
+            {% else %}
+                Aucune image disponible
+            {% endif %}
+        </td>
+        <td>
+            <a href="{{ path('app_absence_show', {'ID_abs': absence.IDAbs}) }}" class="btn btn-info btn-sm">Voir</a>
+            <a href="{{ path('app_absence_edit', {'ID_abs': absence.IDAbs}) }}" class="btn btn-warning btn-sm">Modifier</a>
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="6">Aucun enregistrement trouvé.</td>
+    </tr>
+{% endfor %}

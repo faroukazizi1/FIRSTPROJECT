@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des projets</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 40px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .generated-date {
+            text-align: right;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #34495e;
+            color: white;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        .status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .status.en-cours {
+            background-color: #3498db;
+        }
+
+        .status.termine {
+            background-color: #2ecc71;
+        }
+
+        .status.attente {
+            background-color: #e67e22;
+        }
+
+        footer {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #aaa;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Liste des Projets</h1>
+    <div class="generated-date">
+        Généré le {{ "now"|date("d/m/Y") }}
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Statut</th>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for project in projects %}
+            <tr>
+                <td>{{ project.titre }}</td>
+                <td>{{ project.description }}</td>
+                <td>
+                    {% set statusClass = '' %}
+                    {% if project.statut == 'En cours' %}
+                        {% set statusClass = 'en-cours' %}
+                    {% elseif project.statut == 'Terminé' %}
+                        {% set statusClass = 'termine' %}
+                    {% else %}
+                        {% set statusClass = 'attente' %}
+                    {% endif %}
+                    <span class="status {{ statusClass }}">{{ project.statut }}</span>
+                </td>
+                <td>{{ project.dateDebut ? project.dateDebut|date('d/m/Y') : '' }}</td>
+                <td>{{ project.dateFin ? project.dateFin|date('d/m/Y') : '' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <footer>
+        © {{ "now"|date("Y") }} - Liste générée automatiquement
+    </footer>
+</body>
+</html>

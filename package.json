@@ -1,0 +1,34 @@
+{
+  "name": "firstproject",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faroukazizi1/FIRSTPROJECT.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/faroukazizi1/FIRSTPROJECT/issues"
+  },
+  "homepage": "https://github.com/faroukazizi1/FIRSTPROJECT#readme",
+  "description": "",
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.17",
+    "@fullcalendar/daygrid": "^6.1.17",
+    "@fullcalendar/interaction": "^6.1.17",
+    "@fullcalendar/list": "^6.1.17",
+    "@fullcalendar/timegrid": "^6.1.17",
+    "fullcalendar": "^6.1.17"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^5.1.0"
+  }
+}

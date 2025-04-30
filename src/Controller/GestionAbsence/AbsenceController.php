@@ -1,11 +1,10 @@
-<?php
-
-namespace App\Controller\GestionAbsence;
+<?php namespace App\Controller\GestionAbsence;
 
 use App\Entity\Absence;
 use App\Form\AbsenceType;
 use App\Repository\AbsenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -16,14 +15,54 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/absence')]
 final class AbsenceController extends AbstractController
 {
+    // Route pour afficher l'index des absences
     #[Route(name: 'app_absence_index', methods: ['GET'])]
     public function index(AbsenceRepository $absenceRepository): Response
     {
+        $absences = $absenceRepository->findAll();
+
+        // Appel API météo (OpenWeatherMap)
+        $apiKey = ''; // Remplace par ta clé API ici
+        $city = 'zanzibar'; // Change la ville si nécessaire
+        $url = "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&units=metric&lang=fr";
+
+        $weatherData = null;
+        try {
+            $response = file_get_contents($url);
+            $weatherData = json_decode($response, true);
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Erreur lors de la récupération de la météo.');
+        }
+
         return $this->render('GestionAbsence/absence/index.html.twig', [
-            'absences' => $absenceRepository->findAll(),
+            'absences' => $absences,
+            'weather' => $weatherData,
         ]);
     }
 
+    // Route pour afficher la météo actuelle sur une page séparée
+    #[Route('/meteo', name: 'app_meteo', methods: ['GET'])]
+    public function showMeteo(): Response
+    {
+        // Appel API météo (OpenWeatherMap)
+        $apiKey = ''; // Remplace par ta clé API ici
+        $city = 'Zanzibar'; // Change la ville si nécessaire
+        $url = "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&units=metric&lang=fr";
+
+        $weatherData = null;
+        try {
+            $response = file_get_contents($url);
+            $weatherData = json_decode($response, true);
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Erreur lors de la récupération de la météo.');
+        }
+
+        return $this->render('FrontOffice/chatbot/meteo.html.twig', [
+            'weather' => $weatherData,
+        ]);
+    }
+
+    // Route pour créer une nouvelle absence
     #[Route('/new', name: 'app_absence_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -34,32 +73,27 @@ final class AbsenceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $file */
             $file = $form->get('image_path')->getData();
-            $type = $form->get('type')->getData(); // Récupérer le type d'absence
-        
-            if ($type === 'justifiee' && $file) { // Vérifie si le type est "Justifiée"
-                // Générer un nom de fichier unique
-                $filename = uniqid() . '.' . $file->guessExtension();
+            $type = $form->get('type')->getData();
 
-                try {
+            if ($type === 'justifiee' && $file) {
+                $filename = uniqid() . '.' . $file->guessExtension();
+               try {
                     $uploadsDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads';
                     $file->move($uploadsDirectory, $filename);
-                    // Sauvegarder le chemin de l'image
-                    $absence->setImagePath('uploads/' . $filename);
+                   $absence->setImagePath('uploads/' . $filename);
                     $this->addFlash('success', 'Image téléchargée avec succès.');
                 } catch (FileException $e) {
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
                 }
             } elseif ($type !== 'justifiee') {
-                // Si le type n'est pas justifié, s'assurer qu'aucune image n'est assignée
-                $absence->setImagePath(null);
+               $absence->setImagePath(null);
             }
-        
-            // Persister l'entité Absence
+
             $entityManager->persist($absence);
             $entityManager->flush();
 
             $this->addFlash('success', 'L\'absence a été ajoutée avec succès.');
-        
+
             return $this->redirectToRoute('app_absence_index');
         }
 
@@ -69,6 +103,7 @@ final class AbsenceController extends AbstractController
         ]);
     }
 
+    // Route pour afficher une absence
     #[Route('/{ID_abs}', name: 'app_absence_show', methods: ['GET'])]
     public function show(Absence $absence): Response
     {
@@ -77,6 +112,7 @@ final class AbsenceController extends AbstractController
         ]);
     }
 
+    // Route pour éditer une absence
     #[Route('/{ID_abs}/edit', name: 'app_absence_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Absence $absence, EntityManagerInterface $entityManager): Response
     {
@@ -84,14 +120,12 @@ final class AbsenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Si une nouvelle image est soumise, gérer l'upload et l'assignation
-            $file = $form->get('image_path')->getData();
+           $file = $form->get('image_path')->getData();
             $type = $form->get('type')->getData();
 
             if ($type === 'justifiee' && $file) {
                 $filename = uniqid() . '.' . $file->guessExtension();
-
-                try {
+               try {
                     $uploadsDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads';
                     $file->move($uploadsDirectory, $filename);
                     $absence->setImagePath('uploads/' . $filename);
@@ -99,7 +133,7 @@ final class AbsenceController extends AbstractController
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
                 }
             } elseif ($type !== 'justifiee') {
-                $absence->setImagePath(null); // Si non justifié, on supprime l'image
+                $absence->setImagePath(null);
             }
 
             $entityManager->flush();
@@ -115,6 +149,7 @@ final class AbsenceController extends AbstractController
         ]);
     }
 
+    // Route pour supprimer une absence
     #[Route('/{ID_abs}', name: 'app_absence_delete', methods: ['POST'])]
     public function delete(Request $request, Absence $absence, EntityManagerInterface $entityManager): Response
     {
@@ -130,6 +165,56 @@ final class AbsenceController extends AbstractController
         return $this->redirectToRoute('app_absence_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    // Route pour générer un PDF des absences
+    #[Route('/absence/pdf', name: 'app_absence_pdf', methods: ['GET'])]
+    public function generatePdf(AbsenceRepository $absenceRepository, Pdf $knpSnappy): Response
+    {
+        $absences = $absenceRepository->findAll();
 
-   
+        foreach ($absences as $absence) {
+            if (!$absence->getIDAbs()) {
+                $this->addFlash('error', 'Une absence a un ID invalide.');
+                return $this->redirectToRoute('app_absence_index');
+            }
+        }
+
+        $html = $this->renderView('GestionAbsence/absence/pdf.html.twig', [
+            'absences' => $absences,
+        ]);
+
+        $pdfContent = $knpSnappy->getOutputFromHtml($html);
+
+        return new Response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="absences.pdf"',
+        ]);
+    }
+    #[Route('/absence/search', name: 'app_absence_search', methods: ['GET'])]
+    public function search(Request $request, AbsenceRepository $absenceRepository): Response
+    {
+        $cin = $request->query->get('cin', '');
+        $sort = $request->query->get('sort', 'asc'); // Par défaut tri croissant
+    
+        // Créer la requête pour récupérer les absences et leur nombre
+        $queryBuilder = $absenceRepository->createQueryBuilder('a')
+            ->select('a') // Sélectionner les absences
+            ->orderBy('a.nbr_abs', $sort);  // Trier par nbr_abs
+    
+        // Filtrer par CIN si demandé
+        if ($cin) {
+            $queryBuilder->where('a.cin LIKE :cin')
+                ->setParameter('cin', '%' . $cin . '%');
+        }
+    
+        // Exécuter la requête et récupérer les résultats
+        $absences = $queryBuilder->getQuery()->getResult();
+    
+        return $this->render('GestionAbsence/absence/_absence_list.html.twig', [
+            'absences' => $absences,
+        ]);
+    }
+    
+
+    
+
 }

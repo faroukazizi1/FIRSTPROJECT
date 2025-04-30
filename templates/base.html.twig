@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/demo.css') }}"/>
 
     {% block stylesheets %}{% endblock %}
+            {{ encore_entry_link_tags('app') }}
 </head>
 <body>
 <div class="wrapper">
@@ -82,6 +83,7 @@
 <script src="{{ asset('BackOffice/assets/js/demo.js') }}"></script>
 
 {% block javascripts %}{% endblock %}
+            {{ encore_entry_script_tags('app') }}
 </body>
 
 </html>

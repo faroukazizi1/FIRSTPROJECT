@@ -1,11 +1,12 @@
 {# chatbot.html.twig #}
-{% extends 'FrontOffice/front_base.html.twig' %}
+{% extends 'frontOffice/front_base.html.twig' %}
 
 
 {% block title %}{% endblock %}
 
 {% block body %}
     <div class="container mt-5">
+    <a href="{{ path('app_meteo') }}" class="btn btn-info">Voir la météo actuelle</a>
         <h1 class="mb-4">Consulter les informations concernant vos absences et pénalités</h1>
 
         {# Affichage du message, si présent #}
@@ -16,7 +17,7 @@
         {# Première étape : formulaire pour le CIN #}
         {% if cin is not defined %}
             <div class="card p-4 mb-4">
-                {{ form_start(form) }}
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
                     <div class="form-group">
                         {{ form_label(form.cin, 'Numéro CIN', {'label_attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.cin, {'attr': {'class': 'form-control', 'autocomplete': 'off'}}) }}
@@ -49,13 +50,14 @@
                     <button type="submit" class="btn btn-primary">Envoyer</button>
                 {{ form_end(form) }}
             </div>
+            
         {% endif %}
         
         {# Ajouter un script JavaScript pour la redirection après 3 secondes si le message contient "À bientôt" #}
         {% if message is defined and 'À bientôt' in message %}
             <script>
                 setTimeout(function() {
-                    window.location.href = '{{ path("chatbot") }}'; // Redirection vers la page du CIN
+                    window.location.href = '{{ path('chatbot') }}'; // Redirection vers la page du CIN
                 }, 3000); // 5000 ms = 5 secondes
             </script>
         {% endif %}

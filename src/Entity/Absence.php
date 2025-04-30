@@ -13,8 +13,8 @@ class Absence
 {
     // La propriété Date est nullable
     #[ORM\Column(type: 'date', nullable: true)]  // La date peut être null
-    #[Assert\NotBlank(message: 'La date est obligatoire.')]  // Assure que la date n'est pas vide si présente
-    #[Assert\LessThan('today', message: 'La date doit être dans le passé.')]
+    #[Assert\NotBlank(message: '❌La date est obligatoire.')]  // Assure que la date n'est pas vide si présente
+    #[Assert\LessThan('today', message: '❌La date doit être dans le passé.')]
     private ?\DateTimeInterface $Date = null;
 
     public function getDate(): ?\DateTimeInterface
@@ -30,11 +30,11 @@ class Absence
     }
 
     #[ORM\Column(type: 'integer', nullable: false)]
-    #[Assert\NotBlank(message: 'Le nombre d\'absences est obligatoire.')]
+    #[Assert\NotBlank(message: '❌Le nombre d\'absences est obligatoire.')]
     #[Assert\Range(
         min: 1, 
         max: 999, 
-        notInRangeMessage: 'Le nombre d\'absences doit être entre {{ min }} et {{ max }}.'
+        notInRangeMessage: '❌Le nombre d\'absences doit être entre {{ min }} et {{ max }}.'
     )]
     private ?int $nbr_abs = null;
 
@@ -50,10 +50,10 @@ class Absence
     }
 
     #[ORM\Column(type: 'string', nullable: false)]
-    #[Assert\NotBlank(message: 'Le type d\'absence est obligatoire.')]
+    #[Assert\NotBlank(message: '❌Le type d\'absence est obligatoire.')]
     #[Assert\Choice(
         choices: ['justifiee', 'non_justifiee'],
-        message: 'Le type d\'absence doit être "justifiee" ou "non_justifiee".'
+        message: '❌Le type d\'absence doit être "justifiee" ou "non_justifiee".'
     )]
     private ?string $type = null;
 
@@ -85,10 +85,10 @@ class Absence
     }
 
     #[ORM\Column(type: 'string', length: 8, nullable: false)]
-#[Assert\NotBlank(message: 'Le CIN est obligatoire.')]
+#[Assert\NotBlank(message: '❌Le CIN est obligatoire.')]
 #[Assert\Regex(
     pattern: '/^\d{8}$/',
-    message: 'Le CIN doit être composé exactement de 8 chiffres.'
+    message: '❌Le CIN doit être composé exactement de 8 chiffres.'
 )]
 private ?string $cin = null;
 
@@ -108,8 +108,8 @@ private ?string $cin = null;
     #[Assert\Image(
         maxSize: '2M',
         mimeTypes: ['image/jpeg', 'image/png', 'image/gif'],
-        mimeTypesMessage: 'Seules les images JPEG, PNG et GIF sont acceptées.',
-        maxSizeMessage: 'Le fichier image ne doit pas dépasser 2 Mo.',
+        mimeTypesMessage: '❌Seules les images JPEG, PNG et GIF sont acceptées.',
+        maxSizeMessage: '❌Le fichier image ne doit pas dépasser 2 Mo.',
         groups: ['image_required']  // Validation de l'image uniquement dans ce groupe
     )]
     private ?string $image_path = null;
