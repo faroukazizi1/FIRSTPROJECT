@@ -1,57 +1,181 @@
-{% extends 'base.html.twig' %}
+{# templates/formation/stats.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques des Formations</title>
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/plugins.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/kaiadmin.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-{% block title %}Statistiques des formations{% endblock %}
+    <style>
+        .stat-box {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            padding: 30px 20px;
+        }
+        .stat-box h5 {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .display-6 {
+            font-size: 2rem;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
 
-{% block body %}
-    <h1>Statistiques des formations</h1>
+<div class="wrapper">
+    <div class="header_area">
+        {% include 'BackOffice/side_bar.html.twig' %}
 
-    <div class="stats-container">
-        <div class="stat-card">
-            <h3>Nombre total de formations</h3>
-            <p>{{ stats.total_formations }}</p>
-        </div>
+        <div class="main-panel">
+            <div class="content">
+                <div class="page-inner">
+                    <div class="page-header">
+                        <h4 class="page-title">📊 Statistiques des Formations</h4>
+                        <ul class="breadcrumbs">
+                            <li class="nav-home"><a href="#"><i class="flaticon-home"></i></a></li>
+                            <li class="separator"><i class="flaticon-right-arrow"></i></li>
+                  <a href="{{ path('formation_index') }}">Formations</a>                            <li class="separator"><i class="flaticon-right-arrow"></i></li>
+                            <li class="nav-item">Statistiques</li>
+                        </ul>
+                    </div>
 
-        <div class="stat-card">
-            <h3>Durée moyenne</h3>
-            <p>{{ stats.duree_moyenne|number_format(1) }} heures</p>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="stat-box text-center">
+                                <h5>Total des Formations</h5>
+                                <p class="display-6">{{ stats.total_formations }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stat-box text-center">
+                                <h5>Durée Moyenne</h5>
+                                <p class="display-6">{{ stats.duree_moyenne|number_format(1) }} h</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title">📂 Répartition par type de formation</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Type</th>
+                                                <th>Nombre</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for type in stats.formations_par_type %}
+                                                <tr>
+                                                    <td>{{ type.type }}</td>
+                                                    <td>{{ type.count }}</td>
+                                                </tr>
+                                            {% else %}
+                                                <tr><td colspan="2">Aucune donnée disponible.</td></tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-center justify-content-center">
+                                    <div style="width: 280px; height: 280px;">
+                                        <canvas id="typeChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">📅 Prochaines Formations</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Date de début</th>
+                                        <th>Formateur</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for formation in stats.prochaines_formations %}
+                                        <tr>
+                                            <td>{{ formation.Titre }}</td>
+                                            <td>{{ formation.dateD|date('d/m/Y') }}</td>
+                                            <td>{{ formation.formateur }}</td>
+                                        </tr>
+                                    {% else %}
+                                        <tr><td colspan="3">Aucune formation à venir.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <footer class="footer mt-4">
+                <div class="container-fluid d-flex justify-content-between">
+                    <div class="copyright">
+                        &copy; {{ "now"|date("Y") }}, fait avec <i class="fa fa-heart heart text-danger"></i> par Vous
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
+</div>
 
-    <h2>Formations par type</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th>Nombre</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for type in stats.formations_par_type %}
-                <tr>
-                    <td>{{ type.type }}</td>
-                    <td>{{ type.count }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<script src="{{ asset('BackOffice/assets/js/core/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/core/popper.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/core/bootstrap.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/kaiadmin.min.js') }}"></script>
 
-    <h2>Prochaines formations</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Date de début</th>
-                <th>Formateur</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for formation in stats.prochaines_formations %}
-                <tr>
-                    <td>{{ formation.Titre }}</td>
-                    <td>{{ formation.dateD|date('d/m/Y') }}</td>
-                    <td>{{ formation.formateur }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('typeChart').getContext('2d');
+    const typeChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ stats.formations_par_type|map(t => t.type)|json_encode|raw }},
+            datasets: [{
+                label: 'Formations par type',
+                data: {{ stats.formations_par_type|map(t => t.count)|json_encode|raw }},
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56',
+                    '#4BC0C0', '#9966FF', '#FF9F40'
+                ],
+                hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                title: {
+                    display: true,
+                    text: 'Répartition des formations par type'
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

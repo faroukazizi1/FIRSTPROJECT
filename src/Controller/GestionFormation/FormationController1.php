@@ -19,7 +19,7 @@ use App\Service\MailService;
 
 
 #[Route('/formation')]
-final class FormationController extends AbstractController
+final class FormationController1 extends AbstractController
 {
 
     // src/Controller/FormationController.php
