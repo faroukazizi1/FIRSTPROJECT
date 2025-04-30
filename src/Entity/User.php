@@ -7,12 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 use App\Repository\UserRepository;
+use phpDocumentor\Reflection\PseudoTypes\True_;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'user')]
-class User implements UserInterface , PasswordAuthenticatedUserInterface
+class User implements UserInterface , PasswordAuthenticatedUserInterface , TwoFactorInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -170,6 +173,10 @@ class User implements UserInterface , PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $googleAuthenticatorSecret;
+
+
     #[ORM\OneToMany(targetEntity: Promotion::class, mappedBy: 'user')]
     private Collection $promotions;
 
@@ -228,7 +235,27 @@ class User implements UserInterface , PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-   
+   /////2FA
+
+   public function isGoogleAuthenticatorEnabled(): bool
+   {
+       return null !== $this->googleAuthenticatorSecret;
+   }
+
+   public function getGoogleAuthenticatorUsername(): string
+   {
+       return $this->username;
+   }
+
+   public function getGoogleAuthenticatorSecret(): ?string
+   {
+       return $this->googleAuthenticatorSecret;
+   }
+
+   public function setGoogleAuthenticatorSecret(?string $googleAuthenticatorSecret): void
+   {
+       $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
+   }
 
    
 
