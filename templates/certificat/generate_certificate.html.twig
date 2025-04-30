@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générer Certificat</title>
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/plugins.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/kaiadmin.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="header_area">
+        {% include 'BackOffice/side_bar.html.twig' %}
+
+        <div class="main-panel">
+            <div class="content">
+                <div class="page-inner">
+                    <div class="page-header">
+                        <h4 class="page-title">Générer un Certificat</h4>
+                        <ul class="breadcrumbs">
+                            <li class="nav-home"><a href="#"><i class="flaticon-home"></i></a></li>
+                            <li class="separator"><i class="flaticon-right-arrow"></i></li>
+                            <li class="nav-item">
+                                <a href="{{ path('generate_certificate') }}">Générer un certificat</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title">Sélectionner l'utilisateur et la formation</div>
+                                </div>
+
+                                <div class="card-body">
+                                    {# Afficher les messages flash success ou error #}
+                                    {% for message in app.flashes('success') %}
+                                        <div class="alert alert-success">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+
+                                    {% for message in app.flashes('error') %}
+                                        <div class="alert alert-danger">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+
+                                    <form action="{{ path('generate_certificate') }}" method="POST">
+                                        <div class="form-group">
+                                            <label for="user">Sélectionner un utilisateur</label>
+                                            <select class="form-control" id="user" name="user_id">
+                                                {% for user in users %}
+                                                    <option value="{{ user.id }}">{{ user.username }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="formation">Sélectionner une formation</label>
+                                            <select class="form-control" id="formation" name="formation_id">
+                                                {% for formation in formations %}
+                                                    <option value="{{ formation.id_form }}">{{ formation.Titre }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Générer Certificat</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ asset('BackOffice/assets/js/core/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/core/popper.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/core/bootstrap.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+<script src="{{ asset('BackOffice/assets/js/kaiadmin.min.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Test Soft Skills | Hirevac</title>
+
+  <!-- CSS & Fonts -->
+  <link rel="stylesheet" type="text/css" href="{{ asset('FrontOffice/css/bootstrap.css') }}" />
+  <link href="{{ asset('FrontOffice/css/style.css') }}" rel="stylesheet" />
+  <link href="{{ asset('FrontOffice/css/responsive.css') }}" rel="stylesheet" />
+  <link href="{{ asset('FrontOffice/css/font-awesome.min.css') }}" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="hero_area">
+    <div class="header_area">
+      {% include 'FrontOffice/nav_bar.html.twig' %}
+    </div>
+  </div>
+
+  <!-- Section de Test -->
+  <section class="job_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2 class="section-title">Test de compétences comportementales</h2>
+        <p>Répondez aux questions ci-dessous pour évaluer vos soft skills.</p>
+      </div>
+
+<form method="post" action="{{ path('front_test_submit', {'id': test.id}) }}">        {% for i, question in test.questions %}
+          <div class="card mb-4">
+            <div class="card-body">
+<p style="color: black;"><strong>{{ question.question }}</strong></p>
+              {% for key, option in question.options %}
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="answers[{{ i }}]" value="{{ key }}" id="q{{ i }}_{{ key }}">
+                 <label class="form-check-label" for="q{{ i }}_{{ key }}" style="color: black;">
+  {{ option }}
+</label>
+
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">Soumettre le test</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  
+
+  <!-- Scripts -->
+  <script src="{{ asset('FrontOffice/js/jquery-3.4.1.min.js') }}"></script>
+  <script src="{{ asset('FrontOffice/js/bootstrap.js') }}"></script>
+  <script src="{{ asset('FrontOffice/js/custom.js') }}"></script>
+</body>
+</html>

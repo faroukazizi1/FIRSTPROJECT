@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques des formations{% endblock %}
+
+{% block body %}
+    <h1>Statistiques des formations</h1>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <h3>Nombre total de formations</h3>
+            <p>{{ stats.total_formations }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Durée moyenne</h3>
+            <p>{{ stats.duree_moyenne|number_format(1) }} heures</p>
+        </div>
+    </div>
+
+    <h2>Formations par type</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for type in stats.formations_par_type %}
+                <tr>
+                    <td>{{ type.type }}</td>
+                    <td>{{ type.count }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Prochaines formations</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Date de début</th>
+                <th>Formateur</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for formation in stats.prochaines_formations %}
+                <tr>
+                    <td>{{ formation.Titre }}</td>
+                    <td>{{ formation.dateD|date('d/m/Y') }}</td>
+                    <td>{{ formation.formateur }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

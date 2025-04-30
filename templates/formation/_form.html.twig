@@ -1,4 +1,29 @@
+<style>
+  .invalid-feedback {
+    display: block;
+    color: red !important;
+  }
+  .is-invalid {
+    border-color: red !important;
+  }
+</style>
+
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+  {% for field in form %}
+    {% if field.vars.name != '_token' %}
+      <div class="form-group">
+        {{ form_label(field) }}
+        {{ form_widget(field, {'attr': {
+          'class': 'form-control' ~ (form_errors(field) ? ' is-invalid' : '')
+        }}) }}
+        <div class="invalid-feedback">
+          {{ form_errors(field) }}
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+
 {{ form_end(form) }}
