@@ -109,7 +109,7 @@ final class PretController extends AbstractController
             throw $this->createNotFoundException('Prêt non trouvé.');
         }
 
-        if ($this->isCsrfTokenValid('delete' . $pret->getIdPret(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $pret->getId_pret(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($pret);
             $entityManager->flush();
         }

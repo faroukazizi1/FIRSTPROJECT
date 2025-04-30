@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Statistiques des Durées de Remboursement</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Durée de remboursement (en mois)</th>
+                <th>Nombre de prêts</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stat in statistics %}
+                <tr>
+                    <td>{{ stat.Duree_remboursement	 }} mois</td>
+                    <td>{{ stat.count }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">Aucune donnée trouvée</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reponse_index') }}" class="btn btn-primary">Retour à la liste</a>
+{% endblock %}
