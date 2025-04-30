@@ -3,6 +3,7 @@ scheb_two_factor:
     security_tokens:
         - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
         - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
+        - Acme\AuthenticationBundle\Token\CustomAuthenticationToken
     google:
         enabled: true
         server_name: FlexiRH       # Server name used in QR code
@@ -15,4 +16,3 @@ scheb_two_factor:
         leeway: 0                      # Acceptable time drift in seconds, requires Spomky-Labs/otphp v11 to be used
                                        # Must be less or equal than 30 seconds
                                        # If configured, takes precedence over the "window" option
-        template: security/2fa_form.html.twig   # Template used to render the authentication form

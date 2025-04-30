@@ -3,16 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Endroid\QrCode\Builder\Builder;
 use Doctrine\ORM\EntityManagerInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Endroid\QrCode\Builder\Builder;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 
 class TTwoFactorAuthController extends AbstractController
 {
-    #[Route('/2fa/setup', name: 'app_2fa_setup')]
+    #[Route('/twofa/setup', name: 'app_2fa_setup')]
     public function setup2FA(
         GoogleAuthenticatorInterface $googleAuthenticator,
         EntityManagerInterface $em
@@ -34,4 +35,6 @@ class TTwoFactorAuthController extends AbstractController
             'qrImage' => $qrImageUri,
         ]);
     }
+
+
 }
