@@ -3,45 +3,269 @@
 {% block title %}Absence index{% endblock %}
 
 {% block body %}
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            margin: 0;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            color: #1a73e8;
+            text-align: center;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .form-control {
+            border: 1px solid #dcdcdc;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 1em;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 8px rgba(26, 115, 232, 0.2);
+            outline: none;
+        }
+
+        .btn-group {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #1a73e8;
+            border-color: #1a73e8;
+        }
+
+        .btn-primary:hover {
+            background-color: #1557b0;
+            border-color: #1557b0;
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+            border-color: #138496;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #333;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            border-color: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 0.95em;
+        }
+
+        th {
+            background-color: #1a73e8;
+            color: #fff;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #f1f3f5;
+            transition: background-color 0.3s ease;
+        }
+
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #1557b0;
+        }
+
+        .mt-4 {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+
+            .table {
+                box-shadow: none;
+            }
+
+            h1 {
+                color: #000;
+            }
+
+            .btn, .form-group {
+                display: none;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+
     <h1>Absence index</h1>
 
-    <table class="table">
+    {# --- Champ de recherche CIN --- #}
+    <div class="form-group mb-4">
+        <input type="text" id="search-cin" class="form-control" placeholder="Rechercher par CIN...">
+    </div>
+
+    {# --- Liens pour trier par Nombre d'Absences --- #}
+    <div class="mb-3">
+        <div class="btn-group" role="group">
+            <button type="button" id="sortAsc" class="btn btn-primary btn-sm" data-sort="asc">Trier par Nombre d'Absences (Ascendant)</button>
+            <button type="button" id="sortDesc" class="btn btn-primary btn-sm" data-sort="desc">Trier par Nombre d'Absences (Descendant)</button>
+        </div>
+    </div>
+
+    {# --- Table des absences --- #}
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Date</th>
                 <th>Nbr_abs</th>
                 <th>Type</th>
                 <th>Cin</th>
-                <th>Image</th> <!-- Affichage du lien de l'image -->
+                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
-        {% for absence in absences %}
-            <tr>
-                <td>{{ absence.Date ? absence.Date|date('Y-m-d') : '' }}</td>
-                <td>{{ absence.nbrAbs }}</td>
-                <td>{{ absence.type }}</td>
-                <td>{{ absence.cin }}</td>
-                <td>
-                    {% if absence.imagePath %}
-                        <a href="{{ asset(absence.imagePath) }}" target="_blank">Voir l'image</a>
-                    {% else %}
-                        Aucune image disponible
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{{ path('app_absence_show', {'ID_abs': absence.IDAbs}) }}">Show</a>
-                    <a href="{{ path('app_absence_edit', {'ID_abs': absence.IDAbs}) }}">Edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">No records found</td>  {# ✅ colspan ajusté après suppression de l'ID #}
-            </tr>
-        {% endfor %}
+        <tbody id="absence-list">
+            {% for absence in absences %}
+                <tr>
+                    <td>{{ absence.Date ? absence.Date|date('Y-m-d') : '' }}</td>
+                    <td>{{ absence.nbrAbs }}</td>
+                    <td>{{ absence.type }}</td>
+                    <td>{{ absence.cin }}</td>
+                    <td>
+                        {% if absence.imagePath %}
+                            <a href="{{ asset(absence.imagePath) }}" target="_blank">Voir l'image</a>
+                        {% else %}
+                            Aucune image disponible
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('app_absence_show', {'ID_abs': absence.IDAbs}) }}" class="btn btn-info btn-sm">Voir</a>
+                        <a href="{{ path('app_absence_edit', {'ID_abs': absence.IDAbs}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Aucun enregistrement trouvé.</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_absence_new') }}">Create new</a>
+    {# --- Boutons actions --- #}
+    <div class="mt-4">
+        <a href="{{ path('app_absence_pdf') }}" class="btn btn-primary" target="_blank">Générer le PDF</a>
+        <a href="{{ path('app_absence_new') }}" class="btn btn-success">Créer une nouvelle absence</a>
+    </div>
+
+    {# --- Script AJAX pour la recherche --- #}
+    <script>
+        const searchInput = document.getElementById('search-cin');
+        const absenceList = document.getElementById('absence-list');
+        const sortAscLink = document.getElementById('sortAsc');
+        const sortDescLink = document.getElementById('sortDesc');
+
+        searchInput.addEventListener('input', function () {
+            filterResults();
+        });
+
+        sortAscLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            filterResults('asc');
+        });
+
+        sortDescLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            filterResults('desc');
+        });
+
+        // Fonction pour filtrer et trier les absences
+        function filterResults(direction = 'asc') {
+            const query = searchInput.value.trim();
+            const url = '{{ path('app_absence_search') }}?cin=' + encodeURIComponent(query) + '&sort=' + direction;
+
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    absenceList.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la recherche AJAX :', error);
+                });
+        }
+    </script>
+
 {% endblock %}

@@ -1,6 +1,4 @@
-<?php 
-
-namespace App\Entity;
+<?php namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,16 +25,16 @@ class Penalite
     }
 
     #[ORM\Column(type: 'string', nullable: false)]
-    #[Assert\NotBlank(message: "Le type de pénalité est obligatoire.")]
+    #[Assert\NotBlank(message: "❌Le type de pénalité est obligatoire.")]
     #[Assert\Choice(
         choices: ["Avertissement écrit", "Suspension temporaire", "Démotion"],
-        message: "Veuillez choisir un type de pénalité valide."
+        message: "❌Veuillez choisir un type de pénalité valide."
     )]
     #[Assert\Length(
         min: 5,
         max: 50,
-        minMessage: "Le type de pénalité doit comporter au moins {{ limit }} caractères.",
-        maxMessage: "Le type de pénalité ne doit pas dépasser {{ limit }} caractères."
+        minMessage: "❌Le type de pénalité doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "❌Le type de pénalité ne doit pas dépasser {{ limit }} caractères."
     )]
     private ?string $type = null;
 
@@ -54,11 +52,11 @@ class Penalite
     #[ORM\Column(type: 'integer', nullable: true)]  // Permet null
     #[Assert\GreaterThanOrEqual(
         value: 0,
-        message: "Le seuil d'absence doit être supérieur ou égal à zéro."
+        message: "❌Le seuil d'absence doit être supérieur ou égal à zéro."
     )]
     #[Assert\LessThanOrEqual(
         value: 100,
-        message: "Le seuil d'absence ne doit pas dépasser {{ limit }}."
+        message: "❌Le seuil d'absence ne doit pas dépasser {{ limit }}."
     )]
     private ?int $seuil_abs = null;
 
@@ -74,7 +72,7 @@ class Penalite
     }
 
     #[ORM\Column(type: 'integer', nullable: true)]  // Permet null
-    #[Assert\Positive(message: "Le CIN doit être un nombre positif.")]
+    #[Assert\Positive(message: "❌Le CIN doit être un nombre positif.")]
     private ?int $cin = null;
 
     public function getCin(): ?int

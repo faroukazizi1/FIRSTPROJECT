@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\GestionAbsence;
 
 use App\Entity\Penalite;
@@ -33,87 +34,85 @@ class PenaliteController extends AbstractController
 
     #[Route('/penalite/new', name: 'app_penalite_new')]
     public function new(Request $request, AbsenceRepository $absenceRepository): Response
-{
-    // Récupère les CIN distincts des absences
-    $cinChoices = $absenceRepository->createQueryBuilder('a')
-        ->select('a.cin')
-        ->distinct()
-        ->getQuery()
-        ->getResult();
-
-    // Créer une liste de CIN pour le formulaire
-    $cinList = array_combine(array_column($cinChoices, 'cin'), array_column($cinChoices, 'cin'));
-
-    // Créer une nouvelle entité Penalite
-    $penalite = new Penalite();
-
-    // Créer le formulaire avec les CIN récupérés
-    $form = $this->createForm(PenaliteType::class, $penalite, [
-        'cin_choices' => $cinList,
-    ]);
-
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        // Récupérer le CIN sélectionné
-        $cin = $penalite->getCin();
-
-        // Récupérer le nombre d'absences pour ce CIN
-        $nbrAbs = $absenceRepository->createQueryBuilder('a')
-            ->select('COUNT(a.ID_abs)')
-            ->where('a.cin = :cin')
-            ->setParameter('cin', $cin)
+    {
+        // Récupère les CIN distincts des absences
+        $cinChoices = $absenceRepository->createQueryBuilder('a')
+            ->select('a.cin')
+            ->distinct()
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getResult();
 
-        // Vérification si le nombre d'absences est nul ou incorrect
-        if ($nbrAbs === null) {
-            $nbrAbs = 0; // Si le nombre d'absences est nul, on le remplace par 0
+        // Créer une liste de CIN pour le formulaire
+        $cinList = array_combine(array_column($cinChoices, 'cin'), array_column($cinChoices, 'cin'));
+
+        // Créer une nouvelle entité Penalite
+        $penalite = new Penalite();
+
+        // Créer le formulaire avec les CIN récupérés
+        $form = $this->createForm(PenaliteType::class, $penalite, [
+            'cin_choices' => $cinList,
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer le CIN sélectionné
+            $cin = $penalite->getCin();
+
+            // Récupérer le nombre d'absences pour ce CIN
+            $nbrAbs = $absenceRepository->createQueryBuilder('a')
+                ->select('COUNT(a.ID_abs)')
+                ->where('a.cin = :cin')
+                ->setParameter('cin', $cin)
+                ->getQuery()
+                ->getSingleScalarResult();
+
+            // Vérification si le nombre d'absences est nul ou incorrect
+            if ($nbrAbs === null) {
+                $nbrAbs = 0; // Si le nombre d'absences est nul, on le remplace par 0
+            }
+
+            // Calcul du seuil d'absence
+            $seuilAbs = (float) $nbrAbs / 2;  // Force la division flottante
+
+            // Assigner le seuil à l'entité Penalite
+            $penalite->setSeuilAbs($seuilAbs);
+
+            // Vérification du seuil d'absence
+            if ($seuilAbs >= 2) {
+                // Configuration et envoi du SMS via Twilio
+                $sid = ''; // SID Twilio
+                $authToken = ''; // Token Twilio
+                $fromNumber = ''; // Numéro Twilio
+
+                $client = new Client($sid, $authToken);
+
+                $message = "Le CIN numéro $cin a atteint le seuil d'absence de $seuilAbs.";
+
+                // Envoi du SMS
+                $client->messages->create(
+                    '',  // Remplace par le numéro du destinataire
+                    [
+                        'from' => $fromNumber,
+                        'body' => $message,
+                    ]
+                );
+
+                $this->addFlash('success', "Un SMS a été envoyé au numéro correspondant.");
+            }
+
+            // Persist l'entité Penalite avec le seuil calculé
+            $this->entityManager->persist($penalite);
+            $this->entityManager->flush();
+
+            // Rediriger vers la liste des pénalités
+            return $this->redirectToRoute('app_penalite_index');
         }
 
-        // Calcul du seuil d'absence
-        $seuilAbs = (float) $nbrAbs / 2;  // Force la division flottante
-
-        // Assigner le seuil à l'entité Penalite
-        $penalite->setSeuilAbs($seuilAbs);
-
-        // Vérification du seuil d'absence
-        if ($seuilAbs >= 2) {
-            // Configuration et envoi du SMS via Twilio
-            $sid = ''; // SID Twilio
-            $authToken = ''; // Token Twilio
-            $fromNumber = ''; // Numéro Twilio
-
-            $client = new Client($sid, $authToken);
-
-            $message = "Le CIN numéro $cin a atteint le seuil d'absence de $seuilAbs.";
-
-            // Envoi du SMS
-            $client->messages->create(
-                '',  // Remplace par le numéro du destinataire
-                [
-                    'from' => $fromNumber,
-                    'body' => $message,
-                ]
-            );
-
-            $this->addFlash('success', "Un SMS a été envoyé au numéro correspondant.");
-        }
-
-        // Persist l'entité Penalite avec le seuil calculé
-        $this->entityManager->persist($penalite);
-        $this->entityManager->flush();
-
-        // Rediriger vers la liste des pénalités
-        return $this->redirectToRoute('app_penalite_index');
+        return $this->render('GestionAbsence/penalite/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
-
-    return $this->render('GestionAbsence/penalite/new.html.twig', [
-        'form' => $form->createView(),
-    ]);
-}
-
-
 
     #[Route('/penalite/{ID_pen}', name: 'app_penalite_show')]
     public function show(int $ID_pen): Response
@@ -123,10 +122,13 @@ class PenaliteController extends AbstractController
             ->getRepository(Penalite::class)
             ->find($ID_pen);
 
+        // Vérification si la pénalité existe
         if (!$penalite) {
-            throw $this->createNotFoundException('Pénalité non trouvée');
+            // Si la pénalité n'est pas trouvée, renvoyer une erreur 404
+            throw $this->createNotFoundException('Pénalité non trouvée pour l\'ID ' . $ID_pen);
         }
 
+        // Si la pénalité existe, retourner la vue
         return $this->render('GestionAbsence/penalite/show.html.twig', [
             'penalite' => $penalite,
         ]);
@@ -159,7 +161,6 @@ class PenaliteController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    
 
     // Route pour récupérer le nombre d'absences par CIN
     #[Route('/penalite/nbr_abs/{cin}', name: 'app_penalite_nbr_abs')]
@@ -175,8 +176,34 @@ class PenaliteController extends AbstractController
 
         return $this->json(['nbr_abs' => $nbrAbs]);
     }
-    #[Route('/penalite/{ID_pen}', name: 'app_penalite_delete', methods: ['POST'])]
 
+    #[Route('/penalite/search', name: 'app_penalite_search', methods: ['GET'])]
+    public function search(Request $request): Response
+    {
+        $cin = $request->query->get('cin', '');
+        $sort = $request->query->get('sort', 'asc');
+    
+        // Chercher les pénalités correspondant au CIN et trier par seuil d'absence
+        $queryBuilder = $this->entityManager->getRepository(Penalite::class)
+            ->createQueryBuilder('p')
+            ->where('p.cin LIKE :cin')
+            ->setParameter('cin', '%'.$cin.'%');
+    
+        if ($sort === 'desc') {
+            $queryBuilder->orderBy('p.seuilAbs', 'DESC');
+        } else {
+            $queryBuilder->orderBy('p.seuilAbs', 'ASC');
+        }
+    
+        $penalites = $queryBuilder->getQuery()->getResult();
+    
+        // Renvoyer la liste filtrée et triée des pénalités
+        return $this->render('GestionAbsence/penalite/_penalite_list.html.twig', [
+            'penalites' => $penalites,
+        ]);
+    }
+
+    #[Route('/penalite/{ID_pen}', name: 'app_penalite_delete', methods: ['POST'])]
     public function delete(Request $request, Penalite $penalite, EntityManagerInterface $entityManager): Response
     {
         // Vérification du token CSRF pour la suppression
@@ -195,5 +222,4 @@ class PenaliteController extends AbstractController
         // Redirection vers la liste des pénalités
         return $this->redirectToRoute('app_penalite_index', [], Response::HTTP_SEE_OTHER);
     }
-    
 }
