@@ -1,0 +1,118 @@
+<table>
+    <thead>
+        <!-- Reponse Table - Styled & Simplified -->
+<style>
+    #reponse-table th {
+        white-space: normal !important;
+        word-wrap: break-word;
+        text-overflow: unset !important;
+        font-size: 13px;
+    }
+
+    .form-button-action {
+        gap: 4px; /* réduit l’espacement entre les boutons */
+    }
+
+    .form-button-action .btn {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.875rem;
+    }
+</style>
+
+<div class="table-responsive">
+    <div id="reponse-table_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="dataTables_length" id="reponse-table_length">
+                    <label>Show
+                        <select name="reponse-table_length" aria-controls="reponse-table" class="form-control form-control-sm">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        entries
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div id="reponse-table_filter" class="dataTables_filter">
+                    <label>Search:
+                        <input type="text" class="form-control form-control-sm" placeholder="" aria-controls="reponse-table">
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="reponse-table" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="reponse-table_info">
+                    <thead>
+                        <tr role="row">
+                            <th>Date de réponse</th>
+                            <th>Montant demandé</th>
+                            <th>Revenus bruts</th>
+                            <th>Taux d'intérêt</th>
+                            <th>Mensualité crédit</th>
+                            <th>Potentiel crédit</th>
+                            <th>Durée de remboursement</th>
+                            <th>Montant autorisé</th>
+                            <th>Assurance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reponse in reponses %}
+                            <tr>
+                                <td>{{ reponse.dateReponse ? reponse.dateReponse|date('Y-m-d') : '' }}</td>
+                                <td>{{ reponse.montantDemande }}</td>
+                                <td>{{ reponse.revenusBruts }}</td>
+                                <td>{{ reponse.tauxInteret }}</td>
+                                <td>{{ reponse.mensualiteCredit }}</td>
+                                <td>{{ reponse.potentielCredit }}</td>
+                                <td>{{ reponse.dureeRemboursement }}</td>
+                                <td>{{ reponse.montantAutorise }}</td>
+                                <td>{{ reponse.assurance }}</td>
+                                <td>
+                                    <div class="form-button-action d-flex align-items-center">
+                                        <a href="{{ path('app_reponse_edit', {'ID_reponse': reponse.ID_reponse}) }}"
+                                           class="btn btn-link btn-primary btn-sm p-0 me-1"
+                                           data-original-title="Edit Reponse">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <div class="p-0 m-0">
+                                            {{ include('GestionFinance/reponse/_delete_form.html.twig') }}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="10">Aucune réponse disponible.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </thead>
+    <tbody>
+    {% for reponse in reponses %}
+        <tr>
+            
+          
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="10">Aucune réponse trouvée.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+     <div class="text-center mt-3">
+    <a href="{{ path('app_reponse_new') }}" class="btn btn-primary">Créer un nouveau</a>
+</div>
+

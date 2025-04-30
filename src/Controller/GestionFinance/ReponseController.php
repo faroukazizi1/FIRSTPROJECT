@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\GestionFinance;
 
 use App\Entity\Reponse;
@@ -14,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/reponse')]
 final class ReponseController extends AbstractController
 {
-    private $pretRepository;
+    private PretRepository $pretRepository;
 
     public function __construct(PretRepository $pretRepository)
     {
@@ -22,31 +23,50 @@ final class ReponseController extends AbstractController
     }
 
     #[Route(name: 'app_reponse_index', methods: ['GET'])]
-    public function index(ReponseRepository $reponseRepository): Response
+    public function index(Request $request, ReponseRepository $reponseRepository): Response
     {
+        $sort = $request->query->get('order[0][column]');
+        $direction = $request->query->get('order[0][dir]', 'asc');
+        $columns = [
+            'dateReponse', 'montantDemande', 'revenusBruts', 'tauxInteret', 'mensualiteCredit',
+            'potentielCredit', 'dureeRemboursement', 'montantAutorise', 'assurance'
+        ];
+
+        $queryBuilder = $reponseRepository->createQueryBuilder('r');
+
+        // Si un tri est demandé, on applique le tri à la requête
+        if ($sort !== null) {
+            $sortColumn = $columns[$sort]; // Récupère le nom de la colonne
+            $queryBuilder->orderBy('r.' . $sortColumn, $direction);
+        }
+
+        $reponses = $queryBuilder->getQuery()->getResult();
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->render('GestionFinance/reponse/_reponse_list.html.twig', [
+                'reponses' => $reponses,
+            ]);
+        }
+
         return $this->render('GestionFinance/reponse/index.html.twig', [
-            'reponses' => $reponseRepository->findAll(),
+            'reponses' => $reponses,
         ]);
     }
 
+
     #[Route('/new', name: 'app_reponse_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, PretRepository $pretRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Récupérer les CIN distincts de la table Pret
-        $cinChoices = $pretRepository->createQueryBuilder('a')
+        $cinChoices = $this->pretRepository->createQueryBuilder('a')
             ->select('a.cin')
             ->distinct()
             ->getQuery()
             ->getResult();
 
-        // Créer un tableau clé => valeur pour les CIN (clé et valeur étant le CIN)
-        $cinList = array_combine(array_column($cinChoices, 'cin'), array_column($cinChoices, 'cin'));
+    $cinList = array_combine(array_column($cinChoices, 'cin'), array_column($cinChoices, 'cin'));
 
-        // Créer une nouvelle entité Reponse
-        $reponse = new Reponse();
-
-        // Créer le formulaire en passant les CIN récupérés
-        $form = $this->createForm(ReponseType::class, $reponse, [
+    $reponse = new Reponse();
+    $form = $this->createForm(ReponseType::class, $reponse, [
             'cin_choices' => $cinList,
         ]);
 
@@ -74,20 +94,17 @@ final class ReponseController extends AbstractController
     }
 
     #[Route('/{ID_reponse}/edit', name: 'app_reponse_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Reponse $reponse, EntityManagerInterface $entityManager, PretRepository $pretRepository): Response
+    public function edit(Request $request, Reponse $reponse, EntityManagerInterface $entityManager): Response
     {
-        // Récupérer la liste des CIN distincts
-        $cinList = $pretRepository->createQueryBuilder('a')
+        $cinChoices = $this->pretRepository->createQueryBuilder('a')
             ->select('a.cin')
             ->distinct()
             ->getQuery()
             ->getResult();
 
-        // Créer un tableau clé => valeur pour les CIN
-        $cinList = array_combine(array_column($cinList, 'cin'), array_column($cinList, 'cin'));
+        $cinList = array_combine(array_column($cinChoices, 'cin'), array_column($cinChoices, 'cin'));
 
-        // Créer le formulaire en passant les CIN récupérés
-        $form = $this->createForm(ReponseType::class, $reponse, [
+     $form = $this->createForm(ReponseType::class, $reponse, [
             'cin_choices' => $cinList,
         ]);
 
@@ -115,4 +132,23 @@ final class ReponseController extends AbstractController
 
         return $this->redirectToRoute('app_reponse_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/search/by-duree', name: 'app_reponse_search_by_duree', methods: ['GET'])]
+public function searchByDuree(Request $request, ReponseRepository $reponseRepository): Response
+{
+    $duree = $request->query->get('duree');
+    
+    $queryBuilder = $reponseRepository->createQueryBuilder('r');
+    
+    if ($duree !== null && $duree !== '') {
+        $queryBuilder->where('r.Duree_remboursement LIKE :duree')
+                     ->setParameter('duree', $duree . '%');
+    }
+
+    $reponses = $queryBuilder->getQuery()->getResult();
+
+    return $this->render('GestionFinance/reponse/_reponse_list.html.twig', [
+        'reponses' => $reponses,
+    ]);
 }
+
+} 

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Statistiques : Répartition des prêts par catégorie</h1>
+
+    <div style="width: 600px; margin: auto;">
+        {{ render_chart(chart) }}
+    </div>
+
+    <a href="{{ path('app_pret_index') }}" class="btn btn-secondary mt-4">Retour à la liste des prêts</a>
+{% endblock %}

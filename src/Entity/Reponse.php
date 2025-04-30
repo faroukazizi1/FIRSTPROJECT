@@ -60,8 +60,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     #[Assert\NotNull(message: "La durée de remboursement est obligatoire.")]
     #[Assert\Range(
         min: 1,
-        max: 30,
-        notInRangeMessage: "La durée de remboursement doit être comprise entre {{ min }} et {{ max }} ans."
+        max: 360,
+        notInRangeMessage: "La durée de remboursement doit être comprise entre {{ min }} et {{ max }} mois."
     )]
     private ?int $Duree_remboursement = null;
 

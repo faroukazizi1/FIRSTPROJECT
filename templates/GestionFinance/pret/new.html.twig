@@ -6,52 +6,152 @@
 
     <style>
         body {
-            background-color: #343a40; /* Fond sombre */
-            color: #ffffff; /* Texte blanc */
+            background-color: #343a40;
+            color: #ffffff;
         }
 
         h1 {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
             font-size: 16px;
-            color: #ffffff; /* Titre en blanc */
-            margin-bottom: 10px;
+            padding: 12px 14px;
+            height: 48px;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 16px;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        label {
+            font-size: 14px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
         }
 
         .btn-container {
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .btn {
-            font-size: 10px;
-            padding: 3px 6px;
+            font-size: 14px;
+            padding: 10px 20px;
             text-decoration: none;
-            border-radius: 3px;
+            border-radius: 6px;
             border: 1px solid #ccc;
+            cursor: pointer;
         }
 
         a.btn {
             background-color: #ddd;
             color: black;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+         border: 1px solid #ccc;
         }
 
         a.btn:hover {
-            background-color: #5bc0de; /* Changement de couleur au survol */
+            background-color: #5bc0de;
             color: #ffffff;
         }
 
         .btn:active {
-            background-color: #46b8da; /* Changement de couleur lorsque le bouton est actif */
+            background-color: #46b8da;
+        }
+
+        .btn-info {
+            background-color: #5bc0de;
+            color: white;
+            border: none;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .btn-info:hover,
+        .btn-success:hover {
+            opacity: 0.9;
+        }
+
+        .simulation-result {
+            margin-top: 30px;
+            background-color: #495057;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .simulation-result h3 {
+            margin-bottom: 10px;
+            color: #ffc107;
+        }
+
+        .simulation-result ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .simulation-result li {
+            margin-bottom: 6px;
+        }
+
+        a.calendar-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #00bfff;
+            text-decoration: underline;
+        }
+
+        a.calendar-link:hover {
+            color: #66d9ff;
         }
     </style>
 
     <h1>Create new Pret</h1>
 
-    {{ include('GestionFinance/pret/_form.html.twig') }}
+    <a href="{{ path('pret_calendar') }}" target="_blank" class="calendar-link">
+        📅 Voir le calendrier des prêts
+    </a>
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_widget(form) }}
+
+        <div class="btn-container">
+            <button type="submit" name="simuler" class="btn btn-info">Simuler mon prêt</button>
+            <button type="submit" name="submit" class="btn btn-success">Valider</button>
+        </div>
+    {{ form_end(form) }}
+
+    {% if simulation %}
+        <div class="simulation-result">
+            <h3>Résultat de la simulation :</h3>
+            <ul>
+                <li><strong>Montant maximum autorisé :</strong> {{ simulation.montantMax }} TND</li>
+                <li><strong>Taux appliqué :</strong> {{ simulation.taux }}%</li>
+                <li><strong>Mensualité estimée :</strong> {{ simulation.mensualite }} TND</li>
+                <li><strong>Éligible :</strong> {{ simulation.eligible }}</li>
+            </ul>
+        </div>
+    {% endif %}
 
     <div class="btn-container">
-        <a href="{{ path('app_pret_index') }}" class="btn" style="color: white; background-color: #6c757d;">Back to list</a>
+        <a href="{{ path('app_pret_index') }}" class="btn" style="background-color: #6c757d; color: white;">Back to list</a>
+    </div>
 
-    </div> {% endblock %}
+{% endblock %}

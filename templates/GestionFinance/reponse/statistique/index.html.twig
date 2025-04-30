@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques Durée de Remboursement{% endblock %}
+
+{% block body %}
+    <style>
+        table.table {
+            width: 100%;
+            table-layout: fixed;
+        }
+        table.table th, table.table td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            padding: 8px;
+        }
+        table.table th {
+            font-weight: bold;
+        }
+        td.actions a {
+            margin-right: 5px;
+        }
+
+        .btn-back {
+            background-color: #4CAF50; /* Couleur verte */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            margin-top: 20px;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .btn-back:hover {
+            background-color: #45a049; /* Effet au survol */
+        }
+
+        /* Centrer les graphiques */
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        /* Ajustement des tailles des graphiques */
+        #dureeRemboursementChart, #statistiquesGraphique {
+            width: 700px !important;  /* Taille augmentée */
+            height: 700px !important; /* Taille augmentée */
+        }
+    </style>
+
+    <h1>Statistiques sur la Durée de Remboursement</h1>
+
+    <ul>
+        <li>Nombre total de prêts : {{ totalReponses }}</li>
+        <li>Nombre de prêts avec courte période (moins de 12 mois) : {{ courtePeriode }}</li>
+        <li>Nombre de prêts avec moyenne période (12 à 24 mois) : {{ moyennePeriode }}</li>
+        <li>Nombre de prêts avec longue période (plus de 24 mois) : {{ longuePeriode }}</li>
+    </ul>
+
+    <!-- Conteneur pour centrer les graphiques -->
+    <div class="chart-container">
+        <!-- Canevas pour le graphique circulaire -->
+        <canvas id="dureeRemboursementChart"></canvas>
+
+        <!-- Canevas pour le graphique à barres -->
+        <canvas id="statistiquesGraphique"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('dureeRemboursementChart').getContext('2d');
+        var dureeRemboursementChart = new Chart(ctx, {
+            type: 'pie', // Type du graphique : cercle
+            data: {
+                labels: ['Courte période (< 12 mois)', 'Moyenne période (12 à 24 mois)', 'Longue période (> 24 mois)'], // Légendes des sections
+                datasets: [{
+                    label: 'Répartition des durées de remboursement',
+                    data: [{{ courtePeriode }}, {{ moyennePeriode }}, {{ longuePeriode }}], // Valeurs des sections
+                    backgroundColor: ['#ff9999', '#66b3ff', '#99ff99'], // Couleurs des sections
+                    borderColor: ['#ffffff', '#ffffff', '#ffffff'], // Couleurs des bordures des sections
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top', // Position de la légende
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw + ' prêts';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        var ctx = document.getElementById('statistiquesGraphique').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',  // Type de graphique (barres)
+            data: {
+                labels: ['Courte période (< 12 mois)', 'Moyenne période (12-24 mois)', 'Longue période (> 24 mois)'],  // Labels des catégories
+                datasets: [{
+                    label: 'Nombre de prêts',
+                    data: [{{ courtePeriode }}, {{ moyennePeriode }}, {{ longuePeriode }}],  // Données pour chaque catégorie
+                    backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(75, 192, 192, 0.2)'],  // Couleurs de fond
+                    borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 159, 64, 1)', 'rgba(75, 192, 192, 1)'],  // Couleurs des bordures
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <!-- Bouton retour à l'index -->
+    <a href="{{ path('app_reponse_index') }}" class="btn-back">Retour à la liste</a>
+{% endblock %}
