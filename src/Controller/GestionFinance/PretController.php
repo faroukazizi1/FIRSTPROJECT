@@ -31,18 +31,42 @@ final class PretController extends AbstractController
         $form = $this->createForm(PretType::class, $pret);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        $simulation = null;
+
+        if ($form->isSubmitted() && $request->request->has('simuler')) {
+            // Simulation sans sauvegarde
+            $revenus = $pret->getRevenusBruts();
+            $age = $pret->getAgeEmploye();
+            $duree = $pret->getDureeRemboursement();
+            $montant = $pret->getMontantPret();
+
+            $montantMax = $revenus * 10;
+            $taux = ($age < 30) ? 3.5 : 5.0;
+            $interets = $montant * $taux / 100;
+            $mensualite = ($montant + $interets) / $duree;
+
+            $eligible = $mensualite < ($revenus * 0.4);
+
+            $simulation = [
+                'montantMax' => $montantMax,
+                'taux' => $taux,
+                'mensualite' => round($mensualite, 2),
+                'eligible' => $eligible ? 'Oui' : 'Non',
+            ];
+        }
+
+        if ($form->isSubmitted() && $form->isValid() && $request->request->has('submit')) {
             $entityManager->persist($pret);
             $entityManager->flush();
 
-            $sid = getenv('TWILIO_SID');
-            $authToken = getenv('TWILIO_AUTH_TOKEN');
-            $fromNumber = getenv('TWILIO_FROM_NUMBER');
-            $toNumber = getenv('TWILIO_TO_NUMBER');
-            
-            $client = new Client($sid, $authToken);
+            // Envoi SMS via Twilio
+            $sid = ''; // Ton SID Twilio
+            $authToken = ''; // Ton Auth Token Twilio
+            $fromNumber = ''; // Ton numéro Twilio
+            $toNumber = ''; // Numéro du destinataire
 
-         $message = "Votre demande avec le CIN " . $pret->getCin() . " est prise en considération.";
+            $client = new Client($sid, $authToken);
+            $message = "Votre demande avec le CIN " . $pret->getCin() . " est prise en considération.";
 
             try {
                 $client->messages->create($toNumber, [
@@ -60,6 +84,7 @@ final class PretController extends AbstractController
         return $this->render('GestionFinance/pret/new.html.twig', [
             'pret' => $pret,
             'form' => $form->createView(),
+            'simulation' => $simulation,
         ]);
     }
 
