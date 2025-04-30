@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\GestionFormation;
 
 use App\Entity\Formateur;
 use App\Form\FormateurType;
