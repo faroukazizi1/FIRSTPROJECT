@@ -1,18 +1,10 @@
-# config/packages/knp_snappy.yaml
 knp_snappy:
     pdf:
-        binary: '"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"'
+        enabled: true
+        binary: '%env(WKHTMLTOPDF_PATH)%'
+        options: []
+    image:
+        enabled: true
+        binary: '%env(WKHTMLTOIMAGE_PATH)%'
         options: []
 
-#knp_paginator:
-#    page_range: 5
-#    default_options:
-#        page_name: page
-#        sort_field_name: sort
-#        sort_direction_name: direction
-#        distinct: true
-#        filter_field_name: filterField
-#        filter_value_name: filterValue
-#    template:
- #       pagination: '@KnpPaginator/Pagination/twitter_bootstrap_v5_pagination.html.twig'
-       

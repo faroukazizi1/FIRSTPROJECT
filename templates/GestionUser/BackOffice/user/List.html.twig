@@ -8,6 +8,8 @@
 
 {{ parent()}}
 
+
+
     
 <div class="container">
     <div class="page-inner">
@@ -23,6 +25,22 @@
         </div>
   </div>
 
+  <form id="filter-form">
+    <select name="role">
+        <option value="">--Rôle--</option>
+        <option value="Employe">Employe</option>
+        <option value="RHR">Responsable RH (RHR)</option>
+    </select>
+
+    <select name="sexe">
+        <option value="">--Sexe--</option>
+        <option value="Homme">Homme</option>
+        <option value="Femme">Femme</option>
+    </select>
+  </form>
+
+  <input type="text" id="search-input" class="form-control mb-3" placeholder="Rechercher un utilisateur">
+
     <div class="container mt-4">
                <!-- Displaying the user table -->
                 <div class="table-responsive">
@@ -36,50 +54,54 @@
                                 <th>Sexe</th>
                                 <th>Email</th>
                                 <th>Address</th>
-                                <th>Username</th>
-                                <th>Password</th>
                                 <th>Role</th>
                                 <th>Phone Number</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {% for user in users %}
-                                <tr>
-                                    <td>{{ user.id }}</td>
-                                    <td>{{ user.cin }}</td>
-                                    <td>{{ user.nom }}</td>
-                                    <td>{{ user.prenom }}</td>
-                                    <td>{{ user.sexe }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.adresse }}</td>
-                                    <td>{{ user.username }}</td>
-                                    <td>{{ user.password }}</td>
-                                    <td>{{ user.role }}</td>
-                                    <td>{{ user.numero }}</td>
-                                    <td>
-                                      <!-- Delete form with CSRF protection -->
-                                            <form action="{{ path('app_user_delete', {'id': user.id}) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                                                <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-trash"></i> Delete
-                                                </button>
-                                            </form>
-                                            
-                                            <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning btn-sm" >
-                                                <i class="fas fa-edit"></i> Edit
-                                            </a>                
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="7" class="text-center">No records found</td>
-                                </tr>
-                            {% endfor %}
+                       <tbody id="tbody">
+                        {% include 'GestionUser/BackOffice/user/AjaxSearch.html.twig' with { 'users': users } %}
                         </tbody>
+                        
+                        <a href="{{ path('app_user_export') }}" class="btn btn-success mb-3">Exporter CSV</a>
+
                     </table>
                 </div>
             </div>
         </div>
     </div>
+       <!-- Script js pour le filtrage Ajax-->
+       <script>
+        document.getElementById('filter-form').addEventListener('change', function () {
+            console.log('Filter form changed');
+            const formData = new FormData(this);
+            const queryString = new URLSearchParams(formData).toString();
+            console.log(queryString);  
+            fetch(`/home_back/GestionUser/Ajax?${queryString}`)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('tbody').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur AJAX filtre :', error);
+                });
+        });
+    </script>
+    <!-- Script js pour la Recherche Ajax-->
+    <script>
+        document.getElementById('search-input').addEventListener('input', function () {
+            const query = this.value;
+        
+            fetch(`/home_back/GestionUser/Ajax?q=${encodeURIComponent(query)}`)
+                .then(response => response.text())
+                .then(html => {
+                    document.querySelector('tbody').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la recherche :', error);
+                });
+        });
+    </script>
+ 
+        
 {% endblock %}

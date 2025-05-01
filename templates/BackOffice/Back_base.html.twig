@@ -68,7 +68,7 @@
             <div class="logo-header" data-background-color="dark">
               <a href="index.html" class="logo">
                 <img
-                  src="assets/img/kaiadmin/logo_light.svg"
+                  src=""
                   alt="navbar brand"
                   class="navbar-brand"
                   height="20"
@@ -472,6 +472,8 @@
 
       {% block jss %}
     </div>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script src="https://unpkg.com/@hotwired/stimulus/dist/stimulus.umd.js"></script>
      <!--   Core JS Files   -->
      <script src="{{ asset('BackOffice/assets/js/core/jquery-3.7.1.min.js') }}"></script>
      <script src="{{ asset('BackOffice/assets/js/core/popper.min.js') }}"></script>
@@ -496,7 +498,7 @@
      <script src="{{ asset('BackOffice/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
  
      <!-- jQuery Vector Maps -->
-     <script src="{{ asset('BackOffice/assets/js/plugin/jsvectormap/jsvectormap.min.js') }}"></script>
+     <script src=""></script>
      <script src="{{ asset('BackOffice/assets/js/plugin/jsvectormap/world.js') }}"></script>
  
      <!-- Sweet Alert -->
@@ -507,7 +509,7 @@
  
 
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-    <script src="{{ asset('BackOffice/assets/js/setting-demo.js') }}"></script>
+    <script src=""></script>
     <script src="{{ asset('BackOffice/assets/js/demo.js') }}"></script>
     <script>
       $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {

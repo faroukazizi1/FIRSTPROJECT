@@ -10,6 +10,21 @@
     "build": "encore production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.17",
+    "@fullcalendar/daygrid": "^6.1.17",
+    "@fullcalendar/interaction": "^6.1.17",
+    "@fullcalendar/list": "^6.1.17",
+    "@fullcalendar/timegrid": "^6.1.17",
+    "@symfony/stimulus-bundle": "^2.24.0",
+    "fullcalendar": "^6.1.17",
+    "chart.js": "^3.7.0"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^5.1.0",
+    "sass": "^1.87.0",
+    "sass-loader": "^16.0.5"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/faroukazizi1/FIRSTPROJECT.git"
@@ -21,19 +36,5 @@
     "url": "https://github.com/faroukazizi1/FIRSTPROJECT/issues"
   },
   "homepage": "https://github.com/faroukazizi1/FIRSTPROJECT#readme",
-  "description": "",
-  "dependencies": {
-    "@fullcalendar/core": "^6.1.17",
-    "@fullcalendar/daygrid": "^6.1.17",
-    "@fullcalendar/interaction": "^6.1.17",
-    "@fullcalendar/list": "^6.1.17",
-    "@fullcalendar/timegrid": "^6.1.17",
-    "@symfony/stimulus-bundle": "^2.24.0",
-    "fullcalendar": "^6.1.17"
-  },
-  "devDependencies": {
-    "@symfony/webpack-encore": "^5.1.0",
-    "sass": "^1.87.0",
-    "sass-loader": "^16.0.5"
-  }
+  "description": ""
 }

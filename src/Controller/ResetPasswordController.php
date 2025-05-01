@@ -44,10 +44,10 @@ class ResetPasswordController extends AbstractController
             /** @var string $email */
             $email = $form->get('email')->getData();
 
-            $result = $this->processSendingPasswordResetEmail($email, $mailer, $translator);
-            return $result;
+            return $this->processSendingPasswordResetEmail($email, $mailer, $translator
+            );
         }
-        
+
         return $this->render('reset_password/request.html.twig', [
             'requestForm' => $form,
         ]);
@@ -157,7 +157,7 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('azizifarouk2@gmail.com', 'FlexiRH Mail Bot'))
+            ->from(new Address('mailder@domain.de', 'mailer bot'))
             ->to((string) $user->getEmail())
             ->subject('Your password reset request')
             ->htmlTemplate('reset_password/email.html.twig')
@@ -165,8 +165,9 @@ class ResetPasswordController extends AbstractController
                 'resetToken' => $resetToken,
             ])
         ;
-    
-         $mailer->send($email);
+
+        $mailer->send($email);
+
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);
 

@@ -5,20 +5,20 @@ namespace App\Controller\GestionUser\FrontOffice;
 use App\Entity\Promotion;
 use App\Form\PromotionType;
 use App\Repository\PromotionRepository;
+use App\Service\CurrencyConverterService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Knp\Snappy\Pdf;
 
 
 #[Route('/GestionPromotion')]
-#[IsGranted('IS_AUTHENTICATED_FULLY')] // This will ensure the entire controller requires authentication
 final class PromotionController extends AbstractController
 {
-    #[Route('/', name: 'app_promotion_index', methods: ['GET'])]
-    public function List(PromotionRepository $promotionRepository): Response
+    #[Route('/GestionPromotion',name: 'app_promotion_index', methods: ['GET'])]
+    public function List(PromotionRepository $promotionRepository, ): Response
     {
         // Additional security check if needed
         if (!$this->getUser()) {
@@ -26,15 +26,39 @@ final class PromotionController extends AbstractController
         }
 
         $user = $this->getUser();
+
+        $promotions = $promotionRepository->findPromotionById($user->getUserIdentifier());
         
-        try {
-            return $this->render('GestionUser/FrontOffice/promotion/List.html.twig', [
-                'promotions' => $promotionRepository->findPromotionById($user->getUserIdentifier()),
-            ]);
-        } catch (\Exception $e) {
-            // Handle any errors that might occur
-            $this->addFlash('error', 'An error occurred while fetching promotions.');
-            return $this->redirectToRoute('app_login');
+        return $this->render('GestionUser\FrontOffice\promotion\List.html.twig', [
+            'promotions' => $promotions,
+        ]);
+    }
+
+
+
+    #[Route('/GestionPromotion/{id}/pdf',name: 'promotion_pdf')]
+    public function generatePdf(Pdf $knpSnappyPdf, PromotionRepository $promotionRepository, int $id): Response{
+        
+        $promotion = $promotionRepository->find($id);
+
+        if(!$promotion) {
+            throw $this->createNotFoundException('Promotion not found');
         }
+
+        $html = $this->renderView('GestionUser\FrontOffice\promotion\pdf.html.twig', [
+            'promotion' => $promotion
+        ]);
+
+        $pdfContent = $knpSnappyPdf->getOutputFromHtml($html);
+        
+        return new Response(
+            $pdfContent,
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="promotion.pdf"'
+            ]
+        );
+        
     }
 }
