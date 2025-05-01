@@ -20,11 +20,27 @@ final class UserController extends AbstractController
     #[Route('/home_back/GestionUser', name: 'app_user_List', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
+        
         return $this->render('GestionUser/BackOffice/user/List.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
     }
 
+    #[Route('/home_back/GestionUser/Ajax', name: 'user_ajax_search', methods: ['GET'])]
+    public function search(Request $request, UserRepository $userRepository): Response
+    {
+        $query = $request->query->get('q', null);
+        $role = $request->query->get('role');
+        $sexe = $request->query->get('sexe');
+    
+        $users = $userRepository->searchUsers($query, $role, $sexe);
+    
+        return $this->render('GestionUser/BackOffice/user/AjaxSearch.html.twig', [
+            'users' => $users,
+        ]);
+    }
+    
+    
     #[Route('/home_back/GestionUser/Ajout', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager ,  UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -89,5 +105,43 @@ final class UserController extends AbstractController
             'coords' => $coords,
         ]);
     }
+
+    #[Route('/home_back/GestionUser/export', name: 'app_user_export')]
+    public function exportCsv(UserRepository $userRepository): Response
+    {
+        // Récupération des utilisateurs depuis la base de données (ajoute un filtre si nécessaire)
+        $users = $userRepository->findAll();
+
+        // Préparer la réponse
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment;filename="users.csv"');
+
+        // Ouverture du flux pour écrire dans le fichier CSV
+        $output = fopen('php://output', 'w');
+
+        // Écriture des entêtes du fichier CSV
+        fputcsv($output, ['ID', 'CIN', 'Nom', 'Prénom', 'Email', 'Adresse', 'Role'], ';'); // Séparateur semi-colon pour améliorer la lisibilité
+
+        // Parcours des utilisateurs et écriture des données
+        foreach ($users as $user) {
+            fputcsv($output, [
+                $user->getId(),
+                $user->getCin(),
+                $user->getNom(),
+                $user->getPrenom(),
+                $user->getEmail(),
+                $user->getAdresse(),
+                $user->getRole(),
+            ], ';'); // Utilisation d'un séparateur spécifique
+        }
+
+        // Fermeture du flux après l'écriture
+        fclose($output);
+
+        return $response;
+    }
+
+
 
 }

@@ -1,0 +1,54 @@
+{% extends 'BackOffice/Home.html.twig' %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block body %}
+
+{{ parent() }}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Statistiques RH</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Employe total</h5>
+                    <p class="card-text fs-4">{{ totalUsers }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Promotions totales</h5>
+                    <p class="card-text fs-4">{{ totalPromotions }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Moyenne des salaires promus</h5>
+                    <p class="card-text fs-4">{{ moyenneSalaire|number_format(2, '.', ' ') }} TND</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Répartition par sexe</h3>
+    <div class="mb-4">
+        {{ render_chart(sexeChart) }}
+    </div>
+
+    <h3>Répartition par rôle</h3>
+    <div class="mb-4">
+        {{ render_chart(roleChart) }}
+    </div>
+
+    <h3>Promotions par type</h3>
+    <div class="mb-4">
+        {{ render_chart(promoTypeChart) }}
+    </div>
+</div>
+{% endblock %}

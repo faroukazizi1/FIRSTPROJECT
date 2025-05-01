@@ -78,4 +78,5 @@ final class BackPromotionController extends AbstractController
 
         return $this->redirectToRoute('app_back_promotion_index', [], Response::HTTP_SEE_OTHER);
     }
+    
 }
