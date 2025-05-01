@@ -6,6 +6,8 @@
     "test": "tests"
   },
   "scripts": {
+    "dev": "encore dev --watch",
+    "build": "encore production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,9 +28,12 @@
     "@fullcalendar/interaction": "^6.1.17",
     "@fullcalendar/list": "^6.1.17",
     "@fullcalendar/timegrid": "^6.1.17",
+    "@symfony/stimulus-bundle": "^2.24.0",
     "fullcalendar": "^6.1.17"
   },
   "devDependencies": {
-    "@symfony/webpack-encore": "^5.1.0"
+    "@symfony/webpack-encore": "^5.1.0",
+    "sass": "^1.87.0",
+    "sass-loader": "^16.0.5"
   }
 }
