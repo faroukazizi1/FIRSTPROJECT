@@ -74,6 +74,7 @@ class Bulletinpaie
     #[ORM\Column(type: 'float', nullable: false)]
     private ?float $salaire_brut = null;
 
+
     public function getSalaire_brut(): ?float
     {
         return $this->salaire_brut;
@@ -88,6 +89,7 @@ class Bulletinpaie
     #[ORM\Column(type: 'float', nullable: false)]
     private ?float $deductions = null;
 
+
     public function getDeductions(): ?float
     {
         return $this->deductions;
@@ -101,6 +103,7 @@ class Bulletinpaie
 
     #[ORM\Column(type: 'float', nullable: false)]
     private ?float $salaire_net = null;
+
 
     public function getSalaire_net(): ?float
     {

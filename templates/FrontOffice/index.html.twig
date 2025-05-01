@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande de congé{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Formulaire de Demande de Congé</h1>
+
+        {# Display flash messages (success/error) #}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {# Form starts here #}
+        {{ form_start(form) }}
+            {{ form_row(form.date_debut) }}  
+            {{ form_row(form.date_fin) }}     
+            {{ form_row(form.type_conge) }}   
+            {{ form_row(form.submit) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

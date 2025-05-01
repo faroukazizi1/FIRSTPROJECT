@@ -2,6 +2,7 @@
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+
 use App\Repository\PenaliteRepository;
 
 #[ORM\Entity(repositoryClass: PenaliteRepository::class)]
@@ -36,6 +37,7 @@ class Penalite
         minMessage: "❌Le type de pénalité doit comporter au moins {{ limit }} caractères.",
         maxMessage: "❌Le type de pénalité ne doit pas dépasser {{ limit }} caractères."
     )]
+
     private ?string $type = null;
 
     public function getType(): ?string
@@ -58,6 +60,7 @@ class Penalite
         value: 100,
         message: "❌Le seuil d'absence ne doit pas dépasser {{ limit }}."
     )]
+
     private ?int $seuil_abs = null;
 
     public function getSeuil_abs(): ?int
@@ -66,6 +69,7 @@ class Penalite
     }
 
     public function setSeuil_abs(?int $seuil_abs): self  // Permet null
+
     {
         $this->seuil_abs = $seuil_abs;
         return $this;
@@ -73,6 +77,7 @@ class Penalite
 
     #[ORM\Column(type: 'integer', nullable: true)]  // Permet null
     #[Assert\Positive(message: "❌Le CIN doit être un nombre positif.")]
+
     private ?int $cin = null;
 
     public function getCin(): ?int
@@ -81,6 +86,7 @@ class Penalite
     }
 
     public function setCin(?int $cin): self  // Permet null
+
     {
         $this->cin = $cin;
         return $this;
@@ -101,4 +107,5 @@ class Penalite
         $this->seuil_abs = $seuil_abs;
       return $this;
    }
+
 }

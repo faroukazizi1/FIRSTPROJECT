@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: FormateurRepository::class)]
+
 class Formateur
 {
     #[ORM\Id]
@@ -31,6 +32,7 @@ class Formateur
     private ?string $specialite = null;
 
     #[ORM\OneToMany(mappedBy: 'formateur', targetEntity: Formation::class)]
+
     private Collection $formations;
 
     public function __construct()
@@ -104,11 +106,13 @@ class Formateur
         return $this;
     }
 
+
     /**
      * @return Collection<int, Formation>
      */
     public function getFormations(): Collection
     {
+
         return $this->formations;
     }
 
@@ -118,6 +122,7 @@ class Formateur
             $this->formations->add($formation);
             $formation->setFormateur($this);
         }
+
 
         return $this;
     }
@@ -130,6 +135,7 @@ class Formateur
             }
         }
 
+
         return $this;
     }
 
@@ -137,4 +143,5 @@ class Formateur
     {
         return $this->nomF . ' ' . $this->prenomF;
     }
+
 }

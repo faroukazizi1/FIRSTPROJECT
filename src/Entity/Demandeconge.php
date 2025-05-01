@@ -7,16 +7,19 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+
 use App\Repository\DemandecongeRepository;
 
 #[ORM\Entity(repositoryClass: DemandecongeRepository::class)]
 #[ORM\Table(name: 'demandeconge')]
 class Demandeconge
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
 
     public function getId(): ?int
     {
@@ -87,6 +90,7 @@ class Demandeconge
 
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $statut = null;
+
 
     public function getStatut(): ?string
     {
@@ -212,5 +216,6 @@ class Demandeconge
 
         return $this;
     }
+
 
 }

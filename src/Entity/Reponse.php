@@ -6,6 +6,7 @@ use App\Repository\ReponseRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ReponseRepository::class)]class Reponse
+
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -77,6 +78,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
     // === GETTERS & SETTERS ===
 
+
     public function getID_reponse(): ?int
     {
         return $this->ID_reponse;
@@ -99,6 +101,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         return $this;
     }
 
+
     public function getDateReponse(): ?\DateTimeInterface
     {
         return $this->Date_reponse;
@@ -107,6 +110,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     public function setDateReponse(?\DateTimeInterface $Date_reponse): self
     {
         $this->Date_reponse = $Date_reponse;
+
         return $this;
     }
 
@@ -118,6 +122,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     public function setMontantDemande(?float $Montant_demande): self
     {
         $this->Montant_demande = $Montant_demande;
+
         return $this;
     }
 
@@ -129,6 +134,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     public function setRevenusBruts(?float $Revenus_bruts): self
     {
         $this->Revenus_bruts = $Revenus_bruts;
+
         return $this;
     }
 
@@ -140,6 +146,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     public function setTauxInteret(?float $Taux_interet): self
     {
         $this->Taux_interet = $Taux_interet;
+
         return $this;
     }
 
@@ -147,10 +154,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     {
         return $this->Mensualite_credit;
     }
-
     public function setMensualiteCredit(?float $Mensualite_credit): self
     {
         $this->Mensualite_credit = $Mensualite_credit;
+
         return $this;
     }
 
@@ -162,6 +169,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     public function setPotentielCredit(?float $Potentiel_credit): self
     {
         $this->Potentiel_credit = $Potentiel_credit;
+
         return $this;
     }
 
@@ -173,6 +181,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     public function setDureeRemboursement(?int $Duree_remboursement): self
     {
         $this->Duree_remboursement = $Duree_remboursement;
+
         return $this;
     }
 
@@ -197,3 +206,4 @@ use Symfony\Component\Validator\Constraints as Assert;
         $this->Assurance = $Assurance;
         return $this;
 }}
+

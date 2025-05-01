@@ -13,6 +13,7 @@ use App\Repository\ProjectRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
+
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\Table(name: 'project')]
 class Project
@@ -35,6 +36,7 @@ class Project
     }
 
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,6 +56,7 @@ class Project
         pattern: '/^(?=.*[a-zA-Z])[a-zA-Z0-9_#+\s]+$/',
         message: 'Le titre ne doit contenir que des lettres, chiffres, espaces, #, + ou _ et doit contenir au moins une lettre.'
     )]
+
 
     private ?string $titre = null;
 
@@ -76,6 +79,7 @@ class Project
         message: 'La description doit contenir au moins 7 lettres.'
     )]
 
+
     private ?string $description = null;
 
     public function getDescription(): ?string
@@ -91,6 +95,7 @@ class Project
 
     #[ORM\Column(type: 'string', nullable: false)]
     #[Assert\NotBlank(message: 'Le statut ne doit pas être vide')]
+
 
     private ?string $statut = null;
 
@@ -110,6 +115,7 @@ class Project
     #[Assert\LessThanOrEqual(propertyPath: 'dateFin', message: 'La date de début doit être inférieure à la date de fin')]
     private ?\DateTimeInterface $date_debut = null;
     
+
     public function getDateDebut(): ?\DateTimeInterface
     {
         return $this->date_debut;
@@ -125,6 +131,7 @@ class Project
     #[Assert\NotNull(message: 'La date de fin ne doit pas être vide')]
     #[Assert\GreaterThanOrEqual(propertyPath: 'dateDebut', message: 'La date de fin doit être supérieure à la date de début')]
     private ?\DateTimeInterface $date_fin = null;
+
 
 
     public function getDateFin(): ?\DateTimeInterface

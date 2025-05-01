@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+
 use App\Repository\AbsenceRepository;
 
 #[ORM\Entity(repositoryClass: AbsenceRepository::class)]
@@ -15,6 +16,7 @@ class Absence
     #[ORM\Column(type: 'date', nullable: true)]  // La date peut être null
     #[Assert\NotBlank(message: '❌La date est obligatoire.')]  // Assure que la date n'est pas vide si présente
     #[Assert\LessThan('today', message: '❌La date doit être dans le passé.')]
+
     private ?\DateTimeInterface $Date = null;
 
     public function getDate(): ?\DateTimeInterface
@@ -24,6 +26,7 @@ class Absence
 
     // Méthode qui accepte une DateTimeInterface ou null
     public function setDate(?\DateTimeInterface $Date): self
+
     {
         $this->Date = $Date;
         return $this;
@@ -36,6 +39,7 @@ class Absence
         max: 999, 
         notInRangeMessage: '❌Le nombre d\'absences doit être entre {{ min }} et {{ max }}.'
     )]
+
     private ?int $nbr_abs = null;
 
     public function getNbr_abs(): ?int
@@ -55,6 +59,7 @@ class Absence
         choices: ['justifiee', 'non_justifiee'],
         message: '❌Le type d\'absence doit être "justifiee" ou "non_justifiee".'
     )]
+
     private ?string $type = null;
 
     public function getType(): ?string
@@ -93,6 +98,7 @@ class Absence
 private ?string $cin = null;
 
 
+
     public function getCin(): ?int
     {
         return $this->cin;
@@ -112,6 +118,7 @@ private ?string $cin = null;
         maxSizeMessage: '❌Le fichier image ne doit pas dépasser 2 Mo.',
         groups: ['image_required']  // Validation de l'image uniquement dans ce groupe
     )]
+
     private ?string $image_path = null;
 
     public function getImage_path(): ?string
@@ -133,6 +140,7 @@ private ?string $cin = null;
     public function setNbrAbs(int $nbr_abs): self
     {
     $this->nbr_abs = $nbr_abs;
+
         return $this;
     }
 
@@ -145,7 +153,6 @@ private ?string $cin = null;
     {
         return $this->image_path;
     }
-
     public function setImagePath(?string $image_path): self
     {
         $this->image_path = $image_path;
@@ -157,4 +164,5 @@ private ?string $cin = null;
     {
         return $this->type === 'justifiee';
     }
+
 }

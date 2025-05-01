@@ -3,6 +3,7 @@
 use App\Entity\Pret;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry; class PretRepository extends ServiceEntityRepository
+
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -23,4 +24,5 @@ use Doctrine\Persistence\ManagerRegistry; class PretRepository extends ServiceEn
         // On retourne un tableau simple des CIN
         return array_column($results, 'cin');
     }
+
 }

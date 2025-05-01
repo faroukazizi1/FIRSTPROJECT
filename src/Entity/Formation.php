@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 
+
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
 #[ORM\Table(name: 'formation')]
 class Formation
@@ -40,6 +41,7 @@ private ?\DateTimeInterface $dateF = null;
     #[ORM\JoinColumn(name: 'id_Formateur', referencedColumnName: 'id_Formateur')]
     private ?Formateur $formateur = null;
 
+
     public function getId_form(): ?int
     {
         return $this->id_form;
@@ -61,6 +63,7 @@ private ?\DateTimeInterface $dateF = null;
         $this->Titre = $Titre;
         return $this;
     }
+
 
     public function getDescription(): ?string
     {
@@ -94,6 +97,7 @@ private ?\DateTimeInterface $dateF = null;
         $this->dateF = $dateF;
         return $this;
     }
+
     public function getDuree(): ?int
     {
         return $this->Duree;
@@ -104,6 +108,7 @@ private ?\DateTimeInterface $dateF = null;
         $this->Duree = $Duree;
         return $this;
     }
+
 
     public function getImage(): ?string
     {
@@ -117,6 +122,7 @@ private ?\DateTimeInterface $dateF = null;
     }
 
     // Méthodes pour la relation avec Formateur
+
     public function getFormateur(): ?Formateur
     {
         return $this->formateur;
@@ -158,5 +164,6 @@ public function validateDates(ExecutionContextInterface $context): void
             ->addViolation();
     }
 }
+
 
 }

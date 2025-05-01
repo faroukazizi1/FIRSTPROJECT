@@ -10,6 +10,7 @@ use App\Repository\PretRepository;
 
 #[ORM\Entity(repositoryClass: PretRepository::class)]
 #[UniqueEntity(fields: ['cin'], message: 'Un prêt existe déjà pour ce CIN.')]
+
 #[ORM\Table(name: 'pret')]
 class Pret
 {
@@ -80,6 +81,7 @@ class Pret
 
     // Getters et setters
 
+
     public function getID_pret(): ?int
     {
         return $this->ID_pret;
@@ -102,6 +104,7 @@ class Pret
         return $this;
     }
 
+
     public function getMontantPret(): ?float
     {
         return $this->Montant_pret;
@@ -110,6 +113,7 @@ class Pret
     public function setMontantPret(?float $Montant_pret): self
     {
         $this->Montant_pret = $Montant_pret;
+
         return $this;
     }
 
@@ -143,6 +147,7 @@ class Pret
     public function setTaux(?float $Taux): self
     {
         $this->Taux = $Taux;
+
         return $this;
     }
 
@@ -154,6 +159,7 @@ class Pret
     public function setRevenusBruts(?float $Revenus_bruts): self
     {
         $this->Revenus_bruts = $Revenus_bruts;
+
         return $this;
     }
 
@@ -165,6 +171,7 @@ class Pret
     public function setAgeEmploye(?int $Age_employe): self
     {
         $this->Age_employe = $Age_employe;
+
         return $this;
     }
 
@@ -194,4 +201,5 @@ class Pret
     {
         return (string) $this->cin;
     }
+
 }

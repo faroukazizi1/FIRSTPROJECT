@@ -37,6 +37,7 @@ class ProjectTask
     #[ORM\Column(type: 'string', nullable: false)]
     private ?string $statut = null;
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -63,6 +64,7 @@ class ProjectTask
         $this->user = $user;
         return $this;
     }
+
 
     public function getTitre(): ?string
     {
@@ -108,3 +110,4 @@ class ProjectTask
         return $this;
     }
 }
+

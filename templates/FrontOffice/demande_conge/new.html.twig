@@ -1,0 +1,29 @@
+    {% extends 'base.html.twig' %}
+
+    {% block title %}Demande de congé{% endblock %}
+
+    {% block body %}
+    <div class="container mt-5">
+        <h1>Formulaire de Demande de Congé</h1>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+
+        {{ form_start(form) }}
+            {% if form.startDate is defined %}
+                {{ form_row(form.startDate) }}
+            {% else %}
+                <div class="alert alert-danger">Field 'startDate' missing in form</div>
+            {% endif %}
+            
+            {% if form.endDate is defined %}
+                {{ form_row(form.endDate) }}
+            {% else %}
+                <div class="alert alert-danger">Field 'endDate' missing in form</div>
+            {% endif %}
+                
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        {{ form_end(form) }}
+    </div>
+    {% endblock %}

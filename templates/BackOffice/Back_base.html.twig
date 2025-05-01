@@ -3,6 +3,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         {% block title %}<title>Kaiadmin - Bootstrap 5 Admin Dashboard</title>{% endblock %}
+
         <meta
           content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
           name="viewport"
@@ -14,6 +15,7 @@
         />
     
         {% block css %}
+
         <!-- Fonts and icons -->
         <script src="{{ asset('BackOffice/assets/js/plugin/webfont/webfont.min.js') }}"></script>
         <script>
@@ -33,6 +35,7 @@
             },
           });
         </script>
+
         <!-- CSS Files -->
         <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/bootstrap.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('BackOffice/assets/css/plugins.min.css') }}" />
@@ -46,6 +49,7 @@
 
   <body>
     {% block body %}
+
     <div class="wrapper">
         <!-- Sidebar -->
         <div class="header_area">
@@ -88,6 +92,7 @@
           <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
             <div class="container-fluid">
               <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <button type="submit" class="btn btn-search pe-1">
@@ -95,6 +100,7 @@
                     </button>
                   </div>
                   <input type="text" placeholder="Search ..." class="form-control" />
+
                 </div>
               </nav>
 

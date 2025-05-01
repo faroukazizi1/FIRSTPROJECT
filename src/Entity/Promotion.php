@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use App\Repository\PromotionRepository;
 use Endroid\QrCode\Builder\BuilderInterface;
 
+
 #[ORM\Entity(repositoryClass: PromotionRepository::class)]
 #[ORM\Table(name: 'promotion')]
 class Promotion
@@ -87,6 +88,7 @@ class Promotion
     }
 
     #[ORM\Column(type: 'float', nullable: false)]
+
     private ?float $nouv_sal = null;
 
     public function getNouv_sal(): ?float
