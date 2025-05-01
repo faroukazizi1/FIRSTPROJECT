@@ -1,19 +1,23 @@
-{% extends 'BackOffice/Home.html.twig' %}
+{% extends 'BackOffice/Back_base.html.twig'%}
+
 
 {% block title %}Statistiques{% endblock %}
 
+
+
 {% block body %}
 
-{{ parent() }}
+{{parent()}}
 
 <div class="container mt-4">
     <h1 class="mb-4">Statistiques RH</h1>
 
+    <!-- Display statistics -->
     <div class="row mb-4">
         <div class="col-md-4">
             <div class="card text-bg-primary mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">Employe total</h5>
+                    <h5 class="card-title">Employé total</h5>
                     <p class="card-text fs-4">{{ totalUsers }}</p>
                 </div>
             </div>
@@ -36,19 +40,17 @@
         </div>
     </div>
 
+    <!-- Chart - Gender Distribution -->
     <h3>Répartition par sexe</h3>
-    <div class="mb-4">
-        {{ render_chart(sexeChart) }}
+    <div class="chart-container">
+        {{ render_chart(genderChart) }}
     </div>
 
+    <!-- Chart - Role Distribution -->
     <h3>Répartition par rôle</h3>
-    <div class="mb-4">
+    <div class="chart-container">
         {{ render_chart(roleChart) }}
     </div>
 
-    <h3>Promotions par type</h3>
-    <div class="mb-4">
-        {{ render_chart(promoTypeChart) }}
-    </div>
 </div>
 {% endblock %}

@@ -4,12 +4,11 @@ namespace App\Controller\GestionUser\BackOffice;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use App\Entity\Promotion;
-use App\Repository\PromotionRepository;
-use App\Repository\UserRepository;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
+use App\Repository\PromotionRepository;
+use App\Repository\UserRepository;
 
 #[Route('/back/Stats')]
 final class StatistiqueController extends AbstractController
@@ -17,8 +16,8 @@ final class StatistiqueController extends AbstractController
     #[Route('/statistique', name: 'app_statistique')]
     public function index(
         UserRepository $userRepository, 
-        PromotionRepository $promotionRepository, 
-        ChartBuilderInterface $chartBuilder
+        PromotionRepository $promotionRepository,
+        ChartBuilderInterface $chartBuilder // Injecting the ChartBuilderInterface
     ): Response
     {
         // Statistiques des utilisateurs
@@ -47,55 +46,45 @@ final class StatistiqueController extends AbstractController
     
         $moyenneSalaire = $totalPromotions > 0 ? $totalSalaire / $totalPromotions : 0;
 
-        // Créer les graphiques avec ChartBuilder
-        $sexeChart = $chartBuilder->createChart(Chart::TYPE_PIE);
-        $sexeChart->setData([
+        // Creating a chart for Gender Distribution
+        $genderChart = $chartBuilder->createChart(Chart::TYPE_PIE);
+        $genderChart->setData([
             'labels' => ['Hommes', 'Femmes'],
             'datasets' => [
                 [
-                    'label' => 'Répartition par sexe',
                     'data' => [$hommes, $femmes],
                     'backgroundColor' => ['#4e73df', '#1cc88a'],
                     'borderColor' => ['#4e73df', '#1cc88a'],
                     'borderWidth' => 1,
-                ]
-            ]
+                ],
+            ],
         ]);
-        
+        $genderChart->setOptions([
+            'responsive' => true,
+        ]);
+        if (!$genderChart) {
+            throw new \Exception('Gender chart is not being rendered properly');
+        }
+
+        // Creating a chart for Role Distribution
         $roleChart = $chartBuilder->createChart(Chart::TYPE_PIE);
         $roleChart->setData([
             'labels' => ['Responsables RH', 'Employés'],
             'datasets' => [
                 [
-                    'label' => 'Répartition par rôle',
                     'data' => [$rhrCount, $employeCount],
                     'backgroundColor' => ['#f6c23e', '#36b9cc'],
                     'borderColor' => ['#f6c23e', '#36b9cc'],
                     'borderWidth' => 1,
-                ]
-            ]
+                ],
+            ],
         ]);
-        
-        $promoTypeChart = $chartBuilder->createChart(Chart::TYPE_BAR);
-        $promoTypeChart->setData([
-            'labels' => array_keys($promotionParType),
-            'datasets' => [
-                [
-                    'label' => 'Promotions par type',
-                    'data' => array_values($promotionParType),
-                    'backgroundColor' => '#4e73df',
-                    'borderColor' => '#4e73df',
-                    'borderWidth' => 1,
-                ]
-            ]
+        $roleChart->setOptions([
+            'responsive' => true,
         ]);
-        $promoTypeChart->setOptions([
-            'scales' => [
-                'y' => [
-                    'beginAtZero' => true
-                ]
-            ]
-        ]);
+        if (!$roleChart) {
+            throw new \Exception('Role chart is not being rendered properly');
+        }
 
         return $this->render('statistique/index.html.twig', [
             'totalUsers' => $totalUsers,
@@ -105,10 +94,8 @@ final class StatistiqueController extends AbstractController
             'employeCount' => $employeCount,
             'totalPromotions' => $totalPromotions,
             'moyenneSalaire' => $moyenneSalaire,
-            'promotionParType' => $promotionParType,
-            'sexeChart' => $sexeChart,
-            'roleChart' => $roleChart,
-            'promoTypeChart' => $promoTypeChart,
+            'genderChart' => $genderChart, // Passing the chart to the template
+            'roleChart' => $roleChart,     // Passing the chart to the template
         ]);
     }
 }
