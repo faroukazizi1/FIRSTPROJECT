@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Résultat du Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2em;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .result {
+            background-color: #fff;
+            padding: 2em;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .success {
+            color: green;
+        }
+        .fail {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="result">
+        <h1>Résultat du Test : {{ test.nom }}</h1>
+        <p><strong>Score :</strong> {{ score }} / {{ totalQuestions }}</p>
+        <p><strong>Pourcentage :</strong> {{ percentage }}%</p>
+        <p class="{{ percentage >= 50 ? 'success' : 'fail' }}">
+            {{ resultMessage }}
+        </p>
+        <a href="{{ path('front_tests') }}">Retour à la liste des tests</a>
+    </div>
+</body>
+</html>

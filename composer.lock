@@ -3,11 +3,8 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
-
-    ],  
-    "content-hash": "b03769138145755a5252a1533216d884",
-
-
+    ],
+    "content-hash": "b40d8bc50706b9c7abcbd7492800582c",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2544,7 +2541,6 @@
             "time": "2025-01-14T07:31:54+00:00"
         },
         {
-
             "name": "masterminds/html5",
             "version": "2.9.0",
             "source": {
@@ -3349,7 +3345,6 @@
             "time": "2024-09-11T13:17:53+00:00"
         },
         {
-
             "name": "psr/simple-cache",
             "version": "3.0.0",
             "source": {
@@ -3401,7 +3396,6 @@
             "time": "2021-10-29T13:26:27+00:00"
         },
         {
-
             "name": "sabberworm/php-css-parser",
             "version": "v8.8.0",
             "source": {

@@ -179,12 +179,17 @@
     </div>
 
     {# --- Liens pour trier par Seuil d'Absence --- #}
-    <div class="mb-3">
-        <div class="btn-group" role="group">
-            <button type="button" id="sortAsc" class="btn btn-primary btn-sm" data-sort="asc">Trier par Seuil d'Absence (Ascendant)</button>
-            <button type="button" id="sortDesc" class="btn btn-primary btn-sm" data-sort="desc">Trier par Seuil d'Absence (Descendant)</button>
-        </div>
+   <div class="mb-3">
+    <div class="d-flex justify-content gap-2">
+        <button type="button" id="sortAsc" class="btn btn-primary btn-sm" data-sort="asc">
+            Trier par Seuil d'Absence (Ascendant)
+        </button>
+        <button type="button" id="sortDesc" class="btn btn-primary btn-sm" data-sort="desc">
+            Trier par Seuil d'Absence (Descendant)
+        </button>
     </div>
+</div>
+
 
     {# --- Table des pénalités --- #}
     <table class="table table-striped">
@@ -222,24 +227,11 @@
 
     {# --- Script AJAX pour la recherche et le tri --- #}
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('search-cin');
         const penaliteList = document.getElementById('penalite-list');
-        const sortAscLink = document.getElementById('sortAsc');
-        const sortDescLink = document.getElementById('sortDesc');
-
-        searchInput.addEventListener('input', function () {
-            filterResults();
-        });
-
-        sortAscLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            filterResults('asc');
-        });
-
-        sortDescLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            filterResults('desc');
-        });
+        const sortAscBtn = document.getElementById('sortAsc');
+        const sortDescBtn = document.getElementById('sortDesc');
 
         // Fonction pour filtrer et trier les pénalités
         function filterResults(direction = 'asc') {
@@ -247,14 +239,42 @@
             const url = '{{ path('app_penalite_search') }}?cin=' + encodeURIComponent(query) + '&sort=' + direction;
 
             fetch(url)
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur réseau: ' + response.status);
+                    }
+                    return response.text();
+                })
                 .then(html => {
                     penaliteList.innerHTML = html;
+                    console.log('Données mises à jour avec le tri: ' + direction);
                 })
                 .catch(error => {
-                    console.error('Erreur lors de la recherche AJAX :', error);
+                    console.error('Erreur lors de la recherche AJAX:', error);
                 });
         }
-    </script>
+
+        // Écouteurs d'événements
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                filterResults('asc'); // Par défaut tri ascendant
+            });
+        }
+
+        if (sortAscBtn) {
+            sortAscBtn.addEventListener('click', function() {
+                console.log('Bouton tri ascendant cliqué');
+                filterResults('asc');
+            });
+        }
+
+        if (sortDescBtn) {
+            sortDescBtn.addEventListener('click', function() {
+                console.log('Bouton tri descendant cliqué');
+                filterResults('desc');
+            });
+        }
+    });
+</script>
 
 {% endblock %}

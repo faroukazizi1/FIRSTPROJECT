@@ -62,19 +62,19 @@
 </div>
 
 <div class="sort-buttons">
-    <button id="sort-asc" class="btn btn-success">Trier Montant Demandé ↑</button>
-    <button id="sort-desc" class="btn btn-warning">Trier Montant Demandé ↓</button>
+    <button id="sort-asc" class="btn btn"></button>
+    <button id="sort-desc" class="btn btn"></button>
 </div> <!-- ZONE DYNAMIQUE À REMPLACER PAR AJAX -->
 <div class="table-responsive" id="reponse-list">
     {% include 'GestionFinance/reponse/_reponse_list.html.twig' with {'reponses': reponses} %}
 </div>
 
-<a href="{{ path('app_reponse_new') }}" class="btn btn-primary" style="margin-top: 15px;">Créer une nouvelle réponse</a>
-
-<!-- BOUTON CENTRÉ EN BAS -->
-<div class="btn-center">
-    <a href="{{ path('app_pret_index') }}" class="btn" style="color: white; background-color: #6c757d;">Consulter pret</a>
+<div style="display: flex; justify-content: center; gap: 10px; margin-top: 40px;">
+    <a href="{{ path('app_reponse_new') }}" class="btn btn-primary">Créer une nouvelle réponse</a>
+    <a href="{{ path('app_pret_index') }}" class="btn" style="color: white; background-color: #6c757d;">Consulter prêt</a>
 </div>
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

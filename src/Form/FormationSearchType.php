@@ -4,7 +4,10 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FormationSearchType extends AbstractType
 {
@@ -13,8 +16,30 @@ class FormationSearchType extends AbstractType
         $builder
             ->add('titre', TextType::class, [
                 'required' => false,
-                'label' => 'Recherche par titre',
-                'attr' => ['placeholder' => 'Titre de la formation']
+                'label' => 'Titre'
+            ])
+            ->add('formateur', TextType::class, [
+                'required' => false,
+                'label' => 'Nom du formateur'
+            ])
+            ->add('sort', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Titre (A-Z)' => 'titre_asc',
+                    'Titre (Z-A)' => 'titre_desc',
+                    'Date (plus récent)' => 'date_desc',
+                    'Date (plus ancien)' => 'date_asc',
+                    'Durée (croissant)' => 'duree_asc',
+                    'Durée (décroissant)' => 'duree_desc'
+                ],
+                'label' => 'Trier par'
             ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            // Configure your form options here
+        ]);
     }
 }

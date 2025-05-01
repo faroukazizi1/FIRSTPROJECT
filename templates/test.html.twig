@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="formations, Hirevac, apprentissage" />
+  <meta name="description" content="Découvrez nos tests pour évaluer vos compétences" />
+  <meta name="author" content="Hirevac Team" />
+
+  <title>Test de Compétences | Hirevac</title>
+
+  {% block css %}
+  <link rel="stylesheet" type="text/css" href="{{ asset('FrontOffice/css/bootstrap.css') }}" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+  <link href="{{ asset('FrontOffice/css/font-awesome.min.css') }}" rel="stylesheet" />
+  <link href="{{ asset('FrontOffice/css/style.css') }}" rel="stylesheet" />
+  <link href="{{ asset('FrontOffice/css/responsive.css') }}" rel="stylesheet" />
+
+  <style>
+    .test-section {
+      padding: 40px 20px;
+    }
+
+    .test-form {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .form-select {
+      margin-bottom: 30px;
+    }
+
+    .question {
+      margin-bottom: 20px;
+    }
+
+    .question h5 {
+      font-weight: 600;
+    }
+
+    .submit-btn {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .submit-btn button {
+      padding: 10px 30px;
+      border-radius: 25px;
+      background-color: #0d6efd;
+      color: #fff;
+      border: none;
+    }
+
+    .submit-btn button:hover {
+      background-color: #084298;
+    }
+  </style>
+  {% endblock %}
+</head>
+
+<body>
+
+  <div class="hero_area">
+    <!-- header section -->
+    <div class="header_area">
+      {% include 'FrontOffice/nav_bar.html.twig' %}
+    </div>
+    <!-- end header section -->
+  </div>
+
+  <!-- Test Section -->
+  <section class="job_section layout_padding test-section">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2 class="section-title">
+          Passez Votre Test de Compétences
+        </h2>
+      </div>
+
+      <div class="test-form">
+        <form method="post" action="{{ path('traiter_test') }}">
+          
+          <div class="mb-3">
+            <label for="testType" class="form-label">Choisissez un type de test :</label>
+            <select class="form-select" id="testType" name="testType" required>
+              <option value="">-- Sélectionner --</option>
+              <option value="softskills">Soft Skills</option>
+              <option value="web">Développement Web</option>
+              <option value="mobile">Développement Mobile</option>
+            </select>
+          </div>
+
+          <div id="questions">
+            {% for question in questions %}
+              <div class="question">
+                <h5>{{ loop.index }}. {{ question.texte }}</h5>
+                {% for choix in question.choix %}
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="reponses[{{ question.id }}]" id="choix{{ choix.id }}" value="{{ choix.id }}" required>
+                    <label class="form-check-label" for="choix{{ choix.id }}">
+                      {{ choix.texte }}
+                    </label>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="text-center">Veuillez sélectionner un test pour afficher les questions.</p>
+            {% endfor %}
+          </div>
+
+          <div class="submit-btn">
+            <button type="submit">Envoyer le Test</button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </section>
+  <!-- End Test Section -->
+
+  {% include 'FrontOffice/footer.html.twig' %}
+
+  <script src="{{ asset('FrontOffice/js/jquery-3.4.1.min.js') }}"></script>
+  <script src="{{ asset('FrontOffice/js/bootstrap.js') }}"></script>
+  <script src="{{ asset('FrontOffice/js/custom.js') }}"></script>
+
+  <script>
+    // Script pour éventuellement charger dynamiquement les questions selon le test choisi
+    document.getElementById('testType').addEventListener('change', function() {
+      // Ici tu peux ajouter du JavaScript pour charger dynamiquement les questions via AJAX si besoin
+    });
+  </script>
+
+</body>
+
+</html>

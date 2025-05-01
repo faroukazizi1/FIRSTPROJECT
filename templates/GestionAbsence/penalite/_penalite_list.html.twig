@@ -1,0 +1,16 @@
+{# templates/GestionAbsence/penalite/_penalite_list.html.twig #}
+{% for penalite in penalites %}
+    <tr>
+        <td>{{ penalite.type }}</td>
+        <td>{{ penalite.seuilAbs }}</td>
+        <td>{{ penalite.cin }}</td>
+        <td>
+            <a href="{{ path('app_penalite_show', {'ID_pen': penalite.IDPen}) }}" class="btn btn-info btn-sm">Voir</a>
+            <a href="{{ path('app_penalite_edit', {'ID_pen': penalite.IDPen}) }}" class="btn btn-warning btn-sm">Modifier</a>
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="4">Aucun enregistrement trouvé.</td>
+    </tr>
+{% endfor %}

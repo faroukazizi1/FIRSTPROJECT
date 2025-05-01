@@ -11,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface; // ✅ Correct
+
 
 #[Route('/formateur')]
 final class FormateurController extends AbstractController
@@ -46,24 +48,51 @@ final class FormateurController extends AbstractController
     }
 
     #[Route('/new', name: 'app_formateur_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $formateur = new Formateur();
-        $form = $this->createForm(FormateurType::class, $formateur);
-        $form->handleRequest($request);
+public function new(
+    Request $request,
+    EntityManagerInterface $entityManager,
+    HttpClientInterface $client
+): Response {
+    $veriphoneApiKey = $_ENV['VERIPHONE_API_KEY']; // 🛠️ Lecture directe depuis le .env
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($formateur);
-            $entityManager->flush();
+    $formateur = new Formateur();
+    $form = $this->createForm(FormateurType::class, $formateur);
+    $form->handleRequest($request);
 
-            return $this->redirectToRoute('app_formateur_index');
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Récupérer le numéro
+        $numero = $formateur->getNumero(); // (attention : assure-toi que getNumero() existe)
+
+        // Appeler Veriphone
+        $response = $client->request('GET', 'https://api.veriphone.io/v2/verify', [
+            'query' => [
+                'phone' => $numero,
+                'key' => $veriphoneApiKey
+            ]
+        ]);
+
+        $data = $response->toArray(false); // false pour éviter exceptions automatiques
+
+        // Vérifier la réponse
+        if (isset($data['phone_valid']) && !$data['phone_valid']) {
+            $this->addFlash('error', 'Numéro invalide selon Veriphone.');
+            return $this->redirectToRoute('app_formateur_new');
         }
 
-        return $this->render('formateur/new.html.twig', [
-            'formateur' => $formateur,
-            'form' => $form,
-        ]);
+        // Si OK, enregistrer
+        $entityManager->persist($formateur);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Formateur ajouté avec succès.');
+        return $this->redirectToRoute('app_formateur_index');
     }
+
+    return $this->render('formateur/new.html.twig', [
+        'formateur' => $formateur,
+        'form' => $form,
+    ]);
+}
+
 
     #[Route('/{idFormateur}', name: 'app_formateur_show', methods: ['GET'])]
 
@@ -95,11 +124,17 @@ public function edit(Request $request, Formateur $formateur, EntityManagerInterf
     #[Route('/{idFormateur}/delete', name: 'app_formateur_delete', methods: ['POST'])]
     public function delete(Request $request, Formateur $formateur, EntityManagerInterface $entityManager): Response
     {
+        if (count($formateur->getFormations()) > 0) {
+            $this->addFlash('error', 'Ce formateur est encore assigné à une ou plusieurs formations. Veuillez d\'abord modifier ou supprimer ces formations.');
+            return $this->redirectToRoute('app_formateur_index');
+        }
+    
         if ($this->isCsrfTokenValid('delete' . $formateur->getIdFormateur(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($formateur);
             $entityManager->flush();
+            $this->addFlash('success', 'Formateur supprimé avec succès.');
         }
-
+    
         return $this->redirectToRoute('app_formateur_index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -4,69 +4,99 @@
     <style>
         body {
             color: #ffffff;
-            background-color: #343a40;
+            background-color: #1a1d24;
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
 
         h1 {
             color: #ffffff;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .table-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #252a34;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         table.table {
             width: 100%;
-            table-layout: fixed;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: #2c323d;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         table.table th, table.table td {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-size: 0.9rem;
-            padding: 8px;
-            color: #ffffff;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.95rem;
+            color: #e0e0e0;
+            border-bottom: 1px solid #3a3f4a;
+            transition: background-color 0.3s ease;
         }
 
         table.table th {
             background-color: #007bff;
-            font-weight: bold;
-        }
-
-        tr:nth-child(even) {
-            background-color: #2c3e50;
-        }
-
-        tr:nth-child(odd) {
-            background-color: #34495e;
-        }
-
-        tr:hover {
-            background-color: #5bc0de;
-        }
-
-        td.actions a {
-            margin-right: 5px;
             color: #ffffff;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        table.table td {
+            background-color: #2c323d;
+        }
+
+        tr:hover td {
+            background-color: #3b5998;
+            cursor: pointer;
+        }
+
+        td.actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        td.actions a, td.actions form {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             text-decoration: none;
+            color: #ffffff;
+            transition: color 0.2s ease;
         }
 
         td.actions a:hover {
             color: #ff6347;
+            transform: scale(1.2);
         }
 
         .btn {
             background-color: #17a2b8;
-            color: white;
+            color: #ffffff;
             border: none;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            margin-right: 8px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 0.9rem;
             text-decoration: none;
             display: inline-block;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
         .btn:hover {
             background-color: #138496;
+            transform: translateY(-2px);
         }
 
         .btn-secondary {
@@ -75,68 +105,96 @@
 
         .btn-secondary:hover {
             background-color: #5a6268;
+            transform: translateY(-2px);
         }
 
         .calendar-link {
-            display: inline-block;
-            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 20px;
             color: #00bfff;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
         }
 
         .calendar-link:hover {
-            text-decoration: underline;
             color: #66d9ff;
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            table.table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            table.table th, table.table td {
+                min-width: 120px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
         }
     </style>
 
-    <h1>Pret index</h1>
+    <div class="table-container">
+        <h1>Pret Index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>CIN</th>
-                <th>Montant</th>
-                <th>Date</th>
-                <th>TMM</th>
-                <th>Taux</th>
-                <th>Revenus</th>
-                <th>Âge</th>
-                <th>Durée</th>
-                <th>Catégorie</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for pret in prets %}
-            <tr>
-                <td>{{ pret.cin }}</td>
-                <td>{{ pret.MontantPret }}</td>
-                <td>{{ pret.DatePret ? pret.DatePret|date('Y-m-d') : '' }}</td>
-                <td>{{ pret.TMM }}</td>
-                <td>{{ pret.Taux }}</td>
-                <td>{{ pret.RevenusBruts }}</td>
-                <td>{{ pret.AgeEmploye }}</td>
-                <td>{{ pret.dureeRemboursement }}</td>
-                <td>{{ pret.Categorie }}</td>
-                <td class="actions">
-                    {{ include('GestionFinance/pret/_delete_form.html.twig') }}
-                    <a href="{{ path('app_pret_edit', {'id': pret.ID_pret}) }}">✏️</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">Aucun enregistrement trouvé</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>CIN</th>
+                    <th>Montant</th>
+                    <th>Date</th>
+                    <th>TMM</th>
+                    <th>Taux</th>
+                    <th>Revenus</th>
+                    <th>Âge</th>
+                    <th>Durée</th>
+                    <th>Catégorie</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for pret in prets %}
+                <tr>
+                    <td>{{ pret.cin }}</td>
+                    <td>{{ pret.MontantPret }}</td>
+                    <td>{{ pret.DatePret ? pret.DatePret|date('Y-m-d') : '' }}</td>
+                    <td>{{ pret.TMM }}</td>
+                    <td>{{ pret.Taux }}</td>
+                    <td>{{ pret.RevenusBruts }}</td>
+                    <td>{{ pret.AgeEmploye }}</td>
+                    <td>{{ pret.dureeRemboursement }}</td>
+                    <td>{{ pret.Categorie }}</td>
+                    <td class="actions">
+                        {{ include('GestionFinance/pret/_delete_form.html.twig') }}
+                        <a href="{{ path('app_pret_edit', {'id': pret.ID_pret}) }}">✏️</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">Aucun enregistrement trouvé</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_pret_new') }}" class="btn">Créer un nouveau</a>
-    <a href="{{ path('app_reponse_index') }}" class="btn btn-secondary">Consulter réponse</a>
+        <a href="{{ path('app_pret_new') }}" class="btn">Créer un nouveau</a>
+        <a href="{{ path('app_reponse_index') }}" class="btn btn-secondary">Consulter réponse</a>
 
-    <br>
-    <a href="{{ path('pret_calendar') }}" target="_blank" class="calendar-link">
-        📅 Voir le calendrier des prêts
-    </a> {% endblock %}
+        <br>
+        <a href="{{ path('pret_calendar') }}" target="_blank" class="calendar-link">
+            📅 Voir le calendrier des prêts
+        </a>
+    </div>
+{% endblock %}

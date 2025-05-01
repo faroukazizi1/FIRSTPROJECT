@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificat de Formation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .certificate-container {
+            width: 80%;
+            margin: 30px auto;
+            padding: 40px;
+            border: 10px solid #4CAF50;  /* Bordure verte épaisse */
+            border-radius: 15px;  /* Coins arrondis */
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .certificate-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .certificate-header h1 {
+            font-size: 36px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .certificate-header p {
+            font-size: 18px;
+            color: #333;
+        }
+        .certificate-body {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .certificate-body h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .certificate-body p {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .certificate-footer {
+            text-align: right;
+            margin-top: 40px;
+            font-size: 16px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="certificate-container">
+        <div class="certificate-header">
+            <h1>Certificat de Formation</h1>
+            <p>Ce certificat atteste que</p>
+        </div>
+
+        <div class="certificate-body">
+            <h2>{{ user.username }}</h2>
+            <p>a complété avec succès la formation suivante :</p>
+            <h3>{{ formation.Titre }}</h3>
+            <p>Durée : {{ formation.Duree }} heures</p>
+            <p>Formateur : {{ formation.formateur.nomF }}</p>
+        </div>
+
+        <div class="certificate-footer">
+            <p>Date : {{ "now"|date("d F Y") }}</p>
+        </div>
+    </div>
+
+</body>
+</html>

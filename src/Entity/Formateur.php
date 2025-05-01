@@ -12,7 +12,6 @@ class Formateur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-
     #[ORM\Column(name: 'id_Formateur', type: 'integer')]
     private ?int $idFormateur = null;
 
