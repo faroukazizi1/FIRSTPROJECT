@@ -54,7 +54,7 @@ class PenaliteController extends AbstractController
         ]);
 
         $form->handleRequest($request);
-
+     
         if ($form->isSubmitted() && $form->isValid()) {
             // Récupérer le CIN sélectionné
             $cin = $penalite->getCin();
@@ -112,9 +112,11 @@ class PenaliteController extends AbstractController
                     $this->addFlash('error', "Erreur lors de l'envoi du SMS: " . $e->getMessage());
                 }
             }
-
+            
+            $this->addFlash('info', 'Penalite entity data: ' . print_r($penalite, true));
             // Persist l'entité Penalite avec le seuil calculé
             $this->entityManager->persist($penalite);
+            $this->addFlash('info', 'Flushing to the database...');
             $this->entityManager->flush();
 
             // Rediriger vers la liste des pénalités

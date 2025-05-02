@@ -1,0 +1,23 @@
+<h1>Location of {{ user.username }}</h1>
+
+<div id="map" style="height: 500px;"></div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+  var lat = {{ coords.lat|json_encode|raw }};
+  var lng = {{ coords.lng|json_encode|raw }};
+  
+  var map = L.map('map').setView([lat, lng], 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  if (lat && lng) {
+    L.marker([lat, lng]).addTo(map)
+      .bindPopup("{{ user.adresse|e('js') }}")
+      .openPopup();
+  }
+</script>
