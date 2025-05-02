@@ -14,5 +14,5 @@ knp_snappy:
 #        filter_field_name: filterField
 #        filter_value_name: filterValue
 #    template:
- #       pagination: '@KnpPaginator/Pagination/twitter_bootstrap_v5_pagination.html.twig'
+#        pagination: '@KnpPaginator/Pagination/twitter_bootstrap_v5_pagination.html.twig'
        

@@ -29,7 +29,7 @@ final class BulletinpaieController extends AbstractController
         $form = $this->createForm(BulletinpaieType::class, $bulletinpaie);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) { 
             $entityManager->persist($bulletinpaie);
             $entityManager->flush();
 

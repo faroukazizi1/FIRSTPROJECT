@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande de Congé Index{% endblock %}
+
+{% block body %}
+    <h1>Demande de Congé Index</h1>
+
+    <!-- 🔎 Formulaire de filtre -->
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-3">
+            <input type="text" name="cin" class="form-control" placeholder="Rechercher par CIN" value="{{ app.request.get('cin') }}">
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="date" class="form-control" value="{{ app.request.get('date') }}">
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+            <a href="{{ path('app_demande_conge_index') }}" class="btn btn-secondary">Réinitialiser</a>
+        </div>
+    </form>
+
+    <!-- 📋 Tableau des demandes -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>EmployeId</th>
+                <th>DateDebut</th>
+                <th>DateFin</th>
+                <th>TypeConge</th>
+                <th>Statut</th>
+                <th>DateDemande</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for demandeconge in demandeconges %}
+            <tr>
+                <td>{{ demandeconge.id }}</td>
+                <td>{{ demandeconge.employeId }}</td>
+                <td>{{ demandeconge.dateDebut ? demandeconge.dateDebut|date('Y-m-d') : '' }}</td>
+                <td>{{ demandeconge.dateFin ? demandeconge.dateFin|date('Y-m-d') : '' }}</td>
+                <td>{{ demandeconge.typeConge }}</td>
+<td>
+    {% if demandeconge.statut == 'approuvé' %}
+        <span class="badge bg-success">{{ demandeconge.statut|capitalize }}</span>
+    {% elseif demandeconge.statut == 'refusé' %}
+        <span class="badge bg-danger">{{ demandeconge.statut|capitalize }}</span>
+    {% else %}
+        <span class="badge bg-warning text-dark">{{ demandeconge.statut|default('En attente')|capitalize }}</span>
+    {% endif %}
+</td>
+                <td>{{ demandeconge.dateDemande ? demandeconge.dateDemande|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_demandeconge_show', {'id': demandeconge.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                    <a href="{{ path('app_demandeconge_edit', {'id': demandeconge.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+              
+    <a href="{{ path('app_demande_conge_index', {'action': 'accept', 'id': demandeconge.id}) }}" 
+       class="btn btn-sm btn-success"
+       onclick="return confirm('Confirmer l\'acceptation ?');">Accepter</a>
+
+    <a href="{{ path('app_demande_conge_index', {'action': 'refuse', 'id': demandeconge.id}) }}" 
+       class="btn btn-sm btn-danger"
+       onclick="return confirm('Confirmer le refus ?');">Refuser</a>
+</td>
+
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8" class="text-center">Aucune demande trouvée</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_demande_conge_new') }}" class="btn btn-success">+ Nouvelle Demande</a>
+
+    <!-- 📅 Calendrier FullCalendar -->
+    <h3 class="mt-5">Calendrier des Congés</h3>
+    <div id="calendar"></div>
+
+    <!-- FullCalendar CSS & JS -->
+    <link href="https://unpkg.com/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/fullcalendar@5.11.3/main.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                height: 500,
+                events: [
+                    {% for demandeconge in demandeconges %}
+                        {
+                            title: '{{ demandeconge.employeId }} | {{ demandeconge.typeConge }}',
+                            start: '{{ demandeconge.dateDebut|date('Y-m-d') }}',
+                            end: '{{ demandeconge.dateFin|date('Y-m-d') }}',
+                            color: '{{ demandeconge.statut == "approuvé" ? "#28a745" : (demandeconge.statut == "refusé" ? "#dc3545" : "#ffc107") }}'
+                        },
+                    {% endfor %}
+                ]
+            });
+            calendar.render();
+        });
+    </script>
+
+    <style>
+        #calendar {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+    </style>
+{% endblock %}
