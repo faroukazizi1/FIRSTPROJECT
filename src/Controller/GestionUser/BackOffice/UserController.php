@@ -74,21 +74,28 @@ final class UserController extends AbstractController
     }
 
     #[Route('/home_back/GestionUser/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $plainPassword = $form->get('password')->getData();
-        if ($plainPassword) {
-            $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
-            $user->setPassword($hashedPassword);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = $form->get('PlainPassword')->getData();
+            if ($plainPassword) {
+                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($hashedPassword);
+            }
+
+            $entityManager->flush();
+            return $this->redirectToRoute('app_user_List');
         }
 
-        $entityManager->flush();
-        return $this->redirectToRoute('app_user_List');
+        return $this->render('GestionUser/BackOffice/user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
     }
+
 
 
     #[Route('/user/{id}/map', name: 'user_show_map')]

@@ -22,7 +22,7 @@ final class AbsenceController extends AbstractController
         $absences = $absenceRepository->findAll();
 
         // Appel API météo (OpenWeatherMap)
-        $apiKey = ''; // Remplace par ta clé API ici
+        $apiKey = '0fd5aaecc16ab5d3e79343dfc0434089'; // Remplace par ta clé API ici
         $city = 'zanzibar'; // Change la ville si nécessaire
         $url = "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&units=metric&lang=fr";
 
@@ -45,7 +45,7 @@ final class AbsenceController extends AbstractController
     public function showMeteo(): Response
     {
         // Appel API météo (OpenWeatherMap)
-        $apiKey = ''; // Remplace par ta clé API ici
+        $apiKey = '0fd5aaecc16ab5d3e79343dfc0434089'; // Remplace par ta clé API ici
         $city = 'Zanzibar'; // Change la ville si nécessaire
         $url = "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&units=metric&lang=fr";
 

@@ -2,95 +2,113 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-
-
 use App\Repository\DemandecongeRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DemandecongeRepository::class)]
-#[ORM\Table(name: 'demandeconge')]
+#[ORM\Table(name: 'demande_conge')]
 class Demandeconge
 {
+    public const TYPE_CONGE_MALADIE = 'MALADIE';
+    public const TYPE_CONGE_MATERNITE = 'MATERNITE';
+    public const TYPE_CONGE_SANS_SOLDE = 'SANS_SOLDE';
+    public const TYPE_CONGE_ANNUELLE = 'ANNUELLE';
+    public const TYPE_CONGE_AUTRE = 'AUTRE';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
+    #[ORM\Column(type: 'integer')]
+    private ?int $employeId = null;
+
+    #[ORM\Column(type: 'date')]
+    private ?\DateTimeInterface $dateDebut = null;
+
+    #[ORM\Column(type: 'date')]
+    private ?\DateTimeInterface $dateFin = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $typeConge = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $statut = null;
+
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $dateDemande = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $dateGeneration = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Assert\Range(min: 1, max: 12)]
+    private ?int $mois = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Assert\Range(min: 2000, max: 2100)]
+    private ?int $annee = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $salaireBrut = null;
+
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $deductions = null;
+
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $salaireNet = null;
+
+    // --- Getters & Setters ---
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id): self
+    public function getEmployeId(): ?int
     {
-        $this->id = $id;
+        return $this->employeId;
+    }
+
+    public function setEmployeId(int $employeId): self
+    {
+        $this->employeId = $employeId;
         return $this;
     }
 
-    #[ORM\Column(type: 'integer', nullable: false)]
-    private ?int $employe_id = null;
-
-    public function getEmploye_id(): ?int
+    public function getDateDebut(): ?\DateTimeInterface
     {
-        return $this->employe_id;
+        return $this->dateDebut;
     }
 
-    public function setEmploye_id(int $employe_id): self
+    public function setDateDebut(\DateTimeInterface $dateDebut): self
     {
-        $this->employe_id = $employe_id;
+        $this->dateDebut = $dateDebut;
         return $this;
     }
 
-    #[ORM\Column(type: 'date', nullable: false)]
-    private ?\DateTimeInterface $date_debut = null;
-
-    public function getDate_debut(): ?\DateTimeInterface
+    public function getDateFin(): ?\DateTimeInterface
     {
-        return $this->date_debut;
+        return $this->dateFin;
     }
 
-    public function setDate_debut(\DateTimeInterface $date_debut): self
+    public function setDateFin(\DateTimeInterface $dateFin): self
     {
-        $this->date_debut = $date_debut;
+        $this->dateFin = $dateFin;
         return $this;
     }
 
-    #[ORM\Column(type: 'date', nullable: false)]
-    private ?\DateTimeInterface $date_fin = null;
-
-    public function getDate_fin(): ?\DateTimeInterface
+    public function getTypeConge(): ?string
     {
-        return $this->date_fin;
+        return $this->typeConge;
     }
 
-    public function setDate_fin(\DateTimeInterface $date_fin): self
+    public function setTypeConge(?string $typeConge): self
     {
-        $this->date_fin = $date_fin;
+        $this->typeConge = $typeConge;
         return $this;
     }
-
-    #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $type_conge = null;
-
-    public function getType_conge(): ?string
-    {
-        return $this->type_conge;
-    }
-
-    public function setType_conge(?string $type_conge): self
-    {
-        $this->type_conge = $type_conge;
-        return $this;
-    }
-
-    #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $statut = null;
-
 
     public function getStatut(): ?string
     {
@@ -103,119 +121,91 @@ class Demandeconge
         return $this;
     }
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $commentaire = null;
-
-    public function getCommentaire(): ?string
-    {
-        return $this->commentaire;
-    }
-
-    public function setCommentaire(?string $commentaire): self
-    {
-        $this->commentaire = $commentaire;
-        return $this;
-    }
-
-    #[ORM\Column(type: 'datetime', nullable: false)]
-    private ?\DateTimeInterface $date_demande = null;
-
-    public function getDate_demande(): ?\DateTimeInterface
-    {
-        return $this->date_demande;
-    }
-
-    public function setDate_demande(\DateTimeInterface $date_demande): self
-    {
-        $this->date_demande = $date_demande;
-        return $this;
-    }
-
-    #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $file_attachment = null;
-
-    public function getFile_attachment(): ?string
-    {
-        return $this->file_attachment;
-    }
-
-    public function setFile_attachment(?string $file_attachment): self
-    {
-        $this->file_attachment = $file_attachment;
-        return $this;
-    }
-
-    public function getEmployeId(): ?int
-    {
-        return $this->employe_id;
-    }
-
-    public function setEmployeId(int $employe_id): static
-    {
-        $this->employe_id = $employe_id;
-
-        return $this;
-    }
-
-    public function getDateDebut(): ?\DateTimeInterface
-    {
-        return $this->date_debut;
-    }
-
-    public function setDateDebut(\DateTimeInterface $date_debut): static
-    {
-        $this->date_debut = $date_debut;
-
-        return $this;
-    }
-
-    public function getDateFin(): ?\DateTimeInterface
-    {
-        return $this->date_fin;
-    }
-
-    public function setDateFin(\DateTimeInterface $date_fin): static
-    {
-        $this->date_fin = $date_fin;
-
-        return $this;
-    }
-
-    public function getTypeConge(): ?string
-    {
-        return $this->type_conge;
-    }
-
-    public function setTypeConge(?string $type_conge): static
-    {
-        $this->type_conge = $type_conge;
-
-        return $this;
-    }
-
     public function getDateDemande(): ?\DateTimeInterface
     {
-        return $this->date_demande;
+        return $this->dateDemande;
     }
 
-    public function setDateDemande(\DateTimeInterface $date_demande): static
+    public function setDateDemande(\DateTimeInterface $dateDemande): self
     {
-        $this->date_demande = $date_demande;
-
+        $this->dateDemande = $dateDemande;
         return $this;
     }
 
-    public function getFileAttachment(): ?string
+    public function getDateGeneration(): ?\DateTimeInterface
     {
-        return $this->file_attachment;
+        return $this->dateGeneration;
     }
 
-    public function setFileAttachment(?string $file_attachment): static
+    public function setDateGeneration(?\DateTimeInterface $dateGeneration): self
     {
-        $this->file_attachment = $file_attachment;
-
+        $this->dateGeneration = $dateGeneration;
         return $this;
     }
 
+    public function getMois(): ?int
+    {
+        return $this->mois;
+    }
 
+    public function setMois(?int $mois): self
+    {
+        $this->mois = $mois;
+        return $this;
+    }
+
+    public function getAnnee(): ?int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(?int $annee): self
+    {
+        $this->annee = $annee;
+        return $this;
+    }
+
+    public function getSalaireBrut(): ?int
+    {
+        return $this->salaireBrut;
+    }
+
+    public function setSalaireBrut(?int $salaireBrut): self
+    {
+        $this->salaireBrut = $salaireBrut;
+        return $this;
+    }
+
+    public function getDeductions(): ?float
+    {
+        return $this->deductions;
+    }
+
+    public function setDeductions(?float $deductions): self
+    {
+        $this->deductions = $deductions;
+        return $this;
+    }
+
+    public function getSalaireNet(): ?float
+    {
+        return $this->salaireNet;
+    }
+
+    public function setSalaireNet(?float $salaireNet): self
+    {
+        $this->salaireNet = $salaireNet;
+        return $this;
+    }
+
+    public static function getTypeCongeChoices(): array
+    {
+        return [
+            'Maladie' => self::TYPE_CONGE_MALADIE,
+            'Maternité' => self::TYPE_CONGE_MATERNITE,
+            'Sans Solde' => self::TYPE_CONGE_SANS_SOLDE,
+            'Annuelle' => self::TYPE_CONGE_ANNUELLE,
+            'Autre' => self::TYPE_CONGE_AUTRE,
+        ];
+    }
 }

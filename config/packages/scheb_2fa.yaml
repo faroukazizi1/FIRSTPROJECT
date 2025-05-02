@@ -9,7 +9,6 @@ scheb_two_factor:
         server_name: FlexiRH       # Server name used in QR code
         issuer: FlexiRH            # Issuer name used in QR code
         digits: 6                      # Number of digits in authentication code
-        window: 1                      # [DEPRECATED since v6.11, will be removed in v7] Use "leeway", if possible
                                        # Behavior depends on the version of Spomky-Labs/otphp used:
                                        # - Until v10: How many codes before/after the current one would be accepted
                                        # - From v11: Acceptable time drift in seconds

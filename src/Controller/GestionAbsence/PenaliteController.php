@@ -54,7 +54,7 @@ class PenaliteController extends AbstractController
         ]);
 
         $form->handleRequest($request);
-
+     
         if ($form->isSubmitted() && $form->isValid()) {
             // Récupérer le CIN sélectionné
             $cin = $penalite->getCin();
@@ -89,9 +89,9 @@ class PenaliteController extends AbstractController
             if ($seuilAbs >= 0) {
                 try {
                     // Configuration et envoi du SMS via Twilio
-                    $sid = ''; // SID Twilio
-                    $authToken = ''; // Token Twilio
-                    $fromNumber = ''; // Numéro Twilio
+                    $sid = 'AC0fced13fa813278ecaaa8552647b84b6'; // SID Twilio
+                    $authToken = 'f207b0e2bcd3baeb211012cd78d76553'; // Token Twilio
+                    $fromNumber = '+15737474358'; // Numéro Twilio
 
                     $client = new Client($sid, $authToken);
 
@@ -99,7 +99,7 @@ class PenaliteController extends AbstractController
 
                     // Envoi du SMS
                     $client->messages->create(
-                        '',  // Remplace par le numéro du destinataire
+                        '+21690333500',  // Remplace par le numéro du destinataire
                         [
                             'from' => $fromNumber,
                             'body' => $message,
@@ -112,9 +112,11 @@ class PenaliteController extends AbstractController
                     $this->addFlash('error', "Erreur lors de l'envoi du SMS: " . $e->getMessage());
                 }
             }
-
+            
+            $this->addFlash('info', 'Penalite entity data: ' . print_r($penalite, true));
             // Persist l'entité Penalite avec le seuil calculé
             $this->entityManager->persist($penalite);
+            $this->addFlash('info', 'Flushing to the database...');
             $this->entityManager->flush();
 
             // Rediriger vers la liste des pénalités

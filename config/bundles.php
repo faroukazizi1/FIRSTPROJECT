@@ -20,5 +20,6 @@ return [
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
     Scheb\TwoFactorBundle\SchebTwoFactorBundle::class => ['all' => true],
     Symfony\UX\Chartjs\ChartjsBundle::class => ['all' => true],
+    
 
 ];
