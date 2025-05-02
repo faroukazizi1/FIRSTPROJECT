@@ -61,10 +61,10 @@ final class PretController extends AbstractController
 
             // Envoi SMS via Twilio
            // Envoi SMS via Twilio
-           $sid = 'ACf47cce92a0f6a9ff6eb6b88ff7c797c8'; // Ton SID Twilio
-           $authToken = '8c6b09a8ee5e0796002feb627f2ffb0d'; // Ton Auth Token Twilio
-           $fromNumber = '+14432780246'; // Ton numéro Twilio
-           $toNumber = '+21690333500'; // Numéro du destinataire
+           $sid = ''; // Ton SID Twilio
+           $authToken = ''; // Ton Auth Token Twilio
+           $fromNumber = ''; // Ton numéro Twilio
+           $toNumber = ''; // Numéro du destinataire
             $client = new Client($sid, $authToken);
             $message = "Votre demande avec le CIN " . $pret->getCin() . " est prise en considération.";
 

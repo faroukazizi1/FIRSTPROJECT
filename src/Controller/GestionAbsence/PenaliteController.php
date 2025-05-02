@@ -89,9 +89,9 @@ class PenaliteController extends AbstractController
             if ($seuilAbs >= 0) {
                 try {
                     // Configuration et envoi du SMS via Twilio
-                    $sid = 'AC0fced13fa813278ecaaa8552647b84b6'; // SID Twilio
-                    $authToken = 'f207b0e2bcd3baeb211012cd78d76553'; // Token Twilio
-                    $fromNumber = '+15737474358'; // Numéro Twilio
+                    $sid = ''; // SID Twilio
+                    $authToken = ''; // Token Twilio
+                    $fromNumber = ''; // Numéro Twilio
 
                     $client = new Client($sid, $authToken);
 
@@ -99,7 +99,7 @@ class PenaliteController extends AbstractController
 
                     // Envoi du SMS
                     $client->messages->create(
-                        '+21690333500',  // Remplace par le numéro du destinataire
+                        '',  // Remplace par le numéro du destinataire
                         [
                             'from' => $fromNumber,
                             'body' => $message,
