@@ -3,13 +3,14 @@ namespace App\Controller\GestionAbsence;
 
 use App\Entity\Absence;
 use App\Entity\Penalite;
+use App\Entity\User; // Ajout de l'import pour l'entité User
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ChatbotController extends AbstractController
 {
@@ -23,59 +24,37 @@ class ChatbotController extends AbstractController
     #[Route('/chatbot', name: 'chatbot')]
     public function chatbot(Request $request): Response
     {
-        // Création du formulaire CIN
-        $form = $this->createFormBuilder()
-            ->add('cin', TextType::class, [
-                'label' => 'Entrez votre CIN',
-                'attr' => [
-                    'placeholder' => 'Entrez votre CIN',
-                    'class' => 'form-control'
-                ],
-            ])
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $cin = $form->get('cin')->getData();
-
-            // Vérification : Le CIN doit être un nombre
-            if (!ctype_digit($cin)) {
-                return $this->render('FrontOffice/chatbot/index.html.twig', [
-                    'form' => $form->createView(),
-                    'step' => 'cin',
-                    'message' => '❌ Le CIN doit être un nombre valide. Veuillez réessayer.',
-                ]);
-            }
-
-            // Vérification si l'employé existe via les absences et pénalités
-            $absenceRepository = $this->entityManager->getRepository(Absence::class);
-            $penaliteRepository = $this->entityManager->getRepository(Penalite::class);
-
-            $absences = $absenceRepository->findBy(['cin' => $cin]);
-            $penalites = $penaliteRepository->findBy(['cin' => $cin]);
-
-            if (empty($absences) && empty($penalites)) {
-                return $this->render('FrontOffice/chatbot/index.html.twig', [
-                    'form' => $form->createView(),
-                    'step' => 'cin',
-                    'message' => '⚠ Aucun employé trouvé pour ce CIN. Veuillez entrer un CIN valide.',
-                ]);
-            }
-
-            // CIN valide -> Redirection vers les choix
-            return $this->redirectToRoute('chatbot_choices', ['cin' => $cin]);
+        // Récupère l'utilisateur actuellement authentifié
+        $user = $this->getUser();
+        
+        // Vérifie si l'utilisateur est connecté
+        if (!$user) {
+            // Rediriger vers la page de connexion ou afficher un message d'erreur
+            $this->addFlash('error', 'Veuillez vous connecter pour accéder à cette page');
+            return $this->redirectToRoute('app_login'); // Remplacez par votre route de connexion
         }
-
-        return $this->render('FrontOffice/chatbot/index.html.twig', [
-            'form' => $form->createView(),
-            'step' => 'cin'
-        ]);
+        
+        // Récupère le CIN de l'utilisateur connecté
+        $cin = $user->getCin(); // Assurez-vous que votre entité User a une méthode getCin()
+        
+        // Redirige vers la page des choix avec le CIN récupéré de l'utilisateur
+        return $this->redirectToRoute('chatbot_choices');
     }
 
-    #[Route('/chatbot/{cin}/choices', name: 'chatbot_choices')]
-    public function chatbotChoices(int $cin, Request $request): Response
+    #[Route('/chatbot/choices', name: 'chatbot_choices')]
+    public function chatbotChoices(Request $request): Response
     {
+        // Récupère l'utilisateur actuellement authentifié
+        $user = $this->getUser();
+        
+        // Vérifie si l'utilisateur est connecté
+        if (!$user) {
+            throw new AccessDeniedException('Vous devez être connecté pour accéder à cette page');
+        }
+        
+        // Récupère le CIN de l'utilisateur connecté
+        $cin = $user->getCin(); // Assurez-vous que votre entité User a une méthode getCin()
+
         // Définition des choix disponibles
         $choices = [
             'Le nombre d\'absences' => 1,
@@ -177,6 +156,4 @@ class ChatbotController extends AbstractController
 
         return 'Aucune fraude détectée dans les absences.';
     }
-
-     
-    }     
+}

@@ -1,3 +1,5 @@
+# config/services.yaml
+
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
@@ -12,22 +14,23 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-     # Manual override must come *before* the big App\ load
+
+    # Manual override must come *before* the big App\ load
     App\Service\GeocodingService:
         arguments:
             $openCageApiKey: '%opencage.api_key%'
-    
-    # this creates a service per class whose id is the fully-qualified class name
+
+    # This creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/Service/*' 
+          #  - '../src/Service/*'  # ❌ supprimé pour permettre l'autowire de MailService
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # Add more service definitions when explicit configuration is needed
+    # Please note that last definitions always *replace* previous ones
     App\Form\ReponseType:
         arguments: ['@App\Repository\PretRepository']
         tags: ['form.type']

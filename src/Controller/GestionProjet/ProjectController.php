@@ -82,10 +82,38 @@ final class ProjectController extends AbstractController
         if (!$projet) {
             throw $this->createNotFoundException('Le projet demandé n\'existe pas.');
         }
+        
+        // Calculate task statistics
+        $totalTasks = count($projet->getTasks());
+        $completedTasks = 0;
+        $inProgressTasks = 0;
+        $todoTasks = 0;
+        
+        foreach ($projet->getTasks() as $task) {
+            switch ($task->getStatut()) {
+                case 'completed':
+                    $completedTasks++;
+                    break;
+                case 'in_progress':
+                    $inProgressTasks++;
+                    break;
+                case 'todo':
+                    $todoTasks++;
+                    break;
+            }
+        }
+        
+        // Calculate completion percentage
+        $completionPercentage = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
     
-        // Passer le projet à la vue Twig
+        // Passer le projet et les statistiques à la vue Twig
         return $this->render('GestionProjet/project/details.html.twig', [
-            'projet' => $projet
+            'projet' => $projet,
+            'totalTasks' => $totalTasks,
+            'completedTasks' => $completedTasks,
+            'inProgressTasks' => $inProgressTasks,
+            'todoTasks' => $todoTasks,
+            'completionPercentage' => $completionPercentage
         ]);
     }
     

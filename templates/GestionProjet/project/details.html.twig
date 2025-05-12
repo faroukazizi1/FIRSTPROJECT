@@ -1,3 +1,4 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Détails du projet{% endblock %}
@@ -6,78 +7,157 @@
     {{ parent() }}
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
+        /* Card Animations */
         .card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
         }
+
+        /* Button Animations */
         .btn {
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
         .btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
+
+        /* Table Styling */
         .table th, .table td {
             border: none;
+            padding: 1rem;
         }
         .table thead th {
-            border-bottom: 2px solid #e5e7eb;
+            border-bottom: 2px solid #e2e8f0;
+            background: #f8fafc;
+            color: #1e293b;
         }
         .table tbody tr {
-            border-bottom: 1px solid #e5e7eb;
-            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
         .table tbody tr:hover {
-            background-color: #f9fafb;
+            background-color: #f1f5f9;
+            transform: scale(1.01);
         }
+
+        /* Badge Styling */
         .badge {
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-weight: 600;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #e2e8f0;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 0.5s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent);
+            background-size: 30px 30px;
+            animation: move 2s linear infinite;
+        }
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 30px; }
+        }
+
+        /* Fade-in Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Select Styling */
+        select {
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 640px) {
+            .table th, .table td {
+                padding: 0.75rem;
+            }
+            .badge {
+                padding: 0.4rem 1rem;
+                font-size: 0.75rem;
+            }
         }
     </style>
 {% endblock %}
 
 {% block body %}
-    <div class="container mx-auto px-4 py-8">
-        <div class="card bg-white rounded-xl shadow-lg overflow-hidden">
-            <div class="card-header bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6">
-                <h2 class="text-2xl font-bold">Détails du projet: {{ projet.titre }}</h2>
+    <div class="container mx-auto px-4 py-12">
+        <div class="card bg-white rounded-2xl shadow-xl overflow-hidden fade-in">
+            <div class="card-header bg-gradient-to-r from-indigo-600 to-blue-600 text-white p-8">
+                <h2 class="text-3xl font-extrabold tracking-tight">{{ projet.titre }}</h2>
+                <p class="mt-2 text-sm text-indigo-100">Détails complets du projet</p>
             </div>
-            <div class="card-body p-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="card-body p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <!-- General Information -->
-                    <div>
-                        <h4 class="text-xl font-semibold text-gray-800 mb-4">Informations générales</h4>
-                        <div class="bg-gray-50 rounded-lg p-4 shadow-sm">
+                    <div class="fade-in" style="animation-delay: 0.2s;">
+                        <h4 class="text-2xl font-semibold text-gray-900 mb-6">Informations générales</h4>
+                        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
                             <table class="table w-full text-gray-700">
                                 <tr>
-                                    <th class="p-3 text-left font-semibold">Titre du projet</th>
-                                    <td class="p-3">{{ projet.titre }}</td>
+                                    <th class="text-left font-semibold text-gray-800">Titre</th>
+                                    <td>{{ projet.titre }}</td>
                                 </tr>
                                 <tr>
-                                    <th class="p-3 text-left font-semibold">Description</th>
-                                    <td class="p-3">{{ projet.description }}</td>
+                                    <th class="text-left font-semibold text-gray-800">Description</th>
+                                    <td>{{ projet.description }}</td>
                                 </tr>
                                 <tr>
-                                    <th class="p-3 text-left font-semibold">Date de début</th>
-                                    <td class="p-3">{{ projet.dateDebut ? projet.dateDebut|date('d/m/Y') : 'Non défini' }}</td>
+                                    <th class="text-left font-semibold text-gray-800">Début</th>
+                                    <td>{{ projet.dateDebut ? projet.dateDebut|date('d/m/Y') : 'Non défini' }}</td>
                                 </tr>
                                 <tr>
-                                    <th class="p-3 text-left font-semibold">Date de fin</th>
-                                    <td class="p-3">{{ projet.dateFin ? projet.dateFin|date('d/m/Y') : 'Non défini' }}</td>
+                                    <th class="text-left font-semibold text-gray-800">Fin</th>
+                                    <td>{{ projet.dateFin ? projet.dateFin|date('d/m/Y') : 'Non défini' }}</td>
                                 </tr>
                                 <tr>
-                                    <th class="p-3 text-left font-semibold">Statut</th>
-                                    <td class="p-3">
+                                    <th class="text-left font-semibold text-gray-800">Statut</th>
+                                    <td>
                                         {% if projet.statut == 'completed' %}
-                                            <span class="badge bg-green-100 text-green-800">completed</span>
+                                            <span class="badge bg-green-100 text-green-800">Terminé</span>
                                         {% elseif projet.statut == 'in_progress' %}
-                                            <span class="badge bg-blue-100 text-blue-800">in_progress</span>
-                                        {% elseif projet.statut == 'todo ' %}
-                                            <span class="badge bg-yellow-100 text-yellow-800">todo </span>
+                                            <span class="badge bg-blue-100 text-blue-800">En cours</span>
+                                        {% elseif projet.statut == 'todo' %}
+                                            <span class="badge bg-yellow-100 text-yellow-800">À faire</span>
                                         {% else %}
                                             <span class="badge bg-red-100 text-red-800">{{ projet.statut }}</span>
                                         {% endif %}
@@ -88,38 +168,68 @@
                     </div>
 
                     <!-- Project Tasks -->
-                    <div>
-                        <div class="flex justify-between items-center mb-4">
-                            <h4 class="text-xl font-semibold text-gray-800">Tâches du projet</h4>
-                            <div class="flex items-center space-x-2">
-                                <select id="taskFilter" class="p-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <div class="fade-in" style="animation-delay: 0.4s;">
+                        <div class="flex justify-between items-center mb-6">
+                            <h4 class="text-2xl font-semibold text-gray-900">Tâches du projet</h4>
+                            <div class="flex items-center space-x-3">
+                                <select id="taskFilter" class="p-2.5 border border-gray-300 rounded-lg bg-white text-gray-700 focus:ring-2 focus:ring-blue-500">
                                     <option value="all">Toutes les tâches</option>
-                                    <option value="completed">completed </option>
-                                    <option value="in_progress">in_progress</option>
-                                    <option value="todo">todo </option>   
+                                    <option value="completed">Terminées</option>
+                                    <option value="in_progress">En cours</option>
+                                    <option value="todo">À faire</option>
                                 </select>
                             </div>
                         </div>
+
+                        <!-- Task completion statistics and progress bar -->
+                        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 mb-6">
+                            <div class="mb-4 flex justify-between items-center">
+                                <span class="font-semibold text-gray-800">Progression</span>
+                                <span class="font-bold text-xl text-gray-900">{{ completionPercentage }}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill bg-gradient-to-r from-indigo-500 to-blue-500" style="width: {{ completionPercentage }}%;"></div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-4 mt-6">
+                                <div class="p-4 rounded-lg bg-green-50 text-center">
+                                    <div class="text-green-800 font-semibold">Terminées</div>
+                                    <div class="text-2xl font-bold text-green-900">{{ completedTasks }} <span class="text-sm font-normal">/ {{ totalTasks }}</span></div>
+                                </div>
+                                <div class="p-4 rounded-lg bg-blue-50 text-center">
+                                    <div class="text-blue-800 font-semibold">En cours</div>
+                                    <div class="text-2xl font-bold text-blue-900">{{ inProgressTasks }} <span class="text-sm font-normal">/ {{ totalTasks }}</span></div>
+                                </div>
+                                <div class="p-4 rounded-lg bg-yellow-50 text-center">
+                                    <div class="text-yellow-800 font-semibold">À faire</div>
+                                    <div class="text-2xl font-bold text-yellow-900">{{ todoTasks }} <span class="text-sm font-normal">/ {{ totalTasks }}</span></div>
+                                </div>
+                            </div>
+                        </div>
+
                         {% if projet.tasks|length > 0 %}
-                            <div class="bg-gray-50 rounded-lg p-4 shadow-sm">
+                            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
                                 <table class="table w-full text-gray-700" id="taskTable">
                                     <thead>
                                         <tr>
-                                            <th class="p-3 text-left font-semibold">Titre</th>
-                                            <th class="p-3 text-left font-semibold">Statut</th>
+                                            <th class="text-left font-semibold text-gray-800">Titre</th>
+                                            <th class="text-left font-semibold text-gray-800">Statut</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for task in projet.tasks %}
                                             <tr class="task-row" data-status="{{ task.statut }}">
-                                                <td class="p-3">{{ task.titre }}</td>
-                                                <td class="p-3">
+                                                <td>{{ task.titre }}</td>
+                                                <td>
                                                     <span class="badge
                                                         {% if task.statut == 'completed' %}bg-green-100 text-green-800
                                                         {% elseif task.statut == 'in_progress' %}bg-blue-100 text-blue-800
                                                         {% elseif task.statut == 'todo' %}bg-yellow-100 text-yellow-800
                                                         {% else %}bg-red-100 text-red-800{% endif %}">
-                                                        {{ task.statut }}
+                                                        {% if task.statut == 'completed' %}Terminé
+                                                        {% elseif task.statut == 'in_progress' %}En cours
+                                                        {% elseif task.statut == 'todo' %}À faire
+                                                        {% else %}{{ task.statut }}{% endif %}
                                                     </span>
                                                 </td>
                                             </tr>
@@ -128,18 +238,18 @@
                                 </table>
                             </div>
                         {% else %}
-                            <div class="alert alert-info bg-blue-50 text-blue-800 p-4 rounded-lg">
+                            <div class="alert bg-blue-50 text-blue-800 p-4 rounded-lg text-center">
                                 Aucune tâche associée à ce projet
                             </div>
                         {% endif %}
                     </div>
                 </div>
             </div>
-            <div class="card-footer p-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
-                <a href="{{ path('app_project_index') }}" class="btn bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300">
-                    Retour à la liste
+            <div class="card-footer p-6 bg-gray-50 border-t border-gray-200 flex justify-end space-x-4">
+                <a href="{{ path('app_project_index') }}" class="btn bg-gray-200 text-gray-800 px-5 py-2.5 rounded-lg hover:bg-gray-300">
+                    Retour
                 </a>
-                <a href="{{ path('app_project_edit', {'id': projet.id}) }}" class="btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                <a href="{{ path('app_project_edit', {'id': projet.id}) }}" class="btn bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700">
                     Modifier
                 </a>
             </div>
@@ -157,34 +267,45 @@
             if (taskFilter) {
                 taskFilter.addEventListener('change', function() {
                     const selectedStatus = this.value;
-                    
+                    let visibleCount = 0;
+
                     taskRows.forEach(row => {
                         const rowStatus = row.getAttribute('data-status');
                         if (selectedStatus === 'all' || rowStatus === selectedStatus) {
                             row.style.display = '';
+                            visibleCount++;
+                            row.classList.add('fade-in');
                         } else {
                             row.style.display = 'none';
+                            row.classList.remove('fade-in');
                         }
                     });
 
-                    // Show message if no tasks are visible
-                    const visibleRows = document.querySelectorAll('.task-row:not([style*="display: none"])');
+                    // Handle no results message
                     const taskTable = document.getElementById('taskTable');
                     let noResultsRow = document.querySelector('#no-results-row');
 
-                    if (visibleRows.length === 0 && !noResultsRow) {
-                        noResultsRow = document.createElement('tr');
-                        noResultsRow.id = 'no-results-row';
-                        noResultsRow.innerHTML = `
-                            <td colspan="2" class="p-3 text-center text-gray-600">
-                                Aucune tâche trouvée pour le statut "${selectedStatus}"
-                            </td>`;
-                        taskTable.querySelector('tbody').appendChild(noResultsRow);
-                    } else if (visibleRows.length > 0 && noResultsRow) {
+                    if (visibleCount === 0) {
+                        if (!noResultsRow) {
+                            noResultsRow = document.createElement('tr');
+                            noResultsRow.id = 'no-results-row';
+                            noResultsRow.innerHTML = `
+                                <td colspan="2" class="p-4 text-center text-gray-600">
+                                    Aucune tâche pour le statut sélectionné
+                                </td>`;
+                            taskTable.querySelector('tbody').appendChild(noResultsRow);
+                        }
+                    } else if (noResultsRow) {
                         noResultsRow.remove();
                     }
                 });
             }
+
+            // Trigger initial animation for task rows
+            taskRows.forEach((row, index) => {
+                row.style.animationDelay = `${index * 0.1}s`;
+                row.classList.add('fade-in');
+            });
         });
     </script>
 {% endblock %}

@@ -37,8 +37,6 @@ final class ProjectTaskController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Check if user has admin role
-      
-
         $projectTask = new ProjectTask();
         $form = $this->createForm(ProjectTaskType::class, $projectTask, [
             'is_admin' => true // Enable user selection

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Twilio\Rest\Client;
 
 #[Route('/pret')]
@@ -27,7 +28,22 @@ final class PretController extends AbstractController
     #[Route('/new', name: 'app_pret_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Récupère l'utilisateur actuellement authentifié
+        $user = $this->getUser();
+        
+        // Vérifie si l'utilisateur est connecté
+        if (!$user) {
+            throw new AccessDeniedException('Vous devez être connecté pour accéder à cette page');
+        }
+        
+        // Récupère le CIN de l'utilisateur connecté
+        $cin = $user->getCin(); // Assurez-vous que votre entité User a une méthode getCin()
+        
         $pret = new Pret();
+        
+        // Pré-remplir le CIN de l'utilisateur
+        $pret->setCin($cin);
+        
         $form = $this->createForm(PretType::class, $pret);
         $form->handleRequest($request);
 
@@ -60,11 +76,10 @@ final class PretController extends AbstractController
             $entityManager->flush();
 
             // Envoi SMS via Twilio
-           // Envoi SMS via Twilio
-           $sid = ''; // Ton SID Twilio
-           $authToken = ''; // Ton Auth Token Twilio
-           $fromNumber = ''; // Ton numéro Twilio
-           $toNumber = ''; // Numéro du destinataire
+            $sid = 'ACf47cce92a0f6a9ff6eb6b88ff7c797c8'; // Ton SID Twilio
+            $authToken = '8c6b09a8ee5e0796002feb627f2ffb0d'; // Ton Auth Token Twilio
+            $fromNumber = '+14432780246'; // Ton numéro Twilio
+            $toNumber = '+21658180867'; // Numéro du destinataire
             $client = new Client($sid, $authToken);
             $message = "Votre demande avec le CIN " . $pret->getCin() . " est prise en considération.";
 
@@ -85,6 +100,7 @@ final class PretController extends AbstractController
             'pret' => $pret,
             'form' => $form->createView(),
             'simulation' => $simulation,
+            'cin' => $cin, // Passez le CIN à la vue pour l'afficher
         ]);
     }
 

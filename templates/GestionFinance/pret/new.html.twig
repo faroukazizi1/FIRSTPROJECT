@@ -33,6 +33,11 @@
             color: #000000;
         }
 
+        input[type="text"]:disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
         label {
             font-size: 14px;
             display: block;
@@ -61,7 +66,7 @@
         a.btn {
             background-color: #ddd;
             color: black;
-         border: 1px solid #ccc;
+            border: 1px solid #ccc;
         }
 
         a.btn:hover {
@@ -121,22 +126,51 @@
         a.calendar-link:hover {
             color: #66d9ff;
         }
+
+        .user-info {
+            background-color: #495057;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
     </style>
 
     <h1>Create new Pret</h1>
+
+    <div class="user-info">
+        <p><strong>Utilisateur connecté - CIN:</strong> {{ cin }}</p>
+    </div>
 
     <a href="{{ path('pret_calendar') }}" target="_blank" class="calendar-link">
         📅 Voir le calendrier des prêts
     </a>
 
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-        {{ form_widget(form) }}
+        {# Désactiver le champ CIN car il est automatiquement rempli #}
+        <div class="form-group">
+            {{ form_label(form.cin) }}
+            {{ form_widget(form.cin, {'attr': {'readonly': 'readonly', 'disabled': 'disabled'}}) }}
+            {# Ajout d'un champ caché pour s'assurer que la valeur est soumise #}
+            <input type="hidden" name="{{ form.cin.vars.full_name }}" value="{{ cin }}" />
+            {{ form_errors(form.cin) }}
+        </div>
+
+        {# Afficher les autres champs normalement #}
+        {% for field in form %}
+            {% if field.vars.name != 'cin' %}
+                <div class="form-group">
+                    {{ form_label(field) }}
+                    {{ form_widget(field) }}
+                    {{ form_errors(field) }}
+                </div>
+            {% endif %}
+        {% endfor %}
 
         <div class="btn-container">
             <button type="submit" name="simuler" class="btn btn-info">Simuler mon prêt</button>
             <button type="submit" name="submit" class="btn btn-success">Valider</button>
         </div>
-    {{ form_end(form) }}
+    {{ form_end(form, {'render_rest': false}) }}
 
     {% if simulation %}
         <div class="simulation-result">
